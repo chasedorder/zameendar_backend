@@ -3,3 +3,5 @@ venv/
 .env
 password.md
 **__pycache__/
+migrations/
+**_images/
