@@ -1,4 +1,10 @@
-PROPERTY_CATEGORY = (
-    ("1", "Group Villa"),
-    ("2", "Group Appartment"),
+FACINGS = (
+    ("N", "North"),
+    ("S", "South"),
+    ("E", "East"),
+    ("W", "West"),
+    ("NE", "North East"),
+    ("NW", "North West"),
+    ("SE", "South East"),
+    ("SW", "South West"),
 )

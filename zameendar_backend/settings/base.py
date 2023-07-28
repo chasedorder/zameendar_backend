@@ -25,8 +25,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # External Apps
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "django_better_admin_arrayfield.apps.DjangoBetterAdminArrayfieldConfig",
     "corsheaders",
     "rest_framework",
+    "rest_framework.authtoken",
+    "rest_auth",
     "storages",
     # Internal Apps
     "zameendar_backend.api",
@@ -60,6 +66,22 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.TokenAuthentication",),
+}
+REST_AUTH_SERIALIZERS = {
+    "USER_DETAILS_SERIALIZER": "zameendar_backend.api.serializers.token_serializer.UserSerializer",
+    "TOKEN_SERIALIZER": "zameendar_backend.api.serializers.token_serializer.TokenSerializer",
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    "REGISTER_SERIALIZER": "zameendar_backend.api.serializers.token_serializer.CustomRegisterSerializer",
+}
 
 WSGI_APPLICATION = "zameendar_backend.wsgi.application"
 
@@ -96,10 +118,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = Path("static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+CSRF_COOKIE_NAME = "csrftoken"
 CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = "api.User"
