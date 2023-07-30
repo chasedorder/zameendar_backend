@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import (
     PG,
     Building,
+    ContactDetails,
     Flat,
     GroupAppartment,
     GroupPlot,
@@ -17,6 +18,7 @@ from .models import (
     PropertyMap,
     PropertyPlan,
     Rent,
+    Seller,
     User,
     UserAddress,
     Villa,
@@ -57,6 +59,8 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "fields": (
+                    "first_name",
+                    "last_name",
                     "username",
                     "email",
                     "password",
@@ -70,10 +74,12 @@ class UserAdmin(BaseUserAdmin):
     # search_fields = ("email", "username")
 
 
+admin.site.register(Seller)
 admin.site.register(Plan)
 admin.site.register(PropertyMap)
 admin.site.register(PropertyPlan)
 admin.site.register(Property)
+admin.site.register(ContactDetails)
 admin.site.register(PG)
 admin.site.register(UserAddress)
 admin.site.register(Building)

@@ -2,16 +2,11 @@ import json
 
 import environ
 import razorpay
-from django.shortcuts import HttpResponse, render
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import authentication, permissions
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..dispatchers.responses.send_fail_http_response import send_fail_http_response
 from ..dispatchers.responses.send_pass_http_response import send_pass_http_response
-from ..models import Order, PendingSmsOtp, User
+from ..models import PendingSmsOtp
 from ..utils.generate_otp import generate_six_digit_otp, sendSMS
 
 env = environ.Env()
@@ -80,15 +75,18 @@ environ.Env.read_env()
 #         return Response(res_data)
 
 
-@csrf_exempt
-def send_sms_otp(request):
-    phone = request.GET["phone"]
-    otp = generate_six_digit_otp()
-    pending_otp, is_new = PendingSmsOtp.objects.get_or_create(phone=phone)
-    pending_otp.otp = int(otp)
-    pending_otp.save()
-    resp = sendSMS("apikey", phone, "Zameendar Properties", otp)
-    resp = json.loads(resp.decode("utf-8"))
-    if resp["status"] == "failure":
-        return send_fail_http_response({"message": "Some error occur"})
-    return send_pass_http_response({"message": "OTP sent successfully"})
+class SendSmsOtp(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request):
+        phone = request.GET["phone"]
+        otp = generate_six_digit_otp()
+        pending_otp, _ = PendingSmsOtp.objects.get_or_create(phone=phone)
+        pending_otp.otp = int(otp)
+        pending_otp.save()
+        resp = sendSMS("apikey", phone, "Zameendar Properties", otp)
+        resp = json.loads(resp.decode("utf-8"))
+        if resp["status"] == "failure":
+            return send_fail_http_response({"message": "Some error occur"})
+        return send_pass_http_response({"message": "OTP sent successfully"})

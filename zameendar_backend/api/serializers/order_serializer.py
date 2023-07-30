@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Order
+from zameendar_backend.api.models import Order
 
 
 class OrderSerializer(serializers.ModelSerializer):

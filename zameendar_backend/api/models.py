@@ -57,20 +57,14 @@ class UserAddress(models.Model):
 
 
 class User(AbstractUser):
-    name = models.CharField(max_length=50, null=True, blank=True)
     phone_number = models.CharField(max_length=20)
     last_active = models.DateTimeField(auto_now=True, blank=True)
     email = models.EmailField(unique=True, blank=True)
 
     objects = UserManager()
 
-    def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = self.username
-        return super().save(*args, **kwargs)
-
     def __str__(self):
-        return self.name
+        return self.username
 
 
 class PendingSmsOtp(models.Model):
@@ -82,17 +76,16 @@ class PendingSmsOtp(models.Model):
 
 
 class Seller(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
 
 
 class ContactDetails(models.Model):
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     phone_number_1 = models.CharField(max_length=50, blank=True)
     phone_number_2 = models.CharField(max_length=50, blank=True)
     email = models.EmailField(blank=True)
-
-    def __str__(self):
-        return self.seller.user.username
 
 
 class PropertyAddress(models.Model):
@@ -165,12 +158,12 @@ class Property(models.Model):
         blank=True,
         null=True,
     )
+    contact_detail = models.OneToOneField(
+        ContactDetails, on_delete=models.DO_NOTHING, null=True, blank=True
+    )
     final_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     amenities = ArrayField(models.JSONField(), default=list)
     is_verified = models.BooleanField(default=False)
-    seller_contact_details = models.OneToOneField(
-        ContactDetails, on_delete=models.DO_NOTHING, null=True, blank=True
-    )
 
 
 class PropertyImage(models.Model):
@@ -368,7 +361,8 @@ class PG(models.Model):
 class Plan(models.Model):
     title = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    description = models.TextField(null=True, blank=True)
+    duration_in_months = models.FloatField(null=True, blank=True)
+    description = ArrayField(models.JSONField(), null=True, blank=True, default=list)
 
     def __str__(self):
         return self.title
@@ -376,10 +370,10 @@ class Plan(models.Model):
 
 class PropertyPlan(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    current_plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
+    plan = models.OneToOneField(Plan, on_delete=models.DO_NOTHING)
     plan_start_on = models.DateField(null=True, blank=True)
     plan_expire_on = models.DateField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         active_plans = PropertyPlan.objects.filter(is_active=True)
@@ -393,9 +387,8 @@ class PropertyPlan(models.Model):
 
 
 class Order(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.DO_NOTHING)
+    property_plan = models.ForeignKey(PropertyPlan, on_delete=models.DO_NOTHING)
     final_amount = models.DecimalField(max_digits=8, decimal_places=2)
-    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
     order_id = models.CharField(unique=True, max_length=100, null=True, blank=True, default=None)
     date_of_payment = models.DateTimeField(default=timezone.now)
     # razorpay

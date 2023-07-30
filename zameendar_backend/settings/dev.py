@@ -13,17 +13,6 @@ DATABASES = {
     }
 }
 
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "neondb",
-        "USER": "chasedorder3",
-        "PASSWORD": "glPCmFut0HJ5",
-        "HOST": "ep-black-mountain-02465139.us-east-2.aws.neon.tech",
-        "PORT": "5432",
-    }
-}
 # AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 # AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
 # AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")

@@ -11,7 +11,7 @@ def main():
     if base.DEBUG:
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zameendar_backend.settings.dev")
     else:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zameendar_backend.settings.dev")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zameendar_backend.settings.production")
 
     try:
         from django.core.management import execute_from_command_line

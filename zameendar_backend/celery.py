@@ -10,9 +10,7 @@ from zameendar_backend.settings import base
 if base.DEBUG:
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zameendar_backend.settings.dev")
 else:
-    os.environ.setdefault(
-        "DJANGO_SETTINGS_MODULE", "zameendar_backend.settings.production"
-    )
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "zameendar_backend.settings.production")
 
 app = Celery("zameendar_backend")
 
