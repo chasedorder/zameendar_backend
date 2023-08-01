@@ -158,9 +158,11 @@ class Property(models.Model):
         blank=True,
         null=True,
     )
-    contact_detail = models.OneToOneField(
+    seller_contact = models.OneToOneField(
         ContactDetails, on_delete=models.DO_NOTHING, null=True, blank=True
     )
+    start_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    end_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     final_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     amenities = ArrayField(models.JSONField(), default=list)
     is_verified = models.BooleanField(default=False)
@@ -181,14 +183,11 @@ class GroupAppartment(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     # Pricing Details
     price_per_sqft = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-    start_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-    end_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     bhk_details = ArrayField(models.JSONField(), default=list)
     # Property Details
     number_of_floors = models.IntegerField()
-    read_to_occupy = models.BooleanField(default=False)
+    ready_to_occupy = models.BooleanField(default=False)
     possession_date = models.DateField(null=True, blank=True)
-
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
 
@@ -200,16 +199,21 @@ class GroupVilla(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     # Pricing Details
     price_per_sqft = models.DecimalField(max_digits=10, decimal_places=2)
-    start_price = models.DecimalField(max_digits=10, decimal_places=2)
-    end_price = models.DecimalField(max_digits=10, decimal_places=2)
     bhk_details = ArrayField(models.JSONField(), default=list)
     # Property Details
-    number_of_floors = models.IntegerField()
+    number_of_floors = ArrayField(
+        models.CharField(max_length=100), null=True, blank=True, default=list
+    )
+    land_area_sizes = ArrayField(
+        models.CharField(max_length=100), null=True, blank=True, default=list
+    )
     read_to_occupy = models.BooleanField(default=False)
     possession_date = models.DateField(null=True, blank=True)
 
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
+    land_width = models.CharField(max_length=50, blank=True)
+    land_length = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -329,7 +333,8 @@ class Rent(models.Model):
     )
 
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing_types = ArrayField(models.CharField(max_length=50), default=list)
+    facing = ArrayField(models.CharField(max_length=50), default=list)
+    floor_number = models.IntegerField(null=True, blank=True)
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
     furnishing_detail = ChoiceArrayField(
@@ -346,6 +351,7 @@ class Rent(models.Model):
 class PG(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     sharing_type = ArrayField(models.CharField(max_length=50), default=list)
+    sharing_for = ArrayField(models.CharField(max_length=50), default=list)
     attached_washroom = models.BooleanField(default=False)
     food_facility = models.BooleanField(default=False)
     parking_facility = models.BooleanField(default=False)
