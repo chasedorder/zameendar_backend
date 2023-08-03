@@ -9,6 +9,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
+from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import (
     ContactDetails,
     GroupAppartment,
@@ -81,7 +82,7 @@ class AddGroupAppartment(APIView):
             start_price=float(start_price),
             end_price=float(end_price),
             seller=seller,
-            property_type=Property.GroupAppart,
+            property_type=PropertyTypes.GroupAppart,
             amenities=amenities,
             address=property_address,
             seller_contact=seller_contact,

@@ -9,6 +9,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
+from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import (
     ContactDetails,
     GroupVilla,
@@ -65,9 +66,11 @@ class AddGroupVilla(APIView):
 
         seller = Seller.objects.get(user=request.user)
 
-        property_images = request.FILES.getlists("property_images")
+        property_images = request.FILES.getlist("property_images")
 
-        image_details = json.loads(request.POST.get("images_date", "false"))  # list of json objects
+        image_details = json.loads(
+            request.POST.get("image_details", "false")
+        )  # list of json objects
 
         property_address = PropertyAddress.objects.create(
             street_address=address_details.get("street_address"),
@@ -96,9 +99,9 @@ class AddGroupVilla(APIView):
             seller=seller,
             start_price=float(start_price),
             end_price=float(end_price),
-            property_type=Property.GroupAppart,
+            property_type=PropertyTypes.GroupVilla,
             amenities=amenities,
-            property_address=property_address,
+            address=property_address,
             seller_contact=seller_contact,
             map=property_map,
         )
@@ -121,7 +124,7 @@ class AddGroupVilla(APIView):
             property=property,
             price_per_sqft=float(price_per_sqft),
             bhk_details=bhk_details,
-            land_are_sizes=land_area_sizes,
+            land_area_sizes=land_area_sizes,
             number_of_floors=number_of_floors,
             land_width=land_width,
             land_length=land_length,

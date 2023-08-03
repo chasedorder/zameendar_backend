@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.html import format_html
 
 from .models import (
     PG,
@@ -25,6 +26,10 @@ from .models import (
 )
 
 
+class PropertyAdmin(admin.ModelAdmin):
+    list_display = ["project_name"]
+
+
 class ProperyAddressAdmin(admin.ModelAdmin):
     list_display = [
         "street_address",
@@ -35,6 +40,26 @@ class ProperyAddressAdmin(admin.ModelAdmin):
     ]
 
     readonly_fields = ["linked_property"]
+
+
+class PropertyMapAdmin(admin.ModelAdmin):
+    list_display = ["location", "linked_property"]
+
+    readonly_fields = ["linked_property"]
+
+
+class PropertyImageAdmin(admin.ModelAdmin):
+    def image_tag(self, obj):
+        return format_html(
+            '<img src="{}" style="object-fit: cover; width: 200px; height: 200px;" />'.format(
+                obj.image.url
+            )
+        )
+
+    image_tag.short_description = "Image"
+
+    fields = ["image_tag"]
+    readonly_fields = ["image_tag"]
 
 
 class UserAdmin(BaseUserAdmin):
@@ -76,9 +101,9 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(Seller)
 admin.site.register(Plan)
-admin.site.register(PropertyMap)
+admin.site.register(PropertyMap, PropertyMapAdmin)
 admin.site.register(PropertyPlan)
-admin.site.register(Property)
+admin.site.register(Property, PropertyAdmin)
 admin.site.register(ContactDetails)
 admin.site.register(PG)
 admin.site.register(UserAddress)
@@ -91,6 +116,6 @@ admin.site.register(OpenPlot)
 admin.site.register(Rent)
 admin.site.register(User, UserAdmin)
 admin.site.register(Villa)
-admin.site.register(PropertyImage)
+admin.site.register(PropertyImage, PropertyImageAdmin)
 admin.site.register(PendingSmsOtp)
 admin.site.register(PropertyAddress, ProperyAddressAdmin)

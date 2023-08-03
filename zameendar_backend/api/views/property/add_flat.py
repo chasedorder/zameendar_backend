@@ -9,6 +9,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
+from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import (
     ContactDetails,
     Flat,
@@ -74,7 +75,7 @@ class AddFlat(APIView):
             project_name=project_name,
             seller=seller,
             final_price=float(final_price),
-            property_type=Property.GroupAppart,
+            property_type=PropertyTypes.Flat,
             amenities=amenities,
             address=property_address,
             seller_contact=seller_contact,

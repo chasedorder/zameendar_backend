@@ -1,3 +1,5 @@
+import os
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
@@ -12,7 +14,7 @@ from django.utils.safestring import mark_safe
 from django_better_admin_arrayfield.models.fields import ArrayField
 from rest_framework.authtoken.models import Token
 
-from .meta_models import FACINGS
+from .meta_models import *
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -107,7 +109,7 @@ class PropertyAddress(models.Model):
                         "admin:api_property_change",
                         args=[getattr(self, "property").pk],
                     ),
-                    getattr(self, "property").name,
+                    getattr(self, "property").project_name,
                 )
             )
         return "N/A"
@@ -119,33 +121,24 @@ class PropertyMap(models.Model):
     def __str__(self):
         return self.location
 
+    def linked_property(self):
+        if hasattr(self, "property"):
+            return mark_safe(
+                '<a href="{}">{}</a>'.format(
+                    reverse(
+                        "admin:api_property_change",
+                        args=[getattr(self, "property").pk],
+                    ),
+                    getattr(self, "property").project_name,
+                )
+            )
+        return "N/A"
+
 
 class Property(models.Model):
-    GroupAppart = "Group Appartment"
-    GroupVilla = "Group Villa"
-    GroupPlot = "Group Plot"
-    Flat = "Flat"
-    Building = "Building"
-    Villa = "Villa"
-    OpenPlot = "Open Plot"
-    PG = "PG"
-    Rent = "Rent"
     project_name = models.CharField(max_length=100)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    property_type = models.CharField(
-        max_length=50,
-        choices=(
-            (GroupAppart, "GroupAppartment"),
-            (GroupVilla, "GroupVilla"),
-            (GroupPlot, "GroupPlot"),
-            (Flat, "Flat"),
-            (Building, "Building"),
-            (Villa, "Villa"),
-            (OpenPlot, "OpenPlot"),
-            (PG, "PG"),
-            (Rent, "Rent"),
-        ),
-    )
+    property_type = models.CharField(max_length=50, choices=PropertyTypes.property_type_choices)
     address = models.OneToOneField(
         PropertyAddress,
         on_delete=models.CASCADE,
@@ -166,6 +159,9 @@ class Property(models.Model):
     final_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     amenities = ArrayField(models.JSONField(), default=list)
     is_verified = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.project_name
 
 
 class PropertyImage(models.Model):
@@ -207,7 +203,7 @@ class GroupVilla(models.Model):
     land_area_sizes = ArrayField(
         models.CharField(max_length=100), null=True, blank=True, default=list
     )
-    read_to_occupy = models.BooleanField(default=False)
+    ready_to_occupy = models.BooleanField(default=False)
     possession_date = models.DateField(null=True, blank=True)
 
     number_of_car_parking = models.IntegerField()
@@ -222,7 +218,7 @@ class GroupVilla(models.Model):
 class GroupPlot(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     price_per_sqyd = models.DecimalField(max_digits=10, decimal_places=2)
-    plot_size = models.DecimalField(max_digits=10, decimal_places=2)
+    plot_sizes = ArrayField(models.CharField(max_length=50), default=list)
 
     def __str__(self):
         return self.property.project_name
@@ -230,17 +226,8 @@ class GroupPlot(models.Model):
 
 # Single Poroperties
 class Flat(models.Model):
-    NonFurnished = "Non Furnished"
-    SemiFurnished = "Semi Furnished"
-    FullyFurnished = "Fully Furnished"
-
-    furnished_choices = (
-        ("Non Furnished", "Non Furnished"),
-        ("Semi Furnished", "Semi Furnished"),
-        ("Fully Furnished", "Fully Furnished"),
-    )
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = models.CharField(max_length=10, choices=FACINGS)
+    facing = models.CharField(max_length=10, choices=FACINGS.facing_choices)
     carpet_area = models.CharField(max_length=100)
     bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
     number_of_washrooms = models.IntegerField()
@@ -248,7 +235,7 @@ class Flat(models.Model):
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=furnished_choices),
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
         null=True,
         blank=True,
         default=list,
@@ -278,17 +265,8 @@ class Building(models.Model):
 
 
 class Villa(models.Model):
-    NonFurnished = "Non Furnished"
-    SemiFurnished = "Semi Furnished"
-    FullyFurnished = "Fully Furnished"
-
-    furnished_choices = (
-        ("Non Furnished", "Non Furnished"),
-        ("Semi Furnished", "Semi Furnished"),
-        ("Fully Furnished", "Fully Furnished"),
-    )
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = models.CharField(max_length=10, choices=FACINGS)
+    facing = models.CharField(max_length=10, choices=FACINGS.facing_choices)
     land_size = models.CharField(max_length=50)
     land_width = models.CharField(max_length=50)
     land_length = models.CharField(max_length=50)
@@ -299,7 +277,7 @@ class Villa(models.Model):
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=1000, choices=furnished_choices), default=list
+        models.CharField(max_length=1000, choices=FursnihingTypes.furnished_choices), default=list
     )
     ready_to_occupy = models.BooleanField(default=False)
     available_from = models.DateField()
@@ -310,7 +288,7 @@ class Villa(models.Model):
 
 class OpenPlot(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = models.CharField(max_length=10, choices=FACINGS)
+    facing = models.CharField(max_length=10, choices=FACINGS.facing_choices)
     land_size = models.CharField(max_length=50)
     land_width = models.CharField(max_length=50)
     land_length = models.CharField(max_length=50)
@@ -322,23 +300,13 @@ class OpenPlot(models.Model):
 
 # PG And Rents
 class Rent(models.Model):
-    NonFurnished = "Non Furnished"
-    SemiFurnished = "Semi Furnished"
-    FullyFurnished = "Fully Furnished"
-
-    furnished_choices = (
-        ("Non Furnished", "Non Furnished"),
-        ("Semi Furnished", "Semi Furnished"),
-        ("Fully Furnished", "Fully Furnished"),
-    )
-
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     facing = ArrayField(models.CharField(max_length=50), default=list)
     floor_number = models.IntegerField(null=True, blank=True)
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=1000, choices=furnished_choices), default=list
+        models.CharField(max_length=1000, choices=FursnihingTypes.furnished_choices), default=list
     )
     rent_per_month = models.DecimalField(max_digits=10, decimal_places=2)
     advance_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -417,8 +385,33 @@ class SellerPayment(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=100, null=True, blank=True)
 
 
-@receiver(post_delete, sender=GroupAppartment)
-@receiver(post_delete, sender=GroupVilla)
-def delete_address_on_property_delete(sender, instance, **kwargs):
+PROPERTY_MODEL_MAP = {
+    PropertyTypes.GroupAppart: GroupAppartment,
+    PropertyTypes.GroupVilla: GroupVilla,
+    PropertyTypes.GroupPlot: GroupPlot,
+    PropertyTypes.Flat: Flat,
+    PropertyTypes.Villa: Villa,
+    PropertyTypes.Building: Building,
+    PropertyTypes.OpenPlot: OpenPlot,
+    PropertyTypes.Rent: Rent,
+    PropertyTypes.PG: PG,
+}
+
+
+# <<<<<<<<<<<<<<<<<< SIGNALS >>>>>>>>>>>>>>>>>>>>
+
+
+@receiver(post_delete, sender=Property)
+def delete_address_on_property_delete(sender, instance: Property, **kwargs):
+    model_class = PROPERTY_MODEL_MAP.get(instance.property_type)
+    if model_class:
+        model_class.objects.filter(property=instance).delete()
+
+    PropertyImage.objects.filter(property=instance).delete()
+
     if instance.address:
         instance.address.delete()
+    if instance.seller_contact:
+        instance.seller_contact.delete()
+    if instance.map:
+        instance.map.delete()

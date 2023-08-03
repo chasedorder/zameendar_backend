@@ -25,3 +25,6 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 
 CSRF_TRUSTED_ORIGINS = ["https://98d3-180-188-232-110.ngrok-free.app", "http://127.0.0.1"]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = Path(BASE_DIR, "media")

@@ -9,10 +9,12 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
+from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import (
     ContactDetails,
     GroupPlot,
     Property,
+    PropertyAddress,
     PropertyImage,
     PropertyMap,
     Seller,
@@ -29,7 +31,9 @@ class AddGroupPlot(APIView):
         price_per_sqyd = request.POST["price_per_sqyd"]
         start_price = request.POST["start_price"]
         end_price = request.POST["end_price"]
-        plot_size = request.POST["plot_size"]
+        plot_sizes = json.loads(request.POST["plot_sizes"])  # list of string
+
+        address_details = json.loads(request.POST["address_detail"])  # json object
 
         amenities = json.loads(request.POST["amenities"])  # list of json objects
 
@@ -37,8 +41,18 @@ class AddGroupPlot(APIView):
 
         seller = Seller.objects.get(user=request.user)
 
-        property_images = request.FILES.getlists("property_images")
-        image_details = json.loads(request.POST.get("images_date", "false"))  # list of json objects
+        property_images = request.FILES.getlist("property_images")
+        image_details = json.loads(
+            request.POST.get("image_details", "false")
+        )  # list of json objects
+
+        property_address = PropertyAddress.objects.create(
+            street_address=address_details.get("street_address"),
+            area=address_details.get("area"),
+            city=address_details["city"],
+            state=address_details["state"],
+            postal_code=address_details["postal_code"],
+        )
 
         contact_details = json.loads(request.POST["contact_details"])
 
@@ -58,7 +72,8 @@ class AddGroupPlot(APIView):
             seller=seller,
             start_price=float(start_price),
             end_price=float(end_price),
-            property_type=Property.GroupAppart,
+            property_type=PropertyTypes.GroupPlot,
+            address=property_address,
             amenities=amenities,
             seller_contact=seller_contact,
             map=property_map,
@@ -79,7 +94,7 @@ class AddGroupPlot(APIView):
         GroupPlot.objects.create(
             property=property,
             price_per_sqyd=float(price_per_sqyd),
-            plot_size=float(plot_size),
+            plot_sizes=plot_sizes,
         )
 
         return send_pass_http_response({"message": "Property Added Successfully"})

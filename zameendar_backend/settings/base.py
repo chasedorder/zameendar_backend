@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # External Apps
+    "django_cleanup.apps.CleanupConfig",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
