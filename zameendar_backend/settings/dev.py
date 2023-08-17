@@ -1,6 +1,6 @@
 from .base import *
 
-ALLOWED_HOSTS = [".ngrok-free.app", "127.0.0.1", "192.168.44.128"]
+ALLOWED_HOSTS = ["64.227.177.77", "127.0.0.1", "192.168.44.128"]
 
 DATABASES = {
     "default": {
@@ -24,7 +24,7 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 
-CSRF_TRUSTED_ORIGINS = ["https://98d3-180-188-232-110.ngrok-free.app", "http://127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = ["https://64.227.177.77", "http://127.0.0.1"]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(BASE_DIR, "media")
