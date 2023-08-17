@@ -43,8 +43,10 @@ class AddPG(APIView):
 
         seller = Seller.objects.get(user=request.user)
 
-        property_images = request.FILES.getlists("property_images")
-        image_details = json.loads(request.POST.get("images_date", "false"))  # list of json objects
+        property_images = request.FILES.getlist("property_images")
+        image_details = json.loads(
+            request.POST.get("image_details", "false")
+        )  # list of json objects
 
         contact_details = json.loads(request.POST["contact_details"])
 

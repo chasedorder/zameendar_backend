@@ -9,6 +9,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
+from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import (
     ContactDetails,
     OpenPlot,
@@ -31,7 +32,7 @@ class AddOpenPlot(APIView):
         address_details = json.loads(request.POST["address_detail"])  # json object
         final_price = request.POST["final_price"]
 
-        facing = request.POST["facing"]
+        facing = json.loads(request.POST["facing"])
         land_size = request.POST["land_size"]
         land_width = request.POST["land_width"]
         land_length = request.POST["land_length"]
@@ -41,8 +42,10 @@ class AddOpenPlot(APIView):
 
         seller = Seller.objects.get(user=request.user)
 
-        property_images = request.FILES.getlists("property_images")
-        image_details = json.loads(request.POST.get("images_date", "false"))  # list of json objects
+        property_images = request.FILES.getlist("property_images")
+        image_details = json.loads(
+            request.POST.get("image_details", "false")
+        )  # list of json objects
 
         contact_details = json.loads(request.POST["contact_details"])
 
@@ -68,7 +71,7 @@ class AddOpenPlot(APIView):
             project_name=project_name,
             seller=seller,
             final_price=float(final_price),
-            property_type=Property.GroupAppart,
+            property_type=PropertyTypes.OpenPlot,
             address=property_address,
             seller_contact=seller_contact,
             map=property_map,

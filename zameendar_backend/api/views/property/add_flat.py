@@ -31,16 +31,16 @@ class AddFlat(APIView):
 
         address_details = json.loads(request.POST["address_detail"])  # json object
         final_price = request.POST["final_price"]
-        facing = request.POST["facing"]
+        facing = json.loads(request.POST["facing"])
         carpet_area = request.POST["carpet_area"]
         bedroom_available = json.loads(request.POST["bedroom_available"])  # list of string
         number_of_washrooms = request.POST["number_of_washrooms"]
         floor_number = request.POST["floor_number"]
         number_of_car_parking = request.POST["number_of_car_parking"]
         number_of_bike_parking = request.POST["number_of_bike_parking"]
-        furnishing_detail = json.loads(request.POST["furnishing_detail"])  # list of string
+        furnishing_detail = request.POST["furnishing_detail"]
         ready_to_occupy = json.loads(request.POST["ready_to_occupy"])
-        available_from = formatting_date(request.POST["available_from"])
+        available_from = formatting_date(request.POST.get("available_from"))
 
         amenities = json.loads(request.POST["amenities"])  # list of json objects
 
@@ -48,8 +48,10 @@ class AddFlat(APIView):
 
         seller = Seller.objects.get(user=request.user)
 
-        property_images = request.FILES.getlists("property_images")
-        image_details = json.loads(request.POST.get("images_date", "false"))  # list of json objects
+        property_images = request.FILES.getlist("property_images")
+        image_details = json.loads(
+            request.POST.get("image_details", "false")
+        )  # list of json objects
 
         contact_details = json.loads(request.POST["contact_details"])
 

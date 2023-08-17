@@ -1,5 +1,3 @@
-import os
-
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
@@ -227,21 +225,20 @@ class GroupPlot(models.Model):
 # Single Poroperties
 class Flat(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = models.CharField(max_length=10, choices=FACINGS.facing_choices)
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
     carpet_area = models.CharField(max_length=100)
     bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
     number_of_washrooms = models.IntegerField()
     floor_number = models.IntegerField()
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
-    furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
-        null=True,
-        blank=True,
-        default=list,
+    furnishing_detail = models.CharField(
+        max_length=100, choices=FursnihingTypes.furnished_choices, null=True, blank=True
     )
     ready_to_occupy = models.BooleanField(default=False)
-    available_from = models.DateField()
+    available_from = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -249,7 +246,9 @@ class Flat(models.Model):
 
 class Building(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = models.CharField(max_length=10, choices=())
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
     land_size = models.CharField(max_length=50)
     land_width = models.CharField(max_length=50)
     land_length = models.CharField(max_length=50)
@@ -258,7 +257,7 @@ class Building(models.Model):
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
     ready_to_occupy = models.BooleanField(default=False)
-    available_from = models.DateField()
+    available_from = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -266,7 +265,9 @@ class Building(models.Model):
 
 class Villa(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = models.CharField(max_length=10, choices=FACINGS.facing_choices)
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
     land_size = models.CharField(max_length=50)
     land_width = models.CharField(max_length=50)
     land_length = models.CharField(max_length=50)
@@ -276,11 +277,11 @@ class Villa(models.Model):
     number_of_floors = models.CharField(max_length=50)
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
-    furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=1000, choices=FursnihingTypes.furnished_choices), default=list
+    furnishing_detail = models.CharField(
+        max_length=100, choices=FursnihingTypes.furnished_choices, null=True, blank=True
     )
     ready_to_occupy = models.BooleanField(default=False)
-    available_from = models.DateField()
+    available_from = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -288,7 +289,9 @@ class Villa(models.Model):
 
 class OpenPlot(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = models.CharField(max_length=10, choices=FACINGS.facing_choices)
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
     land_size = models.CharField(max_length=50)
     land_width = models.CharField(max_length=50)
     land_length = models.CharField(max_length=50)
@@ -301,12 +304,14 @@ class OpenPlot(models.Model):
 # PG And Rents
 class Rent(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    facing = ArrayField(models.CharField(max_length=50), default=list)
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
     floor_number = models.IntegerField(null=True, blank=True)
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
-    furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=1000, choices=FursnihingTypes.furnished_choices), default=list
+    furnishing_detail = models.CharField(
+        max_length=100, choices=FursnihingTypes.furnished_choices, null=True, blank=True
     )
     rent_per_month = models.DecimalField(max_digits=10, decimal_places=2)
     advance_amount = models.DecimalField(max_digits=10, decimal_places=2)

@@ -9,6 +9,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
+from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import (
     ContactDetails,
     Property,
@@ -28,22 +29,23 @@ class AddRent(APIView):
         project_name = request.POST["project_name"]
 
         address_details = json.loads(request.POST["address_detail"])  # json object
-        final_price = request.POST["final_price"]
-        facing = request.POST["facing"]
+        facing = json.loads(request.POST["facing"])
         rent_per_month = request.POST["rent_per_month"]
         advance_amount = request.POST["advance_amount"]
         floor_number = request.POST["floor_number"]
         number_of_car_parking = request.POST["number_of_car_parking"]
         number_of_bike_parking = request.POST["number_of_bike_parking"]
-        furnishing_detail = json.loads(request.POST["furnishing_detail"])  # list of string
+        furnishing_detail = request.POST["furnishing_detail"]
         ready_to_occupy = json.loads(request.POST["ready_to_occupy"])
 
         maps_details = json.loads(request.POST.get("maps_details", "false"))
 
         seller = Seller.objects.get(user=request.user)
 
-        property_images = request.FILES.getlists("property_images")
-        image_details = json.loads(request.POST.get("images_date", "false"))  # list of json objects
+        property_images = request.FILES.getlist("property_images")
+        image_details = json.loads(
+            request.POST.get("image_details", "false")
+        )  # list of json objects
 
         contact_details = json.loads(request.POST["contact_details"])
 
@@ -68,8 +70,7 @@ class AddRent(APIView):
         property = Property.objects.create(
             project_name=project_name,
             seller=seller,
-            final_price=float(final_price),
-            property_type=Property.GroupAppart,
+            property_type=PropertyTypes.Rent,
             address=property_address,
             seller_contact=seller_contact,
             map=property_map,
