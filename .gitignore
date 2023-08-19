@@ -5,4 +5,4 @@ password.md
 **__pycache__/
 migrations/
 **_images/
-**static/
+**static/ 
