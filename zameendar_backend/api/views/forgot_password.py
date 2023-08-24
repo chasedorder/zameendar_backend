@@ -29,7 +29,7 @@ class ForgotPassword(APIView):
             user = User.objects.filter(email=email).first()
             if not user:
                 return send_fail_http_response({"message": "email not registered"})
-
+        phone = user.phone_number
         otp = generate_six_digit_otp()
         pending_otp, _ = PendingSmsOtp.objects.get_or_create(phone=phone)
         pending_otp.otp = int(otp)
