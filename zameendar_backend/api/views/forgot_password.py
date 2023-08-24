@@ -37,7 +37,9 @@ class ForgotPassword(APIView):
         resp = sendSMS("apikey", phone, "Zameendar Properties", otp)
         resp = json.loads(resp.decode("utf-8"))
         if resp["status"] == "failure":
-            return send_fail_http_response({"message": "Some error occur"})
+            return send_fail_http_response(
+                {"message": "Some error occur", "otp only for testing": otp}
+            )
         return send_pass_http_response(
             {"message": "OTP sent successfully", "phone_number": user.phone_number}
         )
