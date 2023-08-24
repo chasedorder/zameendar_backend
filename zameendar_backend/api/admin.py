@@ -58,7 +58,7 @@ class PropertyImageAdmin(admin.ModelAdmin):
 
     image_tag.short_description = "Image"
 
-    fields = ["image_tag"]
+    fields = ["image_tag", "image", "title", "property", "meta_data"]
     readonly_fields = ["image_tag"]
 
 
