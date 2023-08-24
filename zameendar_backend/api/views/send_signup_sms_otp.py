@@ -42,5 +42,5 @@ class SendSignupSmsOtp(APIView):
             return send_fail_http_response(
                 {"message": "Some error occur", "otp only for testing": otp}
             )
-
+        pending_otp.delete()
         return send_pass_http_response({"message": "OTP sent successfully"})

@@ -18,17 +18,17 @@ class ForgotPassword(APIView):
     permission_classes = []
 
     def get(self, request):
-        phone = request.POST.get("phone")
-        email = request.POST.get("email")
+        phone = request.GET.get("phone")
+        email = request.GET.get("email")
 
         if phone:
-            user = User.objects.filter(phone=phone).first()
+            user = User.objects.filter(phone_number=phone).first()
             if not user:
-                return send_fail_http_response({"message": "phone number or not registered"})
+                return send_fail_http_response({"message": "phone number not registered"})
         else:
             user = User.objects.filter(email=email).first()
             if not user:
-                return send_fail_http_response({"message": "phone number or not registered"})
+                return send_fail_http_response({"message": "email not registered"})
 
         otp = generate_six_digit_otp()
         pending_otp, _ = PendingSmsOtp.objects.get_or_create(phone=phone)

@@ -14,14 +14,14 @@ class ResetPassword(APIView):
     permission_classes = []
 
     def post(self, request):
-        phone_number = request.POST("phone_number")
+        phone_number = request.POST["phone_number"]
         password = request.POST["password"]
         otp = request.POST["otp"]
         pending_otp = PendingSmsOtp.objects.get(phone=phone_number)
         if int(otp) != pending_otp.otp:
             return send_fail_http_response({"message": "incorrect OTP"})
 
-        user = User.objects.objects.get(phone_number=phone_number)
+        user = User.objects.get(phone_number=phone_number)
         user.set_password(password)
         user.save()
         pending_otp.delete()
