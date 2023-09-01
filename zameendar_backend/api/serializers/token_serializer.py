@@ -3,7 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 
-from zameendar_backend.api.models import User
+from zameendar_backend.api.models import Buyer, Seller, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,6 +52,27 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
 class TokenSerializer(serializers.ModelSerializer):
+    user_type = serializers.SerializerMethodField()
+
     class Meta:
         model = Token
-        fields = ("key", "user")
+        fields = ("key", "user", "user_type")
+
+    def get_user_type(self, obj):
+        serializer_data = UserSerializer(obj.user).data
+        first_name = serializer_data.get("first_name")
+        last_name = serializer_data.get("last_name")
+        email = serializer_data.get("email")
+        is_seller = serializer_data.get("is_seller")
+        is_buyer = serializer_data.get("is_buyer")
+
+        is_seller = Seller.objects.filter(user=obj.user).exists()
+        is_buyer = Buyer.objects.filter(user=obj.user).exists()
+
+        return {
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "is_seller": is_seller,
+            "is_buyer": is_buyer,
+        }

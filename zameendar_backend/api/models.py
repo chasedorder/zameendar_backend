@@ -82,6 +82,13 @@ class Seller(models.Model):
         return self.user.username
 
 
+class Buyer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
 class ContactDetails(models.Model):
     phone_number_1 = models.CharField(max_length=50, blank=True)
     phone_number_2 = models.CharField(max_length=50, blank=True)

@@ -5,6 +5,7 @@ from django.utils.html import format_html
 from .models import (
     PG,
     Building,
+    Buyer,
     ContactDetails,
     Flat,
     GroupAppartment,
@@ -100,6 +101,7 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(Seller)
+admin.site.register(Buyer)
 admin.site.register(Plan)
 admin.site.register(PropertyMap, PropertyMapAdmin)
 admin.site.register(PropertyPlan)
