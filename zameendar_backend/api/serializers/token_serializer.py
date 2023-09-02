@@ -65,6 +65,7 @@ class TokenSerializer(serializers.ModelSerializer):
         email = serializer_data.get("email")
         is_seller = serializer_data.get("is_seller")
         is_buyer = serializer_data.get("is_buyer")
+        phone_number = serializer_data.get("phone_number")
 
         is_seller = Seller.objects.filter(user=obj.user).exists()
         is_buyer = Buyer.objects.filter(user=obj.user).exists()
@@ -75,4 +76,5 @@ class TokenSerializer(serializers.ModelSerializer):
             "email": email,
             "is_seller": is_seller,
             "is_buyer": is_buyer,
+            "phone_number": phone_number,
         }

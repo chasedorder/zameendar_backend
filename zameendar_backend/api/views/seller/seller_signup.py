@@ -7,7 +7,30 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
-from zameendar_backend.api.models import PendingSmsOtp, Seller, User
+from zameendar_backend.api.models import Buyer, PendingSmsOtp, Seller, User
+from zameendar_backend.api.serializers.token_serializer import UserSerializer
+
+
+def get_user_type(user):
+    serializer_data = UserSerializer(user).data
+    first_name = serializer_data.get("first_name")
+    last_name = serializer_data.get("last_name")
+    email = serializer_data.get("email")
+    is_seller = serializer_data.get("is_seller")
+    is_buyer = serializer_data.get("is_buyer")
+    phone_number = serializer_data.get("phone_number")
+
+    is_seller = Seller.objects.filter(user=user).exists()
+    is_buyer = Buyer.objects.filter(user=user).exists()
+
+    return {
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email,
+        "is_seller": is_seller,
+        "is_buyer": is_buyer,
+        "phone_number": phone_number,
+    }
 
 
 class SellerSignUp(APIView):
@@ -48,5 +71,6 @@ class SellerSignUp(APIView):
             {
                 "message": "User Created Successfully",
                 "token": token,
+                "user_type": get_user_type(user=user),
             }
         )
