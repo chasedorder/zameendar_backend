@@ -1,0 +1,337 @@
+from zameendar_backend.api.meta_models import PropertyTypes
+from zameendar_backend.api.models import (
+    PG,
+    PROPERTY_MODEL_MAP,
+    Building,
+    ContactDetails,
+    Flat,
+    GroupAppartment,
+    GroupPlot,
+    GroupVilla,
+    OpenPlot,
+    Property,
+    PropertyAddress,
+    PropertyMap,
+    Rent,
+    Seller,
+    Villa,
+)
+
+
+def seller_serializer(seller: Seller):
+    first_name = seller.user.first_name
+    last_name = seller.user.last_name
+    email = seller.user.email
+
+    serialized_data = {"first_name": first_name, "last_name": last_name, "email": email}
+    return serialized_data
+
+
+def map_serializer(map_: PropertyMap):
+    if not map_:
+        return None
+    location = map_.location
+
+    serializerd_data = {"location": location}
+    return serializerd_data
+
+
+def seller_contact_serializer(seller_contact: ContactDetails):
+    if not seller_contact:
+        return None
+    phone_number_1 = seller_contact.phone_number_1
+    phone_number_2 = seller_contact.phone_number_2
+    email = seller_contact.email
+
+    serialized_data = {
+        "phone_number_1": phone_number_1,
+        "phone_number_2": phone_number_2,
+        "email": email,
+    }
+    return serialized_data
+
+
+def property_address_serializer(address: PropertyAddress):
+    if not address:
+        return None
+    street_address = address.street_address
+    city = address.city
+    state = address.state
+    postal_code = address.postal_code
+    area = address.area
+
+    serialized_data = {
+        "street_address": street_address,
+        "city": city,
+        "state": state,
+        "postal_code": postal_code,
+        "area": area,
+    }
+    return serialized_data
+
+
+def group_appartment_serializer(group_appartment: GroupAppartment):
+    price_per_sqft = group_appartment.price_per_sqft
+    bhk_details = group_appartment.bhk_details
+    number_of_floors = group_appartment.number_of_floors
+    ready_to_occupy = group_appartment.ready_to_occupy
+    possession_date = group_appartment.possession_date
+    number_of_car_parking = group_appartment.number_of_car_parking
+    number_of_bike_parking = group_appartment.number_of_bike_parking
+
+    serialized_data = {
+        "price_per_sqft": price_per_sqft,
+        "bhk_details": bhk_details,
+        "number_of_floors": number_of_floors,
+        "ready_to_occupy": ready_to_occupy,
+        "possession_date": possession_date,
+        "number_of_car_parking": number_of_car_parking,
+        "number_of_bike_parking": number_of_bike_parking,
+    }
+
+    return serialized_data
+
+
+def group_villa_serializer(group_villa: GroupVilla):
+    price_per_sqft = group_villa.price_per_sqft
+    bhk_details = group_villa.bhk_details
+    number_of_floors = group_villa.number_of_floors
+    land_area_sizes = group_villa.land_area_sizes
+    ready_to_occupy = group_villa.ready_to_occupy
+    possession_date = group_villa.possession_date
+    number_of_car_parking = group_villa.number_of_car_parking
+    number_of_bike_parking = group_villa.number_of_bike_parking
+    land_width = group_villa.land_width
+    land_length = group_villa.land_length
+
+    serialized_data = {
+        "price_per_sqft": price_per_sqft,
+        "bhk_details": bhk_details,
+        "number_of_floors": number_of_floors,
+        "land_area_sizes": land_area_sizes,
+        "ready_to_occupy": ready_to_occupy,
+        "possession_date": possession_date,
+        "number_of_car_parking": number_of_car_parking,
+        "number_of_bike_parking": number_of_bike_parking,
+        "land_width": land_width,
+        "land_length": land_length,
+    }
+
+    return serialized_data
+
+
+def group_plot_serializer(group_plot: GroupPlot):
+    price_per_sqyd = group_plot.price_per_sqyd
+    plot_sizes = group_plot.plot_sizes
+
+    serialized_data = {
+        "price_per_sqyd": price_per_sqyd,
+        "plot_sizes": plot_sizes,
+    }
+
+    return serialized_data
+
+
+def flat_serializer(flat: Flat):
+    facing = flat.facing
+    carpet_area = flat.carpet_area
+    bedroom_available = flat.bedroom_available
+    number_of_washrooms = flat.number_of_washrooms
+    floor_number = flat.floor_number
+    number_of_car_parking = flat.number_of_car_parking
+    number_of_bike_parking = flat.number_of_bike_parking
+    furnishing_detail = flat.furnishing_detail
+    ready_to_occupy = flat.ready_to_occupy
+    available_from = flat.available_from
+
+    serialized_data = {
+        "facing": facing,
+        "carpet_area": carpet_area,
+        "bedroom_available": bedroom_available,
+        "number_of_washrooms": number_of_washrooms,
+        "floor_number": floor_number,
+        "number_of_car_parking": number_of_car_parking,
+        "number_of_bike_parking": number_of_bike_parking,
+        "furnishing_detail": furnishing_detail,
+        "ready_to_occupy": ready_to_occupy,
+        "available_from": available_from,
+    }
+
+    return serialized_data
+
+
+def villa_serializer(villa: Villa):
+    facing = villa.facing
+    land_size = villa.land_size
+    land_width = villa.land_width
+    land_length = villa.land_length
+    carpet_area = villa.carpet_area
+    bedroom_available = villa.bedroom_available
+    number_of_washrooms = villa.number_of_washrooms
+    number_of_floors = villa.number_of_floors
+    number_of_car_parking = villa.number_of_car_parking
+    number_of_bike_parking = villa.number_of_bike_parking
+    furnishing_detail = villa.furnishing_detail
+    ready_to_occupy = villa.ready_to_occupy
+    available_from = villa.available_from
+
+    serialized_data = {
+        "facing": facing,
+        "land_size": land_size,
+        "land_width": land_width,
+        "land_length": land_length,
+        "carpet_area": carpet_area,
+        "bedroom_available": bedroom_available,
+        "number_of_washrooms": number_of_washrooms,
+        "number_of_floors": number_of_floors,
+        "number_of_car_parking": number_of_car_parking,
+        "number_of_bike_parking": number_of_bike_parking,
+        "furnishing_detail": furnishing_detail,
+        "ready_to_occupy": ready_to_occupy,
+        "available_from": available_from,
+    }
+
+    return serialized_data
+
+
+def building_serializer(building: Building):
+    facing = building.facing
+    land_size = building.land_size
+    land_width = building.land_width
+    land_length = building.land_length
+    carpet_area = building.carpet_area
+    number_of_floors = building.number_of_floors
+    number_of_car_parking = building.number_of_car_parking
+    number_of_bike_parking = building.number_of_bike_parking
+    ready_to_occupy = building.ready_to_occupy
+    available_from = building.available_from
+
+    serialized_data = {
+        "facing": facing,
+        "land_size": land_size,
+        "land_width": land_width,
+        "land_length": land_length,
+        "carpet_area": carpet_area,
+        "number_of_floors": number_of_floors,
+        "number_of_car_parking": number_of_car_parking,
+        "number_of_bike_parking": number_of_bike_parking,
+        "ready_to_occupy": ready_to_occupy,
+        "available_from": available_from,
+    }
+
+    return serialized_data
+
+
+def open_plot_serializer(open_plot: OpenPlot):
+    facing = open_plot.facing
+    land_size = open_plot.land_size
+    land_width = open_plot.land_width
+    land_length = open_plot.land_length
+    is_fencing = open_plot.is_fencing
+
+    serialized_data = {
+        "facing": facing,
+        "land_size": land_size,
+        "land_width": land_width,
+        "land_length": land_length,
+        "is_fencing": is_fencing,
+    }
+
+    return serialized_data
+
+
+def rent_serializer(rent: Rent):
+    facing = rent.facing
+    floor_number = rent.floor_number
+    number_of_car_parking = rent.number_of_car_parking
+    number_of_bike_parking = rent.number_of_bike_parking
+    furnishing_detail = rent.furnishing_detail
+    rent_per_month = rent.rent_per_month
+    advance_amount = rent.advance_amount
+    ready_to_move_in = rent.ready_to_move_in
+
+    serialized_data = {
+        "facing": facing,
+        "floor_number": floor_number,
+        "number_of_car_parking": number_of_car_parking,
+        "number_of_bike_parking": number_of_bike_parking,
+        "furnishing_detail": furnishing_detail,
+        "rent_per_month": rent_per_month,
+        "advance_amount": advance_amount,
+        "ready_to_move_in": ready_to_move_in,
+    }
+
+    return serialized_data
+
+
+def pg_serializer(pg: PG):
+    sharing_type = pg.sharing_type
+    sharing_for = pg.sharing_for
+    attached_washroom = pg.attached_washroom
+    food_facility = pg.food_facility
+    parking_facility = pg.parking_facility
+    price_per_month = pg.price_per_month
+    advance_amount = pg.advance_amount
+    other_facilities = pg.other_facilities
+    ready_to_move_in = pg.ready_to_move_in
+
+    serialized_data = {
+        "sharing_type": sharing_type,
+        "sharing_for": sharing_for,
+        "attached_washroom": attached_washroom,
+        "food_facility": food_facility,
+        "parking_facility": parking_facility,
+        "price_per_month": price_per_month,
+        "advance_amount": advance_amount,
+        "other_facilities": other_facilities,
+        "ready_to_move_in": ready_to_move_in,
+    }
+
+    return serialized_data
+
+
+PROPERTY_SERIALIZER_MAP = {
+    PropertyTypes.GroupAppart: group_appartment_serializer,
+    PropertyTypes.GroupVilla: group_villa_serializer,
+    PropertyTypes.GroupPlot: group_plot_serializer,
+    PropertyTypes.Flat: flat_serializer,
+    PropertyTypes.Villa: villa_serializer,
+    PropertyTypes.Building: building_serializer,
+    PropertyTypes.OpenPlot: open_plot_serializer,
+    PropertyTypes.Rent: rent_serializer,
+    PropertyTypes.PG: pg_serializer,
+}
+
+
+def property_serializer(property: Property):
+    project_name = property.project_name
+    property_type = property.property_type
+    address = property_address_serializer(property.address)
+    map_details = map_serializer(property.map)
+    seller_contact = seller_contact_serializer(property.seller_contact)
+    start_price = property.start_price
+    end_price = property.end_price
+    final_price = property.final_price
+    amenities = property.amenities
+    is_verified = property.is_verified
+
+    serialized_data = {
+        "project_name": project_name,
+        "property_type": property_type,
+        "address": address,
+        "map_details": map_details,
+        "seller_contact": seller_contact,
+        "start_price": start_price,
+        "end_price": end_price,
+        "final_price": final_price,
+        "amenities": amenities,
+        "is_verified": is_verified,
+    }
+
+    property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)
+
+    serialized_data.update(
+        property_type_details(PROPERTY_MODEL_MAP.get(property_type).objects.get(property=property))
+    )
+
+    return serialized_data

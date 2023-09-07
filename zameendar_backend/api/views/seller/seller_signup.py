@@ -16,8 +16,6 @@ def get_user_type(user):
     first_name = serializer_data.get("first_name")
     last_name = serializer_data.get("last_name")
     email = serializer_data.get("email")
-    is_seller = serializer_data.get("is_seller")
-    is_buyer = serializer_data.get("is_buyer")
     phone_number = serializer_data.get("phone_number")
 
     is_seller = Seller.objects.filter(user=user).exists()

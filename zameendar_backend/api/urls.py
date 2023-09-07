@@ -14,6 +14,7 @@ from .views.property.add_pg import AddPG
 from .views.property.add_rent import AddRent
 from .views.property.add_villa import AddVilla
 from .views.reset_password import ResetPassword
+from .views.seller.get_all_properties import GetSellerProperties
 from .views.seller.seller_signup import SellerSignUp
 from .views.send_signup_sms_otp import SendSignupSmsOtp
 
@@ -34,4 +35,5 @@ urlpatterns = [
     path("get_all_plans/", GetAllPlans.as_view(), name="get_all_plans"),
     path("create_property_plan/", CreatePropertyPlan.as_view(), name="create_property_plan"),
     path("create_order/", CreateOrder.as_view(), name="create_order"),
+    path("get_seller_properties/", GetSellerProperties.as_view(), name="get_seller_properties"),
 ]
