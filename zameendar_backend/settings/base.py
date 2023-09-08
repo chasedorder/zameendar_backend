@@ -75,6 +75,7 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.TokenAuthentication",),
+    "DATETIME_FORMAT": "%s000",
 }
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "zameendar_backend.api.serializers.token_serializer.UserSerializer",

@@ -304,6 +304,7 @@ PROPERTY_SERIALIZER_MAP = {
 
 
 def property_serializer(property: Property):
+    property_id = property.id
     project_name = property.project_name
     property_type = property.property_type
     address = property_address_serializer(property.address)
@@ -316,6 +317,7 @@ def property_serializer(property: Property):
     is_verified = property.is_verified
 
     serialized_data = {
+        "property_id": property_id,
         "project_name": project_name,
         "property_type": property_type,
         "address": address,

@@ -10,7 +10,7 @@ class GetAllPlans(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        plans = Plan.objects.all()
+        plans = Plan.objects.filter(is_active=True)
 
         plans_details = []
 
@@ -21,6 +21,7 @@ class GetAllPlans(APIView):
                     "title": plan.title,
                     "price": plan.price,
                     "description": plan.description,
+                    "duration_in_months": plan.duration_in_months,
                 }
             )
         return JsonResponse({"plans_details": plans_details})

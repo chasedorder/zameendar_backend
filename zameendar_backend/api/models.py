@@ -347,8 +347,9 @@ class PG(models.Model):
 class Plan(models.Model):
     title = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    duration_in_months = models.FloatField(null=True, blank=True)
+    duration_in_months = models.IntegerField(null=True, blank=True)
     description = ArrayField(models.JSONField(), null=True, blank=True, default=list)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -356,16 +357,17 @@ class Plan(models.Model):
 
 class PropertyPlan(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
-    plan = models.OneToOneField(Plan, on_delete=models.DO_NOTHING)
+    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
     plan_start_on = models.DateField(null=True, blank=True)
     plan_expire_on = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        active_plans = PropertyPlan.objects.filter(is_active=True)
+        active_plans = PropertyPlan.objects.filter(is_active=True, property=self.property)
         if self.is_active and active_plans.exists():
-            raise ValidationError("An active plan already exists. Cannot save another active plan.")
-        self.is_active = True
+            raise ValidationError(
+                "An plan for this property already exists. Cannot save another plan."
+            )
         return super().save(*args, **kwargs)
 
     def __str__(self):

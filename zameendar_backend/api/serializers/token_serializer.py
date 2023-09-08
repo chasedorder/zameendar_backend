@@ -9,13 +9,13 @@ from zameendar_backend.api.models import Buyer, Seller, User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        # fields = (
-        #     "id",
-        #     "email",
-        #     "username",
-        #     "password",
-        # )
-        fields = "__all__"
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone_number",
+        )
 
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -63,8 +63,6 @@ class TokenSerializer(serializers.ModelSerializer):
         first_name = serializer_data.get("first_name")
         last_name = serializer_data.get("last_name")
         email = serializer_data.get("email")
-        is_seller = serializer_data.get("is_seller")
-        is_buyer = serializer_data.get("is_buyer")
         phone_number = serializer_data.get("phone_number")
 
         is_seller = Seller.objects.filter(user=obj.user).exists()

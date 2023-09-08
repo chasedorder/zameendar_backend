@@ -2,8 +2,9 @@ from django.urls import path
 
 from .views.forgot_password import ForgotPassword
 from .views.payment.create_order import CreateOrder
-from .views.payment.create_property_plan import CreatePropertyPlan
-from .views.payment.get_all_plans import GetAllPlans
+from .views.plans.create_property_plan import CreatePropertyPlan
+from .views.plans.get_all_plans import GetAllPlans
+from .views.plans.get_property_plan_details import GetPropertyPlanDetail
 from .views.property.add_building import AddBuilding
 from .views.property.add_flat import AddFlat
 from .views.property.add_group_appartment import AddGroupAppartment
@@ -36,4 +37,9 @@ urlpatterns = [
     path("create_property_plan/", CreatePropertyPlan.as_view(), name="create_property_plan"),
     path("create_order/", CreateOrder.as_view(), name="create_order"),
     path("get_seller_properties/", GetSellerProperties.as_view(), name="get_seller_properties"),
+    path(
+        "get_property_plan_details/",
+        GetPropertyPlanDetail.as_view(),
+        name="get_property_plan_details",
+    ),
 ]
