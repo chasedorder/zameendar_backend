@@ -6,3 +6,4 @@ password.md
 migrations/
 **_images/
 **static/ 
+test.py

@@ -10,7 +10,7 @@ class GetSellerProperties(APIView):
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def post(self, request):
+    def get(self, request):
         seller = Seller.objects.get(user=request.user)
 
         properties_queryset = Property.objects.filter(seller=seller)

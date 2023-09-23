@@ -29,6 +29,7 @@ class PropertyTypes:
     OpenPlot = "Open Plot"
     PG = "PG"
     Rent = "Rent"
+    Commercial = "Commercial"
 
     property_type_choices = (
         (GroupAppart, "GroupAppartment"),
@@ -40,6 +41,7 @@ class PropertyTypes:
         (OpenPlot, "OpenPlot"),
         (PG, "PG"),
         (Rent, "Rent"),
+        (Commercial, "Commercial"),
     )
 
 

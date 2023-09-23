@@ -78,7 +78,18 @@ def group_appartment_serializer(group_appartment: GroupAppartment):
     possession_date = group_appartment.possession_date
     number_of_car_parking = group_appartment.number_of_car_parking
     number_of_bike_parking = group_appartment.number_of_bike_parking
-
+    project_area = group_appartment.project_area
+    project_size = group_appartment.project_size
+    rera_id = group_appartment.rera_id
+    sale_type = group_appartment.sale_type
+    property_age = group_appartment.property_age
+    number_of_bedrooms = group_appartment.number_of_bedrooms
+    number_of_bathrooms = group_appartment.number_of_bathrooms
+    rera_id = group_appartment.rera_id
+    facing = group_appartment.facing
+    furnishing_detail = group_appartment.furnishing_detail
+    project_size = group_appartment.project_size
+    sale_type = group_appartment.sale_type
     serialized_data = {
         "price_per_sqft": price_per_sqft,
         "bhk_details": bhk_details,
@@ -87,6 +98,18 @@ def group_appartment_serializer(group_appartment: GroupAppartment):
         "possession_date": possession_date,
         "number_of_car_parking": number_of_car_parking,
         "number_of_bike_parking": number_of_bike_parking,
+        "project_area": project_area,
+        "project_size": project_size,
+        "rera_id": rera_id,
+        "sale_type": sale_type,
+        "property_age": property_age,
+        "number_of_bedrooms": number_of_bedrooms,
+        "number_of_bathrooms": number_of_bathrooms,
+        "rera_id": rera_id,
+        "facing": facing,
+        "furnishing_detail": furnishing_detail,
+        "project_size": project_size,
+        "sale_type": sale_type,
     }
 
     return serialized_data
@@ -315,6 +338,7 @@ def property_serializer(property: Property):
     final_price = property.final_price
     amenities = property.amenities
     is_verified = property.is_verified
+    about_property = property.about_property
 
     serialized_data = {
         "property_id": property_id,
@@ -328,6 +352,7 @@ def property_serializer(property: Property):
         "final_price": final_price,
         "amenities": amenities,
         "is_verified": is_verified,
+        "about_property": about_property,
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)

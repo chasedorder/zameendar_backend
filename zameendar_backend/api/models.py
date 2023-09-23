@@ -164,6 +164,9 @@ class Property(models.Model):
     final_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     amenities = ArrayField(models.JSONField(), default=list)
     is_verified = models.BooleanField(default=False)
+    about_property = models.TextField(null=True, blank=True)
+    added_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_date = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return self.project_name
@@ -186,11 +189,25 @@ class GroupAppartment(models.Model):
     price_per_sqft = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     bhk_details = ArrayField(models.JSONField(), default=list)
     # Property Details
-    number_of_floors = models.IntegerField()
+    number_of_floors = models.IntegerField(null=True, blank=True)
     ready_to_occupy = models.BooleanField(default=False)
     possession_date = models.DateField(null=True, blank=True)
-    number_of_car_parking = models.IntegerField()
-    number_of_bike_parking = models.IntegerField()
+    number_of_car_parking = models.IntegerField(null=True, blank=True)
+    number_of_bike_parking = models.IntegerField(null=True, blank=True)
+    # about,project area, project size,rera id,sale type,facing,furnishing,property age,number of bedrooms, no of  bathrooms
+    project_area = models.CharField(max_length=1000, null=True, blank=True)
+    project_size = models.CharField(max_length=1000, null=True, blank=True)
+    rera_id = models.CharField(max_length=1000, null=True, blank=True)
+    sale_type = models.CharField(max_length=1000, null=True, blank=True)
+    property_age = models.CharField(max_length=100, null=True, blank=True)
+    number_of_bedrooms = models.PositiveIntegerField(null=True, blank=True)
+    number_of_bathrooms = models.PositiveIntegerField(null=True, blank=True)
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+    )
 
     def __str__(self):
         return self.property.project_name
@@ -215,6 +232,16 @@ class GroupVilla(models.Model):
     number_of_bike_parking = models.IntegerField()
     land_width = models.CharField(max_length=50, blank=True)
     land_length = models.CharField(max_length=50, blank=True)
+    total_project_area = models.CharField(max_length=100, null=True, blank=True)
+    rera_id = models.CharField(max_length=100, null=True, blank=True)
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+    )
+    project_size = models.CharField(max_length=50, null=True, blank=True)
+    sale_type = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -224,6 +251,11 @@ class GroupPlot(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     price_per_sqyd = models.DecimalField(max_digits=10, decimal_places=2)
     plot_sizes = ArrayField(models.CharField(max_length=50), default=list)
+    total_project_area = models.CharField(max_length=100, null=True, blank=True)
+    rera_id = models.CharField(max_length=100, null=True, blank=True)
+    facing = ChoiceArrayField(
+        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+    )
 
     def __str__(self):
         return self.property.project_name
@@ -241,11 +273,15 @@ class Flat(models.Model):
     floor_number = models.IntegerField()
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
-    furnishing_detail = models.CharField(
-        max_length=100, choices=FursnihingTypes.furnished_choices, null=True, blank=True
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
     )
     ready_to_occupy = models.BooleanField(default=False)
     available_from = models.DateField(null=True, blank=True)
+    price_per_square_feet = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    sale_type = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -265,6 +301,11 @@ class Building(models.Model):
     number_of_bike_parking = models.IntegerField()
     ready_to_occupy = models.BooleanField(default=False)
     available_from = models.DateField(null=True, blank=True)
+    sale_type = models.CharField(max_length=100, null=True, blank=True)
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+    )
+    bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
 
     def __str__(self):
         return self.property.project_name
@@ -284,11 +325,16 @@ class Villa(models.Model):
     number_of_floors = models.CharField(max_length=50)
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
-    furnishing_detail = models.CharField(
-        max_length=100, choices=FursnihingTypes.furnished_choices, null=True, blank=True
-    )
     ready_to_occupy = models.BooleanField(default=False)
     available_from = models.DateField(null=True, blank=True)
+    price_per_square_feet = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    floors = ArrayField(models.CharField(max_length=100), null=True, blank=True, default=list)
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+    )
+    sale_type = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -303,6 +349,9 @@ class OpenPlot(models.Model):
     land_width = models.CharField(max_length=50)
     land_length = models.CharField(max_length=50)
     is_fencing = models.BooleanField(default=False)
+    price_per_square_yard = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
 
     def __str__(self):
         return self.property.project_name
@@ -317,12 +366,14 @@ class Rent(models.Model):
     floor_number = models.IntegerField(null=True, blank=True)
     number_of_car_parking = models.IntegerField()
     number_of_bike_parking = models.IntegerField()
-    furnishing_detail = models.CharField(
-        max_length=100, choices=FursnihingTypes.furnished_choices, null=True, blank=True
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
     )
     rent_per_month = models.DecimalField(max_digits=10, decimal_places=2)
     advance_amount = models.DecimalField(max_digits=10, decimal_places=2)
     ready_to_move_in = models.BooleanField(default=False)
+    carpet_area = models.CharField(max_length=100, null=True, blank=True)
+    bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
 
     def __str__(self):
         return self.property.project_name
@@ -339,6 +390,46 @@ class PG(models.Model):
     advance_amount = models.DecimalField(max_digits=10, decimal_places=2)
     other_facilities = ArrayField(models.JSONField(), default=list)
     ready_to_move_in = models.BooleanField(default=False)
+    coliving_common_area = models.CharField(max_length=100, null=True, blank=True)
+    non_veg_available = models.BooleanField(default=False)
+    visitor_allowed = models.BooleanField(default=False)
+    opposite_sex_visitor_allowed = models.BooleanField(default=False)
+    drinking_allowed = models.BooleanField(default=False)
+    smoking_allowed = models.BooleanField(default=False)
+    any_time_allowed = models.BooleanField(default=False)
+    last_time_entry = models.TimeField(null=True, blank=True)
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+    )
+    food_offerings = ArrayField(models.CharField(max_length=100), default=list)
+
+    def __str__(self):
+        return self.property.project_name
+
+
+class Commercial(models.Model):
+    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    commerical_category = models.CharField(max_length=100, null=True, blank=True)
+    price_per_square_feet = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    builtup_area = models.CharField(max_length=100, null=True, blank=True)
+    price_per_square_yard = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    passenger_lifts = models.IntegerField(null=True, blank=True)
+    service_lifts = models.IntegerField(null=True, blank=True)
+    parking_available = models.BooleanField(default=False)
+    min_contract_period = models.CharField(max_length=100, null=True, blank=True)
+    negotialble = models.BooleanField(default=False)
+    tax_gov_charges_included = models.BooleanField(default=False)
+    dg_ups_charges_included = models.BooleanField(default=False)
+    water_charges_included = models.BooleanField(default=False)
+    floor_number = models.IntegerField(null=True, blank=True)
+    possesstion_date = models.DateTimeField(null=True, blank=True)
+    electricity_bill_included = models.BooleanField(default=False)
+    safety_deposit = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    rent_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return self.property.project_name
@@ -409,6 +500,7 @@ PROPERTY_MODEL_MAP = {
     PropertyTypes.OpenPlot: OpenPlot,
     PropertyTypes.Rent: Rent,
     PropertyTypes.PG: PG,
+    PropertyTypes.Commercial: Commercial,
 }
 
 
