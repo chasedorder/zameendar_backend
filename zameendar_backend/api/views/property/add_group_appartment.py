@@ -21,6 +21,7 @@ from zameendar_backend.api.models import (
     Seller,
 )
 from zameendar_backend.api.utils.formatting_date_time import formatting_date
+from zameendar_backend.api.utils.json_to_python import json_to_python
 
 
 class AddGroupAppartment(APIView):
@@ -36,12 +37,14 @@ class AddGroupAppartment(APIView):
         start_price = request.POST.get("start_price")
         end_price = request.POST.get("end_price")
 
-        address_details = json.loads(request.POST.get("address_detail", "{}"))  # json object
-        bhk_details = json.loads(request.POST.get("bhk_details", "[]"))  # list of json objects
-        amenities = json.loads(request.POST.get("amenities", "[]"))  # list of json objects
+        address_details = json_to_python(request.POST.get("address_detail"))  # json object
+        bhk_details = json_to_python(request.POST.get("bhk_details"))  # list of json objects
+        amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
 
         number_of_floors = request.POST.get("number_of_floors")
-        ready_to_occupy = json.loads(request.POST.get("ready_to_occupy", "false"))  # false or true
+        ready_to_occupy = json_to_python(
+            request.POST.get("ready_to_occupy", "false")
+        )  # false or true
         if not ready_to_occupy:
             possession_date = formatting_date(request.POST.get("possession_date"))
         else:
@@ -56,17 +59,16 @@ class AddGroupAppartment(APIView):
         property_age = request.POST.get("property_age")
         number_of_bedrooms = request.POST.get("number_of_bedrooms")
         number_of_bathrooms = request.POST.get("number_of_bathrooms")
-        facing = json.loads(request.POST.get("facing", "[]"))
-        furnishing_detail = json.loads(request.POST.get("furnishing_detail", "[]"))
-        maps_details = json.loads(request.POST.get("maps_details", "false"))  # json object
+        facing = json_to_python(request.POST.get("facing"))
+        furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
+
+        maps_details = json_to_python(request.POST.get("maps_details", "false"))  # json object
 
         seller = Seller.objects.get(user=request.user)
 
         property_images = request.FILES.getlist("property_images")
-        image_details = json.loads(
-            request.POST.get("image_details", "false")
-        )  # list of json objects
-        contact_details = json.loads(request.POST.get("contact_details", "{}"))
+        image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+        contact_details = json_to_python(request.POST.get("contact_details"))
 
         about_property = request.POST.get("about_property")
 
@@ -147,6 +149,19 @@ class AddGroupAppartment(APIView):
             group_appartment.furnishing_detail = furnishing_detail
 
             group_appartment.save()
+
+            if image_details:
+                property_images_obj_list = []
+                for image, image_detail in zip(property_images, image_details):
+                    property_images_obj_list.append(
+                        PropertyImage(
+                            title=image_detail["title"],
+                            property=property,
+                            meta_data=image_detail["meta_data"],
+                            image=image,
+                        )
+                    )
+                PropertyImage.objects.bulk_create(property_images_obj_list)
 
             return send_pass_http_response({"property_id": property.id})
 

@@ -194,7 +194,6 @@ class GroupAppartment(models.Model):
     possession_date = models.DateField(null=True, blank=True)
     number_of_car_parking = models.IntegerField(null=True, blank=True)
     number_of_bike_parking = models.IntegerField(null=True, blank=True)
-    # about,project area, project size,rera id,sale type,facing,furnishing,property age,number of bedrooms, no of  bathrooms
     project_area = models.CharField(max_length=1000, null=True, blank=True)
     project_size = models.CharField(max_length=1000, null=True, blank=True)
     rera_id = models.CharField(max_length=1000, null=True, blank=True)
@@ -203,10 +202,16 @@ class GroupAppartment(models.Model):
     number_of_bedrooms = models.PositiveIntegerField(null=True, blank=True)
     number_of_bathrooms = models.PositiveIntegerField(null=True, blank=True)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -217,7 +222,7 @@ class GroupVilla(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     # Pricing Details
     price_per_sqft = models.DecimalField(max_digits=10, decimal_places=2)
-    bhk_details = ArrayField(models.JSONField(), default=list)
+    bhk_details = ArrayField(models.JSONField(), default=list, null=True, blank=True)
     # Property Details
     number_of_floors = ArrayField(
         models.CharField(max_length=100), null=True, blank=True, default=list
@@ -228,17 +233,23 @@ class GroupVilla(models.Model):
     ready_to_occupy = models.BooleanField(default=False)
     possession_date = models.DateField(null=True, blank=True)
 
-    number_of_car_parking = models.IntegerField()
-    number_of_bike_parking = models.IntegerField()
+    number_of_car_parking = models.IntegerField(null=True, blank=True)
+    number_of_bike_parking = models.IntegerField(null=True, blank=True)
     land_width = models.CharField(max_length=50, blank=True)
     land_length = models.CharField(max_length=50, blank=True)
     total_project_area = models.CharField(max_length=100, null=True, blank=True)
     rera_id = models.CharField(max_length=100, null=True, blank=True)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
     project_size = models.CharField(max_length=50, null=True, blank=True)
     sale_type = models.CharField(max_length=100, null=True, blank=True)

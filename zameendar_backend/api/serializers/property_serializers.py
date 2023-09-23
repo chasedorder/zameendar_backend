@@ -126,6 +126,12 @@ def group_villa_serializer(group_villa: GroupVilla):
     number_of_bike_parking = group_villa.number_of_bike_parking
     land_width = group_villa.land_width
     land_length = group_villa.land_length
+    total_project_area = group_villa.total_project_area
+    rera_id = group_villa.rera_id
+    facing = group_villa.facing
+    furnishing_detail = group_villa.furnishing_detail
+    project_size = group_villa.project_size
+    sale_type = group_villa.sale_type
 
     serialized_data = {
         "price_per_sqft": price_per_sqft,
@@ -138,6 +144,12 @@ def group_villa_serializer(group_villa: GroupVilla):
         "number_of_bike_parking": number_of_bike_parking,
         "land_width": land_width,
         "land_length": land_length,
+        "total_project_area": total_project_area,
+        "rera_id": rera_id,
+        "facing": facing,
+        "furnishing_detail": furnishing_detail,
+        "project_size": project_size,
+        "sale_type": sale_type,
     }
 
     return serialized_data
