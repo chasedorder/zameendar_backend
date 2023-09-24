@@ -265,7 +265,10 @@ class GroupPlot(models.Model):
     total_project_area = models.CharField(max_length=100, null=True, blank=True)
     rera_id = models.CharField(max_length=100, null=True, blank=True)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):

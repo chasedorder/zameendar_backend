@@ -19,6 +19,7 @@ from zameendar_backend.api.models import (
     PropertyMap,
     Seller,
 )
+from zameendar_backend.api.utils.json_to_python import json_to_python
 
 
 class AddGroupPlot(APIView):
@@ -26,25 +27,23 @@ class AddGroupPlot(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        project_name = request.POST["project_name"]
-
-        price_per_sqyd = request.POST["price_per_sqyd"]
-        start_price = request.POST["start_price"]
-        end_price = request.POST["end_price"]
-        plot_sizes = json.loads(request.POST["plot_sizes"])  # list of string
-
-        address_details = json.loads(request.POST["address_detail"])  # json object
-
-        amenities = json.loads(request.POST["amenities"])  # list of json objects
-
+        property_id = request.POST.get("property_id")
+        project_name = request.POST.get("project_name")
+        price_per_sqyd = request.POST.get("price_per_sqyd")
+        start_price = request.POST.get("start_price")
+        end_price = request.POST.get("end_price")
+        plot_sizes = json.loads(request.POST.get("plot_sizes"))  # list of string
+        total_project_area = request.POST.get("total_project_area")
+        rera_id = request.POST.get("rera_id")
+        facing = json_to_python(request.POST.get("facing"))
+        address_details = json.loads(request.POST.get("address_detail"))  # json object
+        amenities = json.loads(request.POST.get("amenities"))  # list of json objects
         maps_details = json.loads(request.POST.get("maps_details", "false"))
-
         seller = Seller.objects.get(user=request.user)
-
         property_images = request.FILES.getlist("property_images")
-        image_details = json.loads(
-            request.POST.get("image_details", "false")
-        )  # list of json objects
+        image_details = json.loads(request.POST.get("image_details"))  # list of json objects
+        contact_details = json.loads(request.POST.get("contact_details"))
+        about_property = request.POST.get("about_property")
 
         property_address = PropertyAddress.objects.create(
             street_address=address_details.get("street_address"),
@@ -54,8 +53,6 @@ class AddGroupPlot(APIView):
             postal_code=address_details["postal_code"],
         )
 
-        contact_details = json.loads(request.POST["contact_details"])
-
         seller_contact = ContactDetails.objects.create(
             phone_number_1=contact_details["phone_number_1"],
             phone_number_2=contact_details["phone_number_2"],
@@ -63,7 +60,7 @@ class AddGroupPlot(APIView):
         )
 
         if maps_details:
-            property_map = PropertyMap.objects.create(location=request.POST["location"])
+            property_map = PropertyMap.objects.create(location=maps_details.get("location"))
         else:
             property_map = None
 
@@ -77,6 +74,7 @@ class AddGroupPlot(APIView):
             amenities=amenities,
             seller_contact=seller_contact,
             map=property_map,
+            about_property=about_property,
         )
 
         property_images_obj_list = []
@@ -95,6 +93,9 @@ class AddGroupPlot(APIView):
             property=property,
             price_per_sqyd=float(price_per_sqyd),
             plot_sizes=plot_sizes,
+            total_project_area=total_project_area,
+            rera_id=rera_id,
+            facing=facing,
         )
 
         return send_pass_http_response({"message": "Property Added Successfully"})
