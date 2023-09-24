@@ -218,6 +218,9 @@ def villa_serializer(villa: Villa):
     furnishing_detail = villa.furnishing_detail
     ready_to_occupy = villa.ready_to_occupy
     available_from = villa.available_from
+    price_per_square_feet = villa.price_per_square_feet
+    floors = villa.floors
+    sale_type = villa.sale_type
 
     serialized_data = {
         "facing": facing,
@@ -233,6 +236,9 @@ def villa_serializer(villa: Villa):
         "furnishing_detail": furnishing_detail,
         "ready_to_occupy": ready_to_occupy,
         "available_from": available_from,
+        "price_per_square_feet": price_per_square_feet,
+        "floors": floors,
+        "sale_type": sale_type,
     }
 
     return serialized_data

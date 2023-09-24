@@ -344,25 +344,33 @@ class Building(models.Model):
 class Villa(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        null=True,
+        blank=True,
+        default=list,
     )
-    land_size = models.CharField(max_length=50)
-    land_width = models.CharField(max_length=50)
-    land_length = models.CharField(max_length=50)
-    carpet_area = models.CharField(max_length=100)
-    bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
-    number_of_washrooms = models.IntegerField()
-    number_of_floors = models.CharField(max_length=50)
-    number_of_car_parking = models.IntegerField()
-    number_of_bike_parking = models.IntegerField()
-    ready_to_occupy = models.BooleanField(default=False)
+    land_size = models.CharField(max_length=50, null=True, blank=True)
+    land_width = models.CharField(max_length=50, null=True, blank=True)
+    land_length = models.CharField(max_length=50, null=True, blank=True)
+    carpet_area = models.CharField(max_length=100, null=True, blank=True)
+    bedroom_available = ArrayField(
+        models.CharField(max_length=50), null=True, blank=True, default=list
+    )
+    number_of_washrooms = models.IntegerField(null=True, blank=True)
+    number_of_floors = models.CharField(max_length=50, null=True, blank=True)
+    number_of_car_parking = models.IntegerField(null=True, blank=True)
+    number_of_bike_parking = models.IntegerField(null=True, blank=True)
+    ready_to_occupy = models.BooleanField(default=False, null=True, blank=True)
     available_from = models.DateField(null=True, blank=True)
     price_per_square_feet = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
     floors = ArrayField(models.CharField(max_length=100), null=True, blank=True, default=list)
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
+        null=True,
+        blank=True,
+        default=list,
     )
     sale_type = models.CharField(max_length=100, null=True, blank=True)
 

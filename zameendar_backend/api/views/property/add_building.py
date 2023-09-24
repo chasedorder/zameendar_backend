@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
@@ -144,6 +146,7 @@ def update_building(request):
     property.address = property_address
     property.seller_contact = seller_contact
     property.about_property = about_property
+    property.updated_date = datetime.now()
     property.save()
 
     building = Building.objects.get(property=property)
