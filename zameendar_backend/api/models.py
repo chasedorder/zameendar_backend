@@ -430,27 +430,40 @@ class Rent(models.Model):
 
 class PG(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    sharing_type = ArrayField(models.CharField(max_length=50), default=list)
-    sharing_for = ArrayField(models.CharField(max_length=50), default=list)
-    attached_washroom = models.BooleanField(default=False)
-    food_facility = models.BooleanField(default=False)
-    parking_facility = models.BooleanField(default=False)
-    price_per_month = models.DecimalField(max_digits=10, decimal_places=2)
-    advance_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    other_facilities = ArrayField(models.JSONField(), default=list)
-    ready_to_move_in = models.BooleanField(default=False)
+    sharing_type = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
+    sharing_for = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
+    attached_washroom = models.BooleanField(default=False, null=True, blank=True)
+    food_facility = models.BooleanField(default=False, null=True, blank=True)
+    parking_facility = models.BooleanField(default=False, null=True, blank=True)
+    price_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    advance_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    other_facilities = ArrayField(
+        models.JSONField(),
+        default=list,
+        null=True,
+        blank=True,
+    )
+    ready_to_move_in = models.BooleanField(default=False, null=True, blank=True)
     coliving_common_area = models.CharField(max_length=100, null=True, blank=True)
-    non_veg_available = models.BooleanField(default=False)
-    visitor_allowed = models.BooleanField(default=False)
-    opposite_sex_visitor_allowed = models.BooleanField(default=False)
-    drinking_allowed = models.BooleanField(default=False)
-    smoking_allowed = models.BooleanField(default=False)
-    any_time_allowed = models.BooleanField(default=False)
+    non_veg_available = models.BooleanField(default=False, null=True, blank=True)
+    visitor_allowed = models.BooleanField(default=False, null=True, blank=True)
+    opposite_sex_visitor_allowed = models.BooleanField(default=False, null=True, blank=True)
+    drinking_allowed = models.BooleanField(default=False, null=True, blank=True)
+    smoking_allowed = models.BooleanField(default=False, null=True, blank=True)
+    any_time_allowed = models.BooleanField(default=False, null=True, blank=True)
     last_time_entry = models.TimeField(null=True, blank=True)
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
+        null=True,
+        blank=True,
+        default=list,
     )
-    food_offerings = ArrayField(models.CharField(max_length=100), default=list)
+    food_offerings = ArrayField(
+        models.CharField(max_length=100),
+        null=True,
+        blank=True,
+        default=list,
+    )
 
     def __str__(self):
         return self.property.project_name

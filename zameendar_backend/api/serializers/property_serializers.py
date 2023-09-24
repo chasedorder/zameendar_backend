@@ -335,6 +335,16 @@ def pg_serializer(pg: PG):
     advance_amount = pg.advance_amount
     other_facilities = pg.other_facilities
     ready_to_move_in = pg.ready_to_move_in
+    coliving_common_area = pg.coliving_common_area
+    non_veg_available = pg.non_veg_available
+    visitor_allowed = pg.visitor_allowed
+    opposite_sex_visitor_allowed = pg.opposite_sex_visitor_allowed
+    drinking_allowed = pg.drinking_allowed
+    smoking_allowed = pg.smoking_allowed
+    any_time_allowed = pg.any_time_allowed
+    last_time_entry = pg.last_time_entry
+    furnishing_detail = pg.furnishing_detail
+    food_offerings = pg.food_offerings
 
     serialized_data = {
         "sharing_type": sharing_type,
@@ -346,6 +356,16 @@ def pg_serializer(pg: PG):
         "advance_amount": advance_amount,
         "other_facilities": other_facilities,
         "ready_to_move_in": ready_to_move_in,
+        "coliving_common_area": coliving_common_area,
+        "non_veg_available": non_veg_available,
+        "visitor_allowed": visitor_allowed,
+        "opposite_sex_visitor_allowed": opposite_sex_visitor_allowed,
+        "drinking_allowed": drinking_allowed,
+        "smoking_allowed": smoking_allowed,
+        "any_time_allowed": any_time_allowed,
+        "last_time_entry": last_time_entry,
+        "furnishing_detail": furnishing_detail,
+        "food_offerings": food_offerings,
     }
 
     return serialized_data

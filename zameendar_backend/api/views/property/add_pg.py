@@ -1,4 +1,4 @@
-import json
+from datetime import datetime
 
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
@@ -9,6 +9,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
+from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import (
     PG,
     ContactDetails,
@@ -18,6 +19,10 @@ from zameendar_backend.api.models import (
     PropertyMap,
     Seller,
 )
+from zameendar_backend.api.utils.json_to_python import json_to_python
+from zameendar_backend.api.utils.property.add_common_details import add_common_details
+from zameendar_backend.api.utils.property.add_property_images import add_property_images
+from zameendar_backend.api.utils.property.update_common_details import update_common_details
 
 
 class AddPG(APIView):
@@ -25,82 +30,176 @@ class AddPG(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        project_name = request.POST["project_name"]
+        property_id = request.POST.get("property_id")
 
-        address_details = json.loads(request.POST["address_detail"])  # json object
-        final_price = request.POST["final_price"]
-        sharing_for = request.POST["sharing_for"]
-        sharing_type = request.POST["sharing_type"]
-        price_per_month = request.POST["price_per_month"]
-        advance_amount = request.POST["advance_amount"]
-        attached_washroom = json.loads(request.POST["attached_washroom"])
-        food_facility = json.loads(request.POST["food_facility"])
-        parking_facility = json.loads(request.POST["parking_facility"])
-        ready_to_move_in = json.loads(request.POST["ready_to_move_in"])
-        other_facilities = json.loads(request.POST["other_facilities"])  # list of json objects
-
-        maps_details = json.loads(request.POST.get("maps_details", "false"))
-
-        seller = Seller.objects.get(user=request.user)
-
-        property_images = request.FILES.getlist("property_images")
-        image_details = json.loads(
-            request.POST.get("image_details", "false")
-        )  # list of json objects
-
-        contact_details = json.loads(request.POST["contact_details"])
-
-        seller_contact = ContactDetails.objects.create(
-            phone_number_1=contact_details["phone_number_1"],
-            phone_number_2=contact_details["phone_number_2"],
-            email=contact_details["email"],
-        )
-
-        if maps_details:
-            property_map = PropertyMap.objects.create(location=request.POST["location"])
+        # for updating
+        if property_id:
+            return update_pg(request)
+        # for adding new
         else:
-            property_map = None
+            return create_pg(request)
 
-        property_address = PropertyAddress.objects.create(
-            street_address=address_details.get("street_address"),
-            area=address_details.get("area"),
-            city=address_details["city"],
-            state=address_details["state"],
-            postal_code=address_details["postal_code"],
+
+def create_pg(request):
+    project_name = request.POST.get("project_name")
+    address_details = json_to_python(request.POST.get("address_detail"))  # json object
+    final_price = request.POST.get("final_price")
+    sharing_for = request.POST.get("sharing_for")
+    sharing_type = request.POST.get("sharing_type")
+    price_per_month = request.POST.get("price_per_month")
+    advance_amount = request.POST.get("advance_amount")
+    attached_washroom = json_to_python(request.POST.get("attached_washroom"))
+    food_facility = json_to_python(request.POST.get("food_facility"))
+    parking_facility = json_to_python(request.POST.get("parking_facility"))
+    ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
+    other_facilities = json_to_python(request.POST.get("other_facilities"))  # list of json objects
+    coliving_common_area = request.POST.get("coliving_common_area")
+    non_veg_available = request.POST.get("non_veg_available")
+    visitor_allowed = request.POST.get("visitor_allowed")
+    opposite_sex_visitor_allowed = request.POST.get("opposite_sex_visitor_allowed")
+    drinking_allowed = request.POST.get("drinking_allowed")
+    smoking_allowed = request.POST.get("smoking_allowed")
+    any_time_allowed = request.POST.get("any_time_allowed")
+    last_time_entry = request.POST.get("last_time_entry")
+    furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
+    food_offerings = json_to_python(request.POST.get("food_offerings"))
+    maps_details = json_to_python(request.POST.get("maps_details", "false"))
+    seller = Seller.objects.get(user=request.user)
+    property_images = request.FILES.getlist("property_images")
+    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    contact_details = json_to_python(request.POST.get("contact_details"))
+    about_property = request.POST.get("about_property")
+
+    property_map, property_address, seller_contact = add_common_details(
+        maps_details=maps_details,
+        address_details=address_details,
+        contact_details=contact_details,
+    )
+    property = Property.objects.create(
+        project_name=project_name,
+        seller=seller,
+        final_price=final_price,
+        property_type=PropertyTypes.PG,
+        address=property_address,
+        seller_contact=seller_contact,
+        map=property_map,
+        about_property=about_property,
+    )
+
+    PG.objects.create(
+        property=property,
+        sharing_type=sharing_type,
+        sharing_for=sharing_for,
+        attached_washroom=attached_washroom,
+        food_facility=food_facility,
+        parking_facility=parking_facility,
+        price_per_month=price_per_month,
+        advance_amount=advance_amount,
+        other_facilities=other_facilities,
+        ready_to_move_in=ready_to_move_in,
+        coliving_common_area=coliving_common_area,
+        non_veg_available=non_veg_available,
+        visitor_allowed=visitor_allowed,
+        opposite_sex_visitor_allowed=opposite_sex_visitor_allowed,
+        drinking_allowed=drinking_allowed,
+        smoking_allowed=smoking_allowed,
+        any_time_allowed=any_time_allowed,
+        last_time_entry=last_time_entry,
+        furnishing_detail=furnishing_detail,
+        food_offerings=food_offerings,
+    )
+
+    if image_details:
+        add_property_images(
+            property=property, property_images=property_images, image_details=image_details
         )
-        property = Property.objects.create(
-            project_name=project_name,
-            seller=seller,
-            final_price=float(final_price),
-            property_type=Property.GroupAppart,
-            address=property_address,
-            seller_contact=seller_contact,
-            map=property_map,
+
+    return send_pass_http_response(
+        {
+            "message": "Property Added Successfully",
+            "property_id": property.id,
+        }
+    )
+
+
+def update_pg(request):
+    property_id = request.POST.get("property_id")
+    project_name = request.POST.get("project_name")
+    address_details = json_to_python(request.POST.get("address_detail"))  # json object
+    final_price = request.POST.get("final_price")
+    sharing_for = request.POST.get("sharing_for")
+    sharing_type = request.POST.get("sharing_type")
+    price_per_month = request.POST.get("price_per_month")
+    advance_amount = request.POST.get("advance_amount")
+    attached_washroom = json_to_python(request.POST.get("attached_washroom"))
+    food_facility = json_to_python(request.POST.get("food_facility"))
+    parking_facility = json_to_python(request.POST.get("parking_facility"))
+    ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
+    other_facilities = json_to_python(request.POST.get("other_facilities"))  # list of json objects
+    coliving_common_area = request.POST.get("coliving_common_area")
+    non_veg_available = request.POST.get("non_veg_available")
+    visitor_allowed = request.POST.get("visitor_allowed")
+    opposite_sex_visitor_allowed = request.POST.get("opposite_sex_visitor_allowed")
+    drinking_allowed = request.POST.get("drinking_allowed")
+    smoking_allowed = request.POST.get("smoking_allowed")
+    any_time_allowed = request.POST.get("any_time_allowed")
+    last_time_entry = request.POST.get("last_time_entry")
+    furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
+    food_offerings = json_to_python(request.POST.get("food_offerings"))
+    maps_details = json_to_python(request.POST.get("maps_details", "false"))
+    seller = Seller.objects.get(user=request.user)
+    property_images = request.FILES.getlist("property_images")
+    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    contact_details = json_to_python(request.POST.get("contact_details"))
+    about_property = request.POST.get("about_property")
+
+    property = Property.objects.get(id=property_id)
+
+    property_map, property_address, seller_contact = update_common_details(
+        property=property,
+        maps_details=maps_details,
+        address_details=address_details,
+        contact_details=contact_details,
+    )
+
+    property.project_name = project_name
+    property.seller = seller
+    property.final_price = final_price
+    property.property_type = PropertyTypes.PG
+    property.address = property_address
+    property.seller_contact = seller_contact
+    property.map = property_map
+    property.about_property = about_property
+    property.updated_date = datetime.now()
+    property.save()
+
+    pg = PG.objects.get(property=property)
+
+    pg.property = property
+    pg.sharing_type = sharing_type
+    pg.sharing_for = sharing_for
+    pg.attached_washroom = attached_washroom
+    pg.food_facility = food_facility
+    pg.parking_facility = parking_facility
+    pg.price_per_month = price_per_month
+    pg.advance_amount = advance_amount
+    pg.other_facilities = other_facilities
+    pg.ready_to_move_in = ready_to_move_in
+    pg.coliving_common_area = coliving_common_area
+    pg.non_veg_available = non_veg_available
+    pg.visitor_allowed = visitor_allowed
+    pg.opposite_sex_visitor_allowed = opposite_sex_visitor_allowed
+    pg.drinking_allowed = drinking_allowed
+    pg.smoking_allowed = smoking_allowed
+    pg.any_time_allowed = any_time_allowed
+    pg.last_time_entry = last_time_entry
+    pg.furnishing_detail = furnishing_detail
+    pg.food_offerings = food_offerings
+    pg.save()
+
+    if image_details:
+        add_property_images(
+            property=property, property_images=property_images, image_details=image_details
         )
 
-        property_images_obj_list = []
-        for image, image_detail in zip(property_images, image_details):
-            property_images_obj_list.append(
-                PropertyImage(
-                    title=image_detail["title"],
-                    property=property,
-                    meta_data=image_detail["meta_data"],
-                    image=image,
-                )
-            )
-        PropertyImage.objects.bulk_create(property_images_obj_list)
-
-        PG.objects.create(
-            property=property,
-            sharing_type=sharing_type,
-            sharing_for=sharing_for,
-            attached_washroom=attached_washroom,
-            food_facility=food_facility,
-            parking_facility=parking_facility,
-            price_per_month=float(price_per_month),
-            advance_amount=float(advance_amount),
-            other_facilities=other_facilities,
-            ready_to_move_in=ready_to_move_in,
-        )
-
-        return send_pass_http_response({"message": "Property Added Successfully"})
+    return send_pass_http_response({"property_id": property.id})
