@@ -12,6 +12,7 @@ from zameendar_backend.api.models import (
     OpenPlot,
     Property,
     PropertyAddress,
+    PropertyImage,
     PropertyMap,
     Rent,
     Seller,
@@ -442,6 +443,18 @@ def property_serializer(property: Property):
     is_verified = property.is_verified
     about_property = property.about_property
 
+    image_queryset = PropertyImage.objects.filter(property=property)
+    image_serializer = []
+    for image in image_queryset:
+        image_serializer.append(
+            {
+                "image_id": image.id,
+                "image": image.image.url,
+                "title": image.title,
+                "meta_data": image.meta_data,
+            }
+        )
+
     serialized_data = {
         "property_id": property_id,
         "project_name": project_name,
@@ -455,6 +468,7 @@ def property_serializer(property: Property):
         "amenities": amenities,
         "is_verified": is_verified,
         "about_property": about_property,
+        "images": image_serializer,
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)
