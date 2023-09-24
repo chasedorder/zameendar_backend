@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
@@ -10,15 +11,11 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
     send_pass_http_response,
 )
 from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import (
-    ContactDetails,
-    Property,
-    PropertyAddress,
-    PropertyImage,
-    PropertyMap,
-    Rent,
-    Seller,
-)
+from zameendar_backend.api.models import Property, Rent, Seller
+from zameendar_backend.api.utils.json_to_python import json_to_python
+from zameendar_backend.api.utils.property.add_common_details import add_common_details
+from zameendar_backend.api.utils.property.add_property_images import add_property_images
+from zameendar_backend.api.utils.property.update_common_details import update_common_details
 
 
 class AddRent(APIView):
@@ -26,78 +23,135 @@ class AddRent(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        project_name = request.POST["project_name"]
+        property_id = request.POST.get("property_id")
 
-        address_details = json.loads(request.POST["address_detail"])  # json object
-        facing = json.loads(request.POST["facing"])
-        rent_per_month = request.POST["rent_per_month"]
-        advance_amount = request.POST["advance_amount"]
-        floor_number = request.POST["floor_number"]
-        number_of_car_parking = request.POST["number_of_car_parking"]
-        number_of_bike_parking = request.POST["number_of_bike_parking"]
-        furnishing_detail = request.POST["furnishing_detail"]
-        ready_to_occupy = json.loads(request.POST["ready_to_occupy"])
-
-        maps_details = json.loads(request.POST.get("maps_details", "false"))
-
-        seller = Seller.objects.get(user=request.user)
-
-        property_images = request.FILES.getlist("property_images")
-        image_details = json.loads(
-            request.POST.get("image_details", "false")
-        )  # list of json objects
-
-        contact_details = json.loads(request.POST["contact_details"])
-
-        seller_contact = ContactDetails.objects.create(
-            phone_number_1=contact_details["phone_number_1"],
-            phone_number_2=contact_details["phone_number_2"],
-            email=contact_details["email"],
-        )
-
-        if maps_details:
-            property_map = PropertyMap.objects.create(location=request.POST["location"])
+        # for updating
+        if property_id:
+            return update_rent(request)
+        # for adding new
         else:
-            property_map = None
+            return create_rent(request)
 
-        property_address = PropertyAddress.objects.create(
-            street_address=address_details.get("street_address"),
-            area=address_details.get("area"),
-            city=address_details["city"],
-            state=address_details["state"],
-            postal_code=address_details["postal_code"],
+
+def create_rent(request):
+    project_name = request.POST.get("project_name")
+    address_details = json_to_python(request.POST.get("address_detail"))  # json object
+    facing = json_to_python(request.POST.get("facing"))
+    rent_per_month = request.POST.get("rent_per_month")
+    advance_amount = request.POST.get("advance_amount")
+    floor_number = request.POST.get("floor_number")
+    number_of_car_parking = request.POST.get("number_of_car_parking")
+    number_of_bike_parking = request.POST.get("number_of_bike_parking")
+    furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
+    ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
+    carpet_area = request.POST.get("carpet_area")
+    bedroom_available = json_to_python(request.POST.get("bedroom_available"))
+    about_property = request.POST.get("about_property")
+    maps_details = json_to_python(request.POST.get("maps_details", "false"))
+    seller = Seller.objects.get(user=request.user)
+    property_images = request.FILES.getlist("property_images")
+    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    contact_details = json_to_python(request.POST.get("contact_details"))
+
+    property_map, property_address, seller_contact = add_common_details(
+        maps_details=maps_details,
+        address_details=address_details,
+        contact_details=contact_details,
+    )
+    property = Property.objects.create(
+        project_name=project_name,
+        seller=seller,
+        property_type=PropertyTypes.Rent,
+        address=property_address,
+        seller_contact=seller_contact,
+        map=property_map,
+        about_property=about_property,
+    )
+
+    Rent.objects.create(
+        property=property,
+        facing=facing,
+        floor_number=floor_number,
+        number_of_car_parking=number_of_car_parking,
+        number_of_bike_parking=number_of_bike_parking,
+        furnishing_detail=furnishing_detail,
+        ready_to_move_in=ready_to_move_in,
+        rent_per_month=rent_per_month,
+        advance_amount=advance_amount,
+        carpet_area=carpet_area,
+        bedroom_available=bedroom_available,
+    )
+
+    if image_details:
+        add_property_images(
+            property=property, property_images=property_images, image_details=image_details
         )
-        property = Property.objects.create(
-            project_name=project_name,
-            seller=seller,
-            property_type=PropertyTypes.Rent,
-            address=property_address,
-            seller_contact=seller_contact,
-            map=property_map,
+
+    return send_pass_http_response(
+        {
+            "message": "Property Added Successfully",
+            "property_id": property.id,
+        }
+    )
+
+
+def update_rent(request):
+    property_id = request.POST.get("property_id")
+    project_name = request.POST.get("project_name")
+    address_details = json_to_python(request.POST.get("address_detail"))  # json object
+    facing = json_to_python(request.POST.get("facing"))
+    rent_per_month = request.POST.get("rent_per_month")
+    advance_amount = request.POST.get("advance_amount")
+    floor_number = request.POST.get("floor_number")
+    number_of_car_parking = request.POST.get("number_of_car_parking")
+    number_of_bike_parking = request.POST.get("number_of_bike_parking")
+    furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
+    ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
+    carpet_area = request.POST.get("carpet_area")
+    bedroom_available = json_to_python(request.POST.get("bedroom_available"))
+    about_property = request.POST.get("about_property")
+    maps_details = json_to_python(request.POST.get("maps_details", "false"))
+    seller = Seller.objects.get(user=request.user)
+    property_images = request.FILES.getlist("property_images")
+    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    contact_details = json_to_python(request.POST.get("contact_details"))
+
+    property = Property.objects.get(id=property_id)
+
+    property_map, property_address, seller_contact = update_common_details(
+        property=property,
+        maps_details=maps_details,
+        address_details=address_details,
+        contact_details=contact_details,
+    )
+    property.project_name = project_name
+    property.seller = seller
+    property.property_type = PropertyTypes.Rent
+    property.address = property_address
+    property.seller_contact = seller_contact
+    property.map = property_map
+    property.about_property = about_property
+    property.updated_date = datetime.now()
+    property.save()
+
+    rent = Rent.objects.get(property=property)
+    rent.property = property
+    rent.facing = facing
+    rent.floor_number = floor_number
+    rent.number_of_car_parking = number_of_car_parking
+    rent.number_of_bike_parking = number_of_bike_parking
+    rent.furnishing_detail = furnishing_detail
+    rent.ready_to_move_in = ready_to_move_in
+    rent.rent_per_month = rent_per_month
+    rent.advance_amount = advance_amount
+    rent.carpet_area = carpet_area
+    rent.bedroom_available = bedroom_available
+
+    rent.save()
+
+    if image_details:
+        add_property_images(
+            property=property, property_images=property_images, image_details=image_details
         )
 
-        property_images_obj_list = []
-        for image, image_detail in zip(property_images, image_details):
-            property_images_obj_list.append(
-                PropertyImage(
-                    title=image_detail["title"],
-                    property=property,
-                    meta_data=image_detail["meta_data"],
-                    image=image,
-                )
-            )
-        PropertyImage.objects.bulk_create(property_images_obj_list)
-
-        Rent.objects.create(
-            property=property,
-            facing=facing,
-            floor_number=int(floor_number),
-            number_of_car_parking=int(number_of_car_parking),
-            number_of_bike_parking=int(number_of_bike_parking),
-            furnishing_detail=furnishing_detail,
-            ready_to_move_in=ready_to_occupy,
-            rent_per_month=float(rent_per_month),
-            advance_amount=float(advance_amount),
-        )
-
-        return send_pass_http_response({"message": "Property Added Successfully"})
+    return send_pass_http_response({"property_id": property.id})

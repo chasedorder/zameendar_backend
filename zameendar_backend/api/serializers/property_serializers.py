@@ -306,6 +306,8 @@ def rent_serializer(rent: Rent):
     rent_per_month = rent.rent_per_month
     advance_amount = rent.advance_amount
     ready_to_move_in = rent.ready_to_move_in
+    carpet_area = rent.carpet_area
+    bedroom_available = rent.bedroom_available
 
     serialized_data = {
         "facing": facing,
@@ -316,6 +318,8 @@ def rent_serializer(rent: Rent):
         "rent_per_month": rent_per_month,
         "advance_amount": advance_amount,
         "ready_to_move_in": ready_to_move_in,
+        "carpet_area": carpet_area,
+        "bedroom_available": bedroom_available,
     }
 
     return serialized_data
