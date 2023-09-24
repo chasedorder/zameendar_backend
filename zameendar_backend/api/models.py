@@ -279,18 +279,26 @@ class GroupPlot(models.Model):
 class Flat(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
     carpet_area = models.CharField(max_length=100)
-    bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
-    number_of_washrooms = models.IntegerField()
-    floor_number = models.IntegerField()
-    number_of_car_parking = models.IntegerField()
-    number_of_bike_parking = models.IntegerField()
-    furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+    bedroom_available = ArrayField(
+        models.CharField(max_length=50), default=list, null=True, blank=True
     )
-    ready_to_occupy = models.BooleanField(default=False)
+    number_of_washrooms = models.IntegerField(null=True, blank=True)
+    floor_number = models.IntegerField(null=True, blank=True)
+    number_of_car_parking = models.IntegerField(null=True, blank=True)
+    number_of_bike_parking = models.IntegerField(null=True, blank=True)
+    furnishing_detail = ChoiceArrayField(
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
+        default=list,
+        null=True,
+        blank=True,
+    )
+    ready_to_occupy = models.BooleanField(default=False, null=True, blank=True)
     available_from = models.DateField(null=True, blank=True)
     price_per_square_feet = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True

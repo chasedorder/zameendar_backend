@@ -158,10 +158,15 @@ def group_villa_serializer(group_villa: GroupVilla):
 def group_plot_serializer(group_plot: GroupPlot):
     price_per_sqyd = group_plot.price_per_sqyd
     plot_sizes = group_plot.plot_sizes
-
+    total_project_area = group_plot.total_project_area
+    rera_id = group_plot.rera_id
+    facing = group_plot.facing
     serialized_data = {
         "price_per_sqyd": price_per_sqyd,
         "plot_sizes": plot_sizes,
+        "total_project_area": total_project_area,
+        "rera_id": rera_id,
+        "facing": facing,
     }
 
     return serialized_data
@@ -178,6 +183,8 @@ def flat_serializer(flat: Flat):
     furnishing_detail = flat.furnishing_detail
     ready_to_occupy = flat.ready_to_occupy
     available_from = flat.available_from
+    price_per_square_feet = flat.price_per_square_feet
+    sale_type = flat.sale_type
 
     serialized_data = {
         "facing": facing,
@@ -190,6 +197,8 @@ def flat_serializer(flat: Flat):
         "furnishing_detail": furnishing_detail,
         "ready_to_occupy": ready_to_occupy,
         "available_from": available_from,
+        "price_per_square_feet": price_per_square_feet,
+        "sale_type": sale_type,
     }
 
     return serialized_data

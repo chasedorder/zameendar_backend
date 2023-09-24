@@ -68,6 +68,7 @@ def update_group_appartment(request):
         possession_date = None
 
     property = Property.objects.get(id=property_id)
+
     property_map, property_address, seller_contact = update_common_details(
         property=property,
         maps_details=maps_details,
@@ -76,8 +77,8 @@ def update_group_appartment(request):
     )
 
     property.project_name = project_name
-    property.start_price = float(start_price)
-    property.end_price = float(end_price)
+    property.start_price = start_price
+    property.end_price = end_price
     property.seller = seller
     property.amenities = amenities
     property.address = property_address
@@ -171,11 +172,6 @@ def create_group_appartment(request):
         about_property=about_property,
     )
 
-    if image_details:
-        add_property_images(
-            property=property, property_images=property_images, image_details=image_details
-        )
-
     GroupAppartment.objects.create(
         property=property,
         price_per_sqft=price_per_sqft,
@@ -195,6 +191,11 @@ def create_group_appartment(request):
         facing=facing,
         furnishing_detail=furnishing_detail,
     )
+
+    if image_details:
+        add_property_images(
+            property=property, property_images=property_images, image_details=image_details
+        )
 
     return send_pass_http_response(
         {
