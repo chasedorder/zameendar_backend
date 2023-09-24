@@ -56,9 +56,7 @@ def create_flat(request):
     contact_details = json_to_python(request.POST.get("contact_details"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
-    image_details = json_to_python(
-        request.POST.get("image_details", "false")
-    )  # list of json objects
+    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,

@@ -312,22 +312,30 @@ class Flat(models.Model):
 class Building(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
-    land_size = models.CharField(max_length=50)
-    land_width = models.CharField(max_length=50)
-    land_length = models.CharField(max_length=50)
-    carpet_area = models.CharField(max_length=100)
-    number_of_floors = models.IntegerField()
-    number_of_car_parking = models.IntegerField()
-    number_of_bike_parking = models.IntegerField()
-    ready_to_occupy = models.BooleanField(default=False)
+    land_size = models.CharField(max_length=50, null=True, blank=True)
+    land_width = models.CharField(max_length=50, null=True, blank=True)
+    land_length = models.CharField(max_length=50, null=True, blank=True)
+    carpet_area = models.CharField(max_length=100, null=True, blank=True)
+    number_of_floors = models.IntegerField(null=True, blank=True)
+    number_of_car_parking = models.IntegerField(null=True, blank=True)
+    number_of_bike_parking = models.IntegerField(null=True, blank=True)
+    ready_to_occupy = models.BooleanField(default=False, null=True, blank=True)
     available_from = models.DateField(null=True, blank=True)
     sale_type = models.CharField(max_length=100, null=True, blank=True)
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
-    bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
+    bedroom_available = ArrayField(
+        models.CharField(max_length=50), default=list, null=True, blank=True
+    )
 
     def __str__(self):
         return self.property.project_name

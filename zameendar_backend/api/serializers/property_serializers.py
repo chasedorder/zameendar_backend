@@ -249,6 +249,9 @@ def building_serializer(building: Building):
     number_of_bike_parking = building.number_of_bike_parking
     ready_to_occupy = building.ready_to_occupy
     available_from = building.available_from
+    sale_type = building.sale_type
+    furnishing_detail = building.furnishing_detail
+    bedroom_available = building.bedroom_available
 
     serialized_data = {
         "facing": facing,
@@ -261,6 +264,9 @@ def building_serializer(building: Building):
         "number_of_bike_parking": number_of_bike_parking,
         "ready_to_occupy": ready_to_occupy,
         "available_from": available_from,
+        "sale_type": sale_type,
+        "furnishing_detail": furnishing_detail,
+        "bedroom_available": bedroom_available,
     }
 
     return serialized_data
