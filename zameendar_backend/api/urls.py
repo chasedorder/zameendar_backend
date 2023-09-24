@@ -6,6 +6,7 @@ from .views.plans.create_property_plan import CreatePropertyPlan
 from .views.plans.get_all_plans import GetAllPlans
 from .views.plans.get_property_plan_details import GetPropertyPlanDetail
 from .views.property.add_building import AddBuilding
+from .views.property.add_commercial import AddCommercial
 from .views.property.add_flat import AddFlat
 from .views.property.add_group_appartment import AddGroupAppartment
 from .views.property.add_group_plot import AddGroupPlot
@@ -33,6 +34,7 @@ urlpatterns = [
     path("add_open_plot/", AddOpenPlot.as_view(), name="add_open_plot"),
     path("add_rent/", AddRent.as_view(), name="add_rent"),
     path("add_pg/", AddPG.as_view(), name="add_pg"),
+    path("add_commercial/", AddCommercial.as_view(), name="add_commercial"),
     path("get_all_plans/", GetAllPlans.as_view(), name="get_all_plans"),
     path("create_property_plan/", CreatePropertyPlan.as_view(), name="create_property_plan"),
     path("create_order/", CreateOrder.as_view(), name="create_order"),

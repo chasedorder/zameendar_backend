@@ -3,6 +3,7 @@ from zameendar_backend.api.models import (
     PG,
     PROPERTY_MODEL_MAP,
     Building,
+    Commercial,
     ContactDetails,
     Flat,
     GroupAppartment,
@@ -371,6 +372,48 @@ def pg_serializer(pg: PG):
     return serialized_data
 
 
+def commercial_serializer(commercial: Commercial):
+    commerical_category = commercial.commerical_category
+    price_per_square_feet = commercial.price_per_square_feet
+    builtup_area = commercial.builtup_area
+    price_per_square_yard = commercial.price_per_square_yard
+    passenger_lifts = commercial.passenger_lifts
+    service_lifts = commercial.service_lifts
+    parking_available = commercial.parking_available
+    min_contract_period = commercial.min_contract_period
+    negotialble = commercial.negotialble
+    tax_gov_charges_included = commercial.tax_gov_charges_included
+    dg_ups_charges_included = commercial.dg_ups_charges_included
+    water_charges_included = commercial.water_charges_included
+    floor_number = commercial.floor_number
+    possesstion_date = commercial.possesstion_date
+    electricity_bill_included = commercial.electricity_bill_included
+    safety_deposit = commercial.safety_deposit
+    rent_per_month = commercial.rent_per_month
+
+    serialized_data = {
+        "commerical_category": commerical_category,
+        "price_per_square_feet": price_per_square_feet,
+        "builtup_area": builtup_area,
+        "price_per_square_yard": price_per_square_yard,
+        "passenger_lifts": passenger_lifts,
+        "service_lifts": service_lifts,
+        "parking_available": parking_available,
+        "min_contract_period": min_contract_period,
+        "negotialble": negotialble,
+        "tax_gov_charges_included": tax_gov_charges_included,
+        "dg_ups_charges_included": dg_ups_charges_included,
+        "water_charges_included": water_charges_included,
+        "floor_number": floor_number,
+        "possesstion_date": possesstion_date,
+        "electricity_bill_included": electricity_bill_included,
+        "safety_deposit": safety_deposit,
+        "rent_per_month": rent_per_month,
+    }
+
+    return serialized_data
+
+
 PROPERTY_SERIALIZER_MAP = {
     PropertyTypes.GroupAppart: group_appartment_serializer,
     PropertyTypes.GroupVilla: group_villa_serializer,
@@ -381,6 +424,7 @@ PROPERTY_SERIALIZER_MAP = {
     PropertyTypes.OpenPlot: open_plot_serializer,
     PropertyTypes.Rent: rent_serializer,
     PropertyTypes.PG: pg_serializer,
+    PropertyTypes.Commercial: commercial_serializer,
 }
 
 
