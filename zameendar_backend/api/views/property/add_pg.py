@@ -10,15 +10,7 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
     send_pass_http_response,
 )
 from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import (
-    PG,
-    ContactDetails,
-    Property,
-    PropertyAddress,
-    PropertyImage,
-    PropertyMap,
-    Seller,
-)
+from zameendar_backend.api.models import PG, Property, Seller
 from zameendar_backend.api.utils.json_to_python import json_to_python
 from zameendar_backend.api.utils.property.add_common_details import add_common_details
 from zameendar_backend.api.utils.property.add_property_images import add_property_images
