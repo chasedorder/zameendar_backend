@@ -284,13 +284,14 @@ def open_plot_serializer(open_plot: OpenPlot):
     land_width = open_plot.land_width
     land_length = open_plot.land_length
     is_fencing = open_plot.is_fencing
-
+    price_per_square_yard = open_plot.price_per_square_yard
     serialized_data = {
         "facing": facing,
         "land_size": land_size,
         "land_width": land_width,
         "land_length": land_length,
         "is_fencing": is_fencing,
+        "price_per_square_yard": price_per_square_yard,
     }
 
     return serialized_data

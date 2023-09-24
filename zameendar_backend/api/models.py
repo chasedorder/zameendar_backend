@@ -381,12 +381,15 @@ class Villa(models.Model):
 class OpenPlot(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        null=True,
+        blank=True,
+        default=list,
     )
-    land_size = models.CharField(max_length=50)
-    land_width = models.CharField(max_length=50)
-    land_length = models.CharField(max_length=50)
-    is_fencing = models.BooleanField(default=False)
+    land_size = models.CharField(max_length=50, null=True, blank=True)
+    land_width = models.CharField(max_length=50, null=True, blank=True)
+    land_length = models.CharField(max_length=50, null=True, blank=True)
+    is_fencing = models.BooleanField(default=False, null=True, blank=True)
     price_per_square_yard = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
@@ -399,19 +402,27 @@ class OpenPlot(models.Model):
 class Rent(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
-        models.CharField(max_length=50, choices=FACINGS.facing_choices), default=list
+        models.CharField(max_length=50, choices=FACINGS.facing_choices),
+        default=list,
+        null=True,
+        blank=True,
     )
     floor_number = models.IntegerField(null=True, blank=True)
-    number_of_car_parking = models.IntegerField()
-    number_of_bike_parking = models.IntegerField()
+    number_of_car_parking = models.IntegerField(null=True, blank=True)
+    number_of_bike_parking = models.IntegerField(null=True, blank=True)
     furnishing_detail = ChoiceArrayField(
-        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices), default=list
+        models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
+        null=True,
+        blank=True,
+        default=list,
     )
-    rent_per_month = models.DecimalField(max_digits=10, decimal_places=2)
-    advance_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    ready_to_move_in = models.BooleanField(default=False)
+    rent_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    advance_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    ready_to_move_in = models.BooleanField(default=False, null=True, blank=True)
     carpet_area = models.CharField(max_length=100, null=True, blank=True)
-    bedroom_available = ArrayField(models.CharField(max_length=50), default=list)
+    bedroom_available = ArrayField(
+        models.CharField(max_length=50), default=list, null=True, blank=True
+    )
 
     def __str__(self):
         return self.property.project_name
