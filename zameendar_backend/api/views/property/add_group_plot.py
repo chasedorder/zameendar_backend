@@ -81,7 +81,12 @@ def create_group_plot(request):
             property=property, property_images=property_images, image_details=image_details
         )
 
-    return send_pass_http_response({"message": "Property Added Successfully"})
+    return send_pass_http_response(
+        {
+            "message": "Property Added Successfully",
+            "property_id": property.id,
+        }
+    )
 
 
 def update_group_plot(request):

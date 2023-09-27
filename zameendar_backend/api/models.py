@@ -451,7 +451,7 @@ class PG(models.Model):
     drinking_allowed = models.BooleanField(default=False, null=True, blank=True)
     smoking_allowed = models.BooleanField(default=False, null=True, blank=True)
     any_time_allowed = models.BooleanField(default=False, null=True, blank=True)
-    last_time_entry = models.TimeField(null=True, blank=True)
+    last_time_entry = models.CharField(null=True, blank=True)
     furnishing_detail = ChoiceArrayField(
         models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
         null=True,
