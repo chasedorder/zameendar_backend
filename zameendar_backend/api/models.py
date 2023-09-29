@@ -90,16 +90,16 @@ class Buyer(models.Model):
 
 
 class ContactDetails(models.Model):
-    phone_number_1 = models.CharField(max_length=50, blank=True)
-    phone_number_2 = models.CharField(max_length=50, blank=True)
+    phone_number_1 = models.CharField(max_length=50, blank=True, null=True)
+    phone_number_2 = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(blank=True)
 
 
 class PropertyAddress(models.Model):
-    street_address = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=20)
+    street_address = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
     area = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):

@@ -11,7 +11,7 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
 )
 from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import Property, Seller, Villa
-from zameendar_backend.api.utils.formatting_date_time import formatting_date
+from zameendar_backend.api.utils.formatting_date_time import convert_string_to_date
 from zameendar_backend.api.utils.json_to_python import json_to_python
 from zameendar_backend.api.utils.property.add_common_details import add_common_details
 from zameendar_backend.api.utils.property.add_property_images import add_property_images
@@ -50,7 +50,7 @@ def create_villa(request):
     number_of_car_parking = request.POST.get("number_of_car_parking")
     number_of_bike_parking = request.POST.get("number_of_bike_parking")
     ready_to_occupy = json_to_python(request.POST.get("ready_to_occupy"))
-    available_from = formatting_date(request.POST.get("available_from"))
+    available_from = convert_string_to_date(request.POST.get("available_from"))
     price_per_square_feet = request.POST.get("price_per_square_feet")
     floors = json_to_python(request.POST.get("floors"))
     furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
@@ -129,7 +129,7 @@ def update_villa(request):
     number_of_car_parking = request.POST.get("number_of_car_parking")
     number_of_bike_parking = request.POST.get("number_of_bike_parking")
     ready_to_occupy = json_to_python(request.POST.get("ready_to_occupy"))
-    available_from = formatting_date(request.POST.get("available_from"))
+    available_from = convert_string_to_date(request.POST.get("available_from"))
     price_per_square_feet = request.POST.get("price_per_square_feet")
     floors = json_to_python(request.POST.get("floors"))
     furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
