@@ -1,3 +1,5 @@
+import random
+
 from django.urls import path
 
 from .views.forgot_password import ForgotPassword
@@ -17,6 +19,7 @@ from .views.property.add_rent import AddRent
 from .views.property.add_villa import AddVilla
 from .views.reset_password import ResetPassword
 from .views.seller.get_all_properties import GetSellerProperties
+from .views.seller.get_property_details import GetSellerPropertyDetails
 from .views.seller.seller_signup import SellerSignUp
 from .views.send_signup_sms_otp import SendSignupSmsOtp
 
@@ -43,5 +46,10 @@ urlpatterns = [
         "get_property_plan_details/",
         GetPropertyPlanDetail.as_view(),
         name="get_property_plan_details",
+    ),
+    path(
+        "get_seller_property_details/",
+        GetSellerPropertyDetails.as_view(),
+        name="get_seller_property_details",
     ),
 ]
