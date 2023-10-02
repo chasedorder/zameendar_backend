@@ -36,6 +36,7 @@ class AddRent(APIView):
 def create_rent(request):
     project_name = request.POST.get("project_name")
     address_details = json_to_python(request.POST.get("address_detail"))  # json object
+    rent_type = request.POST.get("rent_type")
     facing = json_to_python(request.POST.get("facing"))
     rent_per_month = request.POST.get("rent_per_month")
     advance_amount = request.POST.get("advance_amount")
@@ -70,6 +71,7 @@ def create_rent(request):
 
     Rent.objects.create(
         property=property,
+        rent_type=rent_type,
         facing=facing,
         floor_number=floor_number,
         number_of_car_parking=number_of_car_parking,

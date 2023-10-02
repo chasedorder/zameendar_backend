@@ -190,7 +190,7 @@ class GroupAppartment(models.Model):
     bhk_details = ArrayField(models.JSONField(), default=list)
     # Property Details
     number_of_floors = models.IntegerField(null=True, blank=True)
-    ready_to_occupy = models.BooleanField(default=False)
+    ready_to_occupy = models.BooleanField(default=False, null=True, blank=True)
     possession_date = models.DateField(null=True, blank=True)
     number_of_car_parking = models.IntegerField(null=True, blank=True)
     number_of_bike_parking = models.IntegerField(null=True, blank=True)
@@ -230,7 +230,7 @@ class GroupVilla(models.Model):
     land_area_sizes = ArrayField(
         models.CharField(max_length=100), null=True, blank=True, default=list
     )
-    ready_to_occupy = models.BooleanField(default=False)
+    ready_to_occupy = models.BooleanField(default=False, null=True, blank=True)
     possession_date = models.DateField(null=True, blank=True)
 
     number_of_car_parking = models.IntegerField(null=True, blank=True)
@@ -260,8 +260,8 @@ class GroupVilla(models.Model):
 
 class GroupPlot(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    price_per_sqyd = models.DecimalField(max_digits=10, decimal_places=2)
-    plot_sizes = ArrayField(models.CharField(max_length=50), default=list)
+    price_per_sqyd = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    plot_sizes = ArrayField(models.CharField(max_length=50), default=list, null=True, blank=True)
     total_project_area = models.CharField(max_length=100, null=True, blank=True)
     rera_id = models.CharField(max_length=100, null=True, blank=True)
     facing = ChoiceArrayField(
@@ -284,7 +284,7 @@ class Flat(models.Model):
         null=True,
         blank=True,
     )
-    carpet_area = models.CharField(max_length=100)
+    carpet_area = models.CharField(max_length=100, null=True, blank=True)
     bedroom_available = ArrayField(
         models.CharField(max_length=50), default=list, null=True, blank=True
     )
@@ -401,6 +401,7 @@ class OpenPlot(models.Model):
 # PG And Rents
 class Rent(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    rent_type = models.CharField(max_length=100, null=True, blank=True)
     facing = ChoiceArrayField(
         models.CharField(max_length=50, choices=FACINGS.facing_choices),
         default=list,
