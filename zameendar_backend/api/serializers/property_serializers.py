@@ -393,6 +393,7 @@ def commercial_serializer(commercial: Commercial):
     electricity_bill_included = commercial.electricity_bill_included
     safety_deposit = commercial.safety_deposit
     rent_per_month = commercial.rent_per_month
+    commercial_type = commercial.commercial_type
 
     serialized_data = {
         "commerical_category": commerical_category,
@@ -412,6 +413,7 @@ def commercial_serializer(commercial: Commercial):
         "electricity_bill_included": electricity_bill_included,
         "safety_deposit": safety_deposit,
         "rent_per_month": rent_per_month,
+        "commercial_type": commercial_type,
     }
 
     return serialized_data

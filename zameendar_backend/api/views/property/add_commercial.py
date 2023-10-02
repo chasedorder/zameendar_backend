@@ -36,7 +36,7 @@ def create_commerical(request):
     project_name = request.POST.get("project_name")
     address_details = json_to_python(request.POST.get("address_detail"))  # json object
     final_price = request.POST.get("final_price")
-
+    commercial_type = request.POST.get("commercial_type")
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
@@ -81,6 +81,7 @@ def create_commerical(request):
     Commercial.objects.create(
         property=property,
         commerical_category=commerical_category,
+        commercial_type=commercial_type,
         price_per_square_feet=price_per_square_feet,
         builtup_area=builtup_area,
         price_per_square_yard=price_per_square_yard,
@@ -114,6 +115,7 @@ def create_commerical(request):
 
 def update_commerical(request):
     property_id = request.POST.get("property_id")
+    commercial_type = request.POST.get("commercial_type")
     project_name = request.POST.get("project_name")
     address_details = json_to_python(request.POST.get("address_detail"))  # json object
     final_price = request.POST.get("final_price")
@@ -162,6 +164,7 @@ def update_commerical(request):
     property.save()
 
     commercial = Commercial.objects.get(property=property)
+    commercial.commercial_type = commercial_type
     commercial.property = property
     commercial.commerical_category = commerical_category
     commercial.price_per_square_feet = price_per_square_feet

@@ -99,6 +99,7 @@ def create_rent(request):
 
 def update_rent(request):
     property_id = request.POST.get("property_id")
+    rent_type = request.POST.get("rent_type")
     project_name = request.POST.get("project_name")
     address_details = json_to_python(request.POST.get("address_detail"))  # json object
     facing = json_to_python(request.POST.get("facing"))
@@ -148,6 +149,7 @@ def update_rent(request):
     rent.advance_amount = advance_amount
     rent.carpet_area = carpet_area
     rent.bedroom_available = bedroom_available
+    rent.rent_type = rent_type
 
     rent.save()
 
