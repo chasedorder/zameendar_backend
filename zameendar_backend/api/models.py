@@ -431,13 +431,14 @@ class Rent(models.Model):
 
 class PG(models.Model):
     property = models.OneToOneField(Property, on_delete=models.CASCADE)
-    sharing_type = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
+    # sharing_type = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
+    sharing_types = ArrayField(models.JSONField(), null=True, blank=True, default=list)
     sharing_for = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
     attached_washroom = models.BooleanField(default=False, null=True, blank=True)
     food_facility = models.BooleanField(default=False, null=True, blank=True)
     parking_facility = models.BooleanField(default=False, null=True, blank=True)
-    price_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    advance_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    # price_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    # advance_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     other_facilities = ArrayField(
         models.JSONField(),
         default=list,

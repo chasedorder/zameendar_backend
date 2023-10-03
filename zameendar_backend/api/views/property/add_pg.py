@@ -38,8 +38,6 @@ def create_pg(request):
     final_price = request.POST.get("final_price")
     sharing_for = json_to_python(request.POST.get("sharing_for"))
     sharing_type = json_to_python(request.POST.get("sharing_type"))
-    price_per_month = request.POST.get("price_per_month")
-    advance_amount = request.POST.get("advance_amount")
     attached_washroom = json_to_python(request.POST.get("attached_washroom"))
     food_facility = json_to_python(request.POST.get("food_facility"))
     parking_facility = json_to_python(request.POST.get("parking_facility"))
@@ -85,8 +83,6 @@ def create_pg(request):
         attached_washroom=attached_washroom,
         food_facility=food_facility,
         parking_facility=parking_facility,
-        price_per_month=price_per_month,
-        advance_amount=advance_amount,
         other_facilities=other_facilities,
         ready_to_move_in=ready_to_move_in,
         coliving_common_area=coliving_common_area,
@@ -121,8 +117,6 @@ def update_pg(request):
     final_price = request.POST.get("final_price")
     sharing_for = request.POST.get("sharing_for")
     sharing_type = request.POST.get("sharing_type")
-    price_per_month = request.POST.get("price_per_month")
-    advance_amount = request.POST.get("advance_amount")
     attached_washroom = json_to_python(request.POST.get("attached_washroom"))
     food_facility = json_to_python(request.POST.get("food_facility"))
     parking_facility = json_to_python(request.POST.get("parking_facility"))
@@ -173,8 +167,6 @@ def update_pg(request):
     pg.attached_washroom = attached_washroom
     pg.food_facility = food_facility
     pg.parking_facility = parking_facility
-    pg.price_per_month = price_per_month
-    pg.advance_amount = advance_amount
     pg.other_facilities = other_facilities
     pg.ready_to_move_in = ready_to_move_in
     pg.coliving_common_area = coliving_common_area
