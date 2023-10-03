@@ -335,8 +335,6 @@ def pg_serializer(pg: PG):
     attached_washroom = pg.attached_washroom
     food_facility = pg.food_facility
     parking_facility = pg.parking_facility
-    price_per_month = pg.price_per_month
-    advance_amount = pg.advance_amount
     other_facilities = pg.other_facilities
     ready_to_move_in = pg.ready_to_move_in
     coliving_common_area = pg.coliving_common_area
@@ -356,8 +354,6 @@ def pg_serializer(pg: PG):
         "attached_washroom": attached_washroom,
         "food_facility": food_facility,
         "parking_facility": parking_facility,
-        "price_per_month": price_per_month,
-        "advance_amount": advance_amount,
         "other_facilities": other_facilities,
         "ready_to_move_in": ready_to_move_in,
         "coliving_common_area": coliving_common_area,
