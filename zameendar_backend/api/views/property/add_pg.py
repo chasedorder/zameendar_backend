@@ -37,7 +37,7 @@ def create_pg(request):
     address_details = json_to_python(request.POST.get("address_detail"))  # json object
     final_price = request.POST.get("final_price")
     sharing_for = json_to_python(request.POST.get("sharing_for"))
-    sharing_type = json_to_python(request.POST.get("sharing_type"))
+    sharing_types = json_to_python(request.POST.get("sharing_types"))
     attached_washroom = json_to_python(request.POST.get("attached_washroom"))
     food_facility = json_to_python(request.POST.get("food_facility"))
     parking_facility = json_to_python(request.POST.get("parking_facility"))
@@ -78,7 +78,7 @@ def create_pg(request):
 
     PG.objects.create(
         property=property,
-        sharing_type=sharing_type,
+        sharing_types=sharing_types,
         sharing_for=sharing_for,
         attached_washroom=attached_washroom,
         food_facility=food_facility,
@@ -116,7 +116,7 @@ def update_pg(request):
     address_details = json_to_python(request.POST.get("address_detail"))  # json object
     final_price = request.POST.get("final_price")
     sharing_for = request.POST.get("sharing_for")
-    sharing_type = request.POST.get("sharing_type")
+    sharing_types = request.POST.get("sharing_types")
     attached_washroom = json_to_python(request.POST.get("attached_washroom"))
     food_facility = json_to_python(request.POST.get("food_facility"))
     parking_facility = json_to_python(request.POST.get("parking_facility"))
@@ -162,7 +162,7 @@ def update_pg(request):
     pg = PG.objects.get(property=property)
 
     pg.property = property
-    pg.sharing_type = sharing_type
+    pg.sharing_types = sharing_types
     pg.sharing_for = sharing_for
     pg.attached_washroom = attached_washroom
     pg.food_facility = food_facility

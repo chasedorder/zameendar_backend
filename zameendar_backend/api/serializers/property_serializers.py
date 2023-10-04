@@ -330,7 +330,7 @@ def rent_serializer(rent: Rent):
 
 
 def pg_serializer(pg: PG):
-    sharing_type = pg.sharing_type
+    sharing_types = pg.sharing_types
     sharing_for = pg.sharing_for
     attached_washroom = pg.attached_washroom
     food_facility = pg.food_facility
@@ -349,7 +349,7 @@ def pg_serializer(pg: PG):
     food_offerings = pg.food_offerings
 
     serialized_data = {
-        "sharing_type": sharing_type,
+        "sharing_types": sharing_types,
         "sharing_for": sharing_for,
         "attached_washroom": attached_washroom,
         "food_facility": food_facility,
