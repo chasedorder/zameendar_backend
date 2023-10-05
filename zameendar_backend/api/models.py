@@ -175,8 +175,9 @@ class Property(models.Model):
 class PropertyImage(models.Model):
     image = models.ImageField(upload_to="property_images/")
     title = models.CharField(max_length=100, null=True, blank=True)
-    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
     meta_data = models.JSONField(default=dict)
+    added_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.title

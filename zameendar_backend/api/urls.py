@@ -17,6 +17,8 @@ from .views.property.add_open_plot import AddOpenPlot
 from .views.property.add_pg import AddPG
 from .views.property.add_rent import AddRent
 from .views.property.add_villa import AddVilla
+from .views.property.delete_property_image import DeletePropertyImage
+from .views.property.update_property_image import UpdatePropertyImage
 from .views.reset_password import ResetPassword
 from .views.seller.get_all_properties import GetSellerProperties
 from .views.seller.get_property_details import GetSellerPropertyDetails
