@@ -44,6 +44,8 @@ urlpatterns = [
     path("create_property_plan/", CreatePropertyPlan.as_view(), name="create_property_plan"),
     path("create_order/", CreateOrder.as_view(), name="create_order"),
     path("get_seller_properties/", GetSellerProperties.as_view(), name="get_seller_properties"),
+    path("delete_property_image/", DeletePropertyImage.as_view(), name="delete_property_image"),
+    path("update_property_image/", UpdatePropertyImage.as_view(), name="update_property_image"),
     path(
         "get_property_plan_details/",
         GetPropertyPlanDetail.as_view(),

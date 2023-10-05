@@ -10,7 +10,7 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
 from zameendar_backend.api.models import PropertyImage, Seller
 
 
-class DeleteImage(APIView):
+class DeletePropertyImage(APIView):
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
