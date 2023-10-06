@@ -15,8 +15,7 @@ class GetSellerPropertyDetails(APIView):
 
     def get(self, request):
         seller = Seller.objects.get(user=request.user)
-        property_id = request.POST.get("property_id")
-
+        property_id = request.GET["property_id"]
         property = Property.objects.get(id=property_id)
         if not seller == property.seller:
             return send_fail_http_response({"message": "Not Authorized"})
