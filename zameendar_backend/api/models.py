@@ -447,7 +447,8 @@ class PG(models.Model):
         blank=True,
     )
     ready_to_move_in = models.BooleanField(default=False, null=True, blank=True)
-    coliving_common_area = models.CharField(max_length=100, null=True, blank=True)
+    # coliving_common_area = models.CharField(max_length=100, null=True, blank=True)
+    coliving_common_areas = ArrayField(models.JSONField(), null=True, blank=True, default=list)
     non_veg_available = models.BooleanField(default=False, null=True, blank=True)
     visitor_allowed = models.BooleanField(default=False, null=True, blank=True)
     opposite_sex_visitor_allowed = models.BooleanField(default=False, null=True, blank=True)

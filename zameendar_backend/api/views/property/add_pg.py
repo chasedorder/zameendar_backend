@@ -43,7 +43,7 @@ def create_pg(request):
     parking_facility = json_to_python(request.POST.get("parking_facility"))
     ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
     other_facilities = json_to_python(request.POST.get("other_facilities"))  # list of json objects
-    coliving_common_area = request.POST.get("coliving_common_area")
+    coliving_common_areas = json_to_python(request.POST.get("coliving_common_areas"))
     non_veg_available = json_to_python(request.POST.get("non_veg_available"))
     visitor_allowed = json_to_python(request.POST.get("visitor_allowed"))
     opposite_sex_visitor_allowed = json_to_python(request.POST.get("opposite_sex_visitor_allowed"))
@@ -85,7 +85,7 @@ def create_pg(request):
         parking_facility=parking_facility,
         other_facilities=other_facilities,
         ready_to_move_in=ready_to_move_in,
-        coliving_common_area=coliving_common_area,
+        coliving_common_areas=coliving_common_areas,
         non_veg_available=non_veg_available,
         visitor_allowed=visitor_allowed,
         opposite_sex_visitor_allowed=opposite_sex_visitor_allowed,
@@ -122,7 +122,7 @@ def update_pg(request):
     parking_facility = json_to_python(request.POST.get("parking_facility"))
     ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
     other_facilities = json_to_python(request.POST.get("other_facilities"))  # list of json objects
-    coliving_common_area = request.POST.get("coliving_common_area")
+    coliving_common_areas = json_to_python(request.POST.get("coliving_common_areas"))
     non_veg_available = request.POST.get("non_veg_available")
     visitor_allowed = request.POST.get("visitor_allowed")
     opposite_sex_visitor_allowed = request.POST.get("opposite_sex_visitor_allowed")
@@ -169,7 +169,7 @@ def update_pg(request):
     pg.parking_facility = parking_facility
     pg.other_facilities = other_facilities
     pg.ready_to_move_in = ready_to_move_in
-    pg.coliving_common_area = coliving_common_area
+    pg.coliving_common_areas = coliving_common_areas
     pg.non_veg_available = non_veg_available
     pg.visitor_allowed = visitor_allowed
     pg.opposite_sex_visitor_allowed = opposite_sex_visitor_allowed
