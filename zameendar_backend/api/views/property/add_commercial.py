@@ -115,11 +115,10 @@ def create_commerical(request):
 
 def update_commerical(request):
     property_id = request.POST.get("property_id")
-    commercial_type = request.POST.get("commercial_type")
     project_name = request.POST.get("project_name")
     address_details = json_to_python(request.POST.get("address_detail"))  # json object
     final_price = request.POST.get("final_price")
-
+    commercial_type = request.POST.get("commercial_type")
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
@@ -133,15 +132,15 @@ def update_commerical(request):
     price_per_square_yard = request.POST.get("price_per_square_yard")
     passenger_lifts = request.POST.get("passenger_lifts")
     service_lifts = request.POST.get("service_lifts")
-    parking_available = request.POST.get("parking_available")
+    parking_available = json_to_python(request.POST.get("parking_available"))
     min_contract_period = request.POST.get("min_contract_period")
-    negotialble = request.POST.get("negotialble")
-    tax_gov_charges_included = request.POST.get("tax_gov_charges_included")
-    dg_ups_charges_included = request.POST.get("dg_ups_charges_included")
-    water_charges_included = request.POST.get("water_charges_included")
+    negotialble = json_to_python(request.POST.get("negotialble"))
+    tax_gov_charges_included = json_to_python(request.POST.get("tax_gov_charges_included"))
+    dg_ups_charges_included = json_to_python(request.POST.get("dg_ups_charges_included"))
+    water_charges_included = json_to_python(request.POST.get("water_charges_included"))
     floor_number = request.POST.get("floor_number")
     possession_date = request.POST.get("possession_date")
-    electricity_bill_included = request.POST.get("electricity_bill_included")
+    electricity_bill_included = json_to_python(request.POST.get("electricity_bill_included"))
     safety_deposit = request.POST.get("safety_deposit")
     rent_per_month = request.POST.get("rent_per_month")
 
