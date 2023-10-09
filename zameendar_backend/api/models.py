@@ -493,7 +493,7 @@ class Commercial(models.Model):
     dg_ups_charges_included = models.BooleanField(default=False, null=True, blank=True)
     water_charges_included = models.BooleanField(default=False, null=True, blank=True)
     floor_number = models.IntegerField(null=True, blank=True)
-    possesstion_date = models.DateTimeField(null=True, blank=True)
+    possession_date = models.DateTimeField(null=True, blank=True)
     electricity_bill_included = models.BooleanField(default=False, null=True, blank=True)
     safety_deposit = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     rent_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

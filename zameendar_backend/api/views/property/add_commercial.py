@@ -57,7 +57,7 @@ def create_commerical(request):
     dg_ups_charges_included = json_to_python(request.POST.get("dg_ups_charges_included"))
     water_charges_included = json_to_python(request.POST.get("water_charges_included"))
     floor_number = request.POST.get("floor_number")
-    possesstion_date = request.POST.get("possesstion_date")
+    possession_date = request.POST.get("possession_date")
     electricity_bill_included = json_to_python(request.POST.get("electricity_bill_included"))
     safety_deposit = request.POST.get("safety_deposit")
     rent_per_month = request.POST.get("rent_per_month")
@@ -94,7 +94,7 @@ def create_commerical(request):
         dg_ups_charges_included=dg_ups_charges_included,
         water_charges_included=water_charges_included,
         floor_number=floor_number,
-        possesstion_date=possesstion_date,
+        possession_date=possession_date,
         electricity_bill_included=electricity_bill_included,
         safety_deposit=safety_deposit,
         rent_per_month=rent_per_month,
@@ -140,7 +140,7 @@ def update_commerical(request):
     dg_ups_charges_included = request.POST.get("dg_ups_charges_included")
     water_charges_included = request.POST.get("water_charges_included")
     floor_number = request.POST.get("floor_number")
-    possesstion_date = request.POST.get("possesstion_date")
+    possession_date = request.POST.get("possession_date")
     electricity_bill_included = request.POST.get("electricity_bill_included")
     safety_deposit = request.POST.get("safety_deposit")
     rent_per_month = request.POST.get("rent_per_month")
@@ -179,7 +179,7 @@ def update_commerical(request):
     commercial.dg_ups_charges_included = dg_ups_charges_included
     commercial.water_charges_included = water_charges_included
     commercial.floor_number = floor_number
-    commercial.possesstion_date = possesstion_date
+    commercial.possession_date = possession_date
     commercial.electricity_bill_included = electricity_bill_included
     commercial.safety_deposit = safety_deposit
     commercial.rent_per_month = rent_per_month
