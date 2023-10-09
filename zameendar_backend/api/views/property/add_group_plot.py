@@ -125,7 +125,7 @@ def update_group_plot(request):
     property.address = property_address
     property.seller_contact = seller_contact
     property.map = property_map
-    property.property_type = PropertyTypes.GroupVilla
+    property.property_type = PropertyTypes.GroupPlot
     property.about_property = about_property
     property.updated_date = datetime.now()
     property.save()
