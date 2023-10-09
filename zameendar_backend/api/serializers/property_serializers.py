@@ -385,7 +385,7 @@ def commercial_serializer(commercial: Commercial):
     dg_ups_charges_included = commercial.dg_ups_charges_included
     water_charges_included = commercial.water_charges_included
     floor_number = commercial.floor_number
-    possesstion_date = commercial.possesstion_date
+    possession_date = commercial.possession_date
     electricity_bill_included = commercial.electricity_bill_included
     safety_deposit = commercial.safety_deposit
     rent_per_month = commercial.rent_per_month
@@ -405,7 +405,7 @@ def commercial_serializer(commercial: Commercial):
         "dg_ups_charges_included": dg_ups_charges_included,
         "water_charges_included": water_charges_included,
         "floor_number": floor_number,
-        "possesstion_date": possesstion_date,
+        "possession_date": possession_date,
         "electricity_bill_included": electricity_bill_included,
         "safety_deposit": safety_deposit,
         "rent_per_month": rent_per_month,
