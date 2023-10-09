@@ -337,7 +337,7 @@ def pg_serializer(pg: PG):
     parking_facility = pg.parking_facility
     other_facilities = pg.other_facilities
     ready_to_move_in = pg.ready_to_move_in
-    coliving_common_area = pg.coliving_common_area
+    coliving_common_areas = pg.coliving_common_areas
     non_veg_available = pg.non_veg_available
     visitor_allowed = pg.visitor_allowed
     opposite_sex_visitor_allowed = pg.opposite_sex_visitor_allowed
@@ -356,7 +356,7 @@ def pg_serializer(pg: PG):
         "parking_facility": parking_facility,
         "other_facilities": other_facilities,
         "ready_to_move_in": ready_to_move_in,
-        "coliving_common_area": coliving_common_area,
+        "coliving_common_areas": coliving_common_areas,
         "non_veg_available": non_veg_available,
         "visitor_allowed": visitor_allowed,
         "opposite_sex_visitor_allowed": opposite_sex_visitor_allowed,
