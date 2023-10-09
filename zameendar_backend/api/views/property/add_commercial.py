@@ -11,6 +11,7 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
 )
 from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import Commercial, Property, Seller
+from zameendar_backend.api.utils.formatting_date_time import convert_string_to_date
 from zameendar_backend.api.utils.json_to_python import json_to_python
 from zameendar_backend.api.utils.property.add_common_details import add_common_details
 from zameendar_backend.api.utils.property.add_property_images import add_property_images
@@ -94,7 +95,7 @@ def create_commerical(request):
         dg_ups_charges_included=dg_ups_charges_included,
         water_charges_included=water_charges_included,
         floor_number=floor_number,
-        possession_date=possession_date,
+        possession_date=convert_string_to_date(possession_date) if possession_date else None,
         electricity_bill_included=electricity_bill_included,
         safety_deposit=safety_deposit,
         rent_per_month=rent_per_month,
@@ -178,7 +179,9 @@ def update_commerical(request):
     commercial.dg_ups_charges_included = dg_ups_charges_included
     commercial.water_charges_included = water_charges_included
     commercial.floor_number = floor_number
-    commercial.possession_date = possession_date
+    commercial.possession_date = (
+        convert_string_to_date(possession_date) if possession_date else None
+    )
     commercial.electricity_bill_included = electricity_bill_included
     commercial.safety_deposit = safety_deposit
     commercial.rent_per_month = rent_per_month
