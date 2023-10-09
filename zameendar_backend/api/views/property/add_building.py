@@ -71,6 +71,7 @@ def create_building(request):
         address=property_address,
         seller_contact=seller_contact,
         about_property=about_property,
+        map=property_map,
     )
 
     Building.objects.create(
@@ -147,6 +148,7 @@ def update_building(request):
     property.seller_contact = seller_contact
     property.about_property = about_property
     property.updated_date = datetime.now()
+    property.map = property_map
     property.save()
 
     building = Building.objects.get(property=property)
