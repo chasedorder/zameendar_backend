@@ -8,6 +8,7 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
     send_pass_http_response,
 )
 from zameendar_backend.api.models import Plan, Property, PropertyPlan
+from zameendar_backend.api.utils.json_to_python import json_to_python
 
 
 class CreatePropertyPlan(APIView):
@@ -17,18 +18,24 @@ class CreatePropertyPlan(APIView):
     def post(self, request):
         plan_id = request.POST["plan_id"]
         property_id = request.POST["property_id"]
+        is_offer_taken = json_to_python(request.POST.get("is_offer_taken", "false"))
 
         property = Property.objects.get(id=property_id)
         plan = Plan.objects.get(id=plan_id)
 
         property_plan = PropertyPlan.objects.filter(property=property, is_active=True).first()
         if not property_plan:
+            if is_offer_taken:
+                plan_expire_on = date.today() + relativedelta(months=plan.offer_duration_in_months)
+            else:
+                plan_expire_on = date.today() + relativedelta(months=plan.duration_in_months)
             property_plan = PropertyPlan.objects.create(
                 property=property,
                 plan=plan,
                 plan_start_on=date.today(),
-                plan_expire_on=date.today() + relativedelta(months=plan.duration_in_months),
+                plan_expire_on=plan_expire_on,
                 is_active=True,
+                is_offer_taken=is_offer_taken,
             )
 
             return send_pass_http_response(

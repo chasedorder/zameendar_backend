@@ -504,13 +504,20 @@ class Commercial(models.Model):
 
 class Plan(models.Model):
     title = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    base_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    offer_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     duration_in_months = models.IntegerField(null=True, blank=True)
+    offer_duration_in_months = models.IntegerField(null=True, blank=True)
     description = ArrayField(models.JSONField(), null=True, blank=True, default=list)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, null=True, blank=True)
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not base_price and not offer_price:
+            raise ValidationError("Base price and offer price cannot be empty")
+        return super().save(*args, **kwargs)
 
 
 class PropertyPlan(models.Model):
@@ -519,6 +526,7 @@ class PropertyPlan(models.Model):
     plan_start_on = models.DateField(null=True, blank=True)
     plan_expire_on = models.DateField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
+    is_offer_taken = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         active_plans = PropertyPlan.objects.filter(is_active=True, property=self.property)

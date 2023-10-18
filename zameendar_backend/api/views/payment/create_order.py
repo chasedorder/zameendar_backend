@@ -1,13 +1,8 @@
-import json
-
 import environ
 import razorpay
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
-from zameendar_backend.api.dispatchers.responses.send_fail_http_response import (
-    send_fail_http_response,
-)
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
@@ -32,7 +27,11 @@ class CreateOrder(APIView):
 
         property = Property.objects.get(id=property_id)
         property_plan = PropertyPlan.objects.get(property=property)
-        final_amount = property_plan.plan.price
+
+        if property_plan.is_offer_taken:
+            final_amount = property_plan.plan.offer_price
+        else:
+            final_amount = property_plan.plan.price
 
         if final_amount == amount:
             payment = client.order.create(
