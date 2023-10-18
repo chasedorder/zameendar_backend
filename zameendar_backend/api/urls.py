@@ -2,6 +2,18 @@ import random
 
 from django.urls import path
 
+from .views.buyer.get_all_building import GetAllBuilding
+from .views.buyer.get_all_commercial import GetAllCommercial
+from .views.buyer.get_all_flat import GetAllFlat
+from .views.buyer.get_all_group_appartment import GetAllGroupAppartments
+from .views.buyer.get_all_group_plot import GetAllGroupPlot
+from .views.buyer.get_all_group_villa import GetAllGroupVilla
+from .views.buyer.get_all_open_plot import GetAllOpenPlot
+from .views.buyer.get_all_pg import GetAllPg
+from .views.buyer.get_all_rent import GetAllRent
+from .views.buyer.get_all_villa import GetAllVilla
+
+# seller
 from .views.forgot_password import ForgotPassword
 from .views.payment.create_order import CreateOrder
 from .views.plans.create_property_plan import CreatePropertyPlan
@@ -55,5 +67,56 @@ urlpatterns = [
         "get_seller_property_details/",
         GetSellerPropertyDetails.as_view(),
         name="get_seller_property_details",
+    ),
+    # buyer
+    path(
+        "get_all_group_appartments/",
+        GetAllGroupAppartments.as_view(),
+        name="get_all_group_appartments",
+    ),
+    path(
+        "get_all_group_villa/",
+        GetAllGroupVilla.as_view(),
+        name="get_all_group_villa",
+    ),
+    path(
+        "get_all_group_plot/",
+        GetAllGroupPlot.as_view(),
+        name="get_all_group_plot",
+    ),
+    path(
+        "get_all_flat/",
+        GetAllFlat.as_view(),
+        name="get_all_flat",
+    ),
+    path(
+        "get_all_building/",
+        GetAllBuilding.as_view(),
+        name="get_all_building",
+    ),
+    path(
+        "get_all_villa/",
+        GetAllVilla.as_view(),
+        name="get_all_villa",
+    ),
+    path(
+        "get_all_open_plot/",
+        GetAllOpenPlot.as_view(),
+        name="get_all_open_plot",
+    ),
+    path(
+        "get_all_rent/",
+        GetAllRent.as_view(),
+        name="get_all_rent",
+    ),
+    path(
+        "get_all_pg/",
+        GetAllCommercial.as_view(),
+        name="get_all_pg",
+    ),
+    path(
+        "get_all_commercial/",
+        GetAllCommercial.as_view(),
+        name="get_all_commercial",
     ),
 ]
