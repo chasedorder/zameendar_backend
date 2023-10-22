@@ -111,7 +111,7 @@ urlpatterns = [
     ),
     path(
         "get_all_pg/",
-        GetAllCommercial.as_view(),
+        GetAllPg.as_view(),
         name="get_all_pg",
     ),
     path(
