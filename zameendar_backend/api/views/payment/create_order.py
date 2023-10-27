@@ -20,20 +20,18 @@ class CreateOrder(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        amount = request.POST["amount"]
-        property_id = request.POST["property_id"]
+        property_plan_id = request.POST["property_plan_id"]
 
         client = razorpay.Client(auth=(env("RAZORPAY_PUBLIC_KEY"), env("RAZORPAY_SECRET_KEY")))
 
-        property = Property.objects.get(id=property_id)
-        property_plan = PropertyPlan.objects.get(property=property)
+        property_plan = PropertyPlan.objects.get(id=property_plan_id)
 
         if property_plan.is_offer_taken:
             final_amount = property_plan.plan.offer_price
         else:
-            final_amount = property_plan.plan.price
+            final_amount = property_plan.plan.base_price
 
-        if final_amount == amount:
+        if final_amount:
             payment = client.order.create(
                 {
                     "amount": int(final_amount) * 100,
