@@ -19,9 +19,11 @@ class GetAllPlans(APIView):
                 {
                     "id": plan.id,
                     "title": plan.title,
-                    "price": plan.price,
+                    "base_price": plan.base_price,
+                    "offer_price": plan.offer_price,
                     "description": plan.description,
                     "duration_in_months": plan.duration_in_months,
+                    "offer_duration_in_months": plan.offer_duration_in_months,
                 }
             )
         return JsonResponse({"plans_details": plans_details})
