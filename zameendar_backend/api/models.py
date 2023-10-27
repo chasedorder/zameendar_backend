@@ -520,6 +520,7 @@ class Order(models.Model):
     property_plan = models.ForeignKey(PropertyPlan, on_delete=models.DO_NOTHING)
     final_amount = models.DecimalField(max_digits=8, decimal_places=2)
     order_id = models.CharField(unique=True, max_length=100, null=True, blank=True, default=None)
+    order_date = models.DateTimeField(auto_now=True)
     date_of_payment = models.DateTimeField(default=timezone.now)
     # razorpay
     razorpay_order_id = models.CharField(max_length=100000, null=True, blank=True)

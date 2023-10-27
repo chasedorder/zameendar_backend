@@ -45,6 +45,7 @@ class CreateOrder(APIView):
             order = Order.objects.create(
                 property_plan=property_plan,
                 final_amount=final_amount,
+                razorpay_order_id=payment["id"],
             )
 
             serializer = OrderSerializer(order)
