@@ -106,38 +106,12 @@ class PropertyAddress(models.Model):
         return f"{self.street_address}, {self.area}, {self.city}, {self.state},\
               {self.postal_code},"
 
-    def linked_property(self):
-        if hasattr(self, "property"):
-            return mark_safe(
-                '<a href="{}">{}</a>'.format(
-                    reverse(
-                        "admin:api_property_change",
-                        args=[getattr(self, "property").pk],
-                    ),
-                    getattr(self, "property").project_name,
-                )
-            )
-        return "N/A"
-
 
 class PropertyMap(models.Model):
     location = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.location
-
-    def linked_property(self):
-        if hasattr(self, "property"):
-            return mark_safe(
-                '<a href="{}">{}</a>'.format(
-                    reverse(
-                        "admin:api_property_change",
-                        args=[getattr(self, "property").pk],
-                    ),
-                    getattr(self, "property").project_name,
-                )
-            )
-        return "N/A"
 
 
 class Property(models.Model):
@@ -515,8 +489,10 @@ class Plan(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not base_price and not offer_price:
+        if not self.base_price and not offer_price:
             raise ValidationError("Base price and offer price cannot be empty")
+        if self.offer_price and not self.offer_duration_in_months:
+            raise ValidationError("Offer duration cannot be empty")
         return super().save(*args, **kwargs)
 
 

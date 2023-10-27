@@ -1,11 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
+from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
 from .models import (
     PG,
+    PROPERTY_MODEL_MAP,
     Building,
     Buyer,
+    Commercial,
     ContactDetails,
     Flat,
     GroupAppartment,
@@ -27,29 +32,124 @@ from .models import (
 )
 
 
-class PropertyAdmin(admin.ModelAdmin):
-    list_display = ["project_name"]
+class PlanAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
 
 
-class ProperyAddressAdmin(admin.ModelAdmin):
+class SellerAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+class BuyerAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+class PropertyPlanAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+class ContactDetailsAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+class UserAddressAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+# base properties to show in each property category in admin panel
+class BasePropertyAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    list_display = ["property", "id", "get_property_id", "base_property"]
+
+    @admin.display(description="Property id")
+    def get_property_id(self, obj):
+        return obj.property.id
+
+    def base_property(self, obj):
+        if hasattr(obj, "property"):
+            return mark_safe(
+                '<a href="{}">{}</a>'.format(
+                    reverse(
+                        "admin:api_property_change",
+                        args=[getattr(obj, "property").pk],
+                    ),
+                    getattr(obj, "property").project_name,
+                )
+            )
+        return "N/A"
+
+    readonly_fields = ["base_property"]
+
+
+class PropertyAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    list_display = ["project_name", "id", "seller", "added_date", "property_details"]
+
+    def property_details(self, obj):
+        if hasattr(obj, "property_type"):
+            property_category_obj = PROPERTY_MODEL_MAP[obj.property_type].objects.get(property=obj)
+            category_model_class_name = property_category_obj._meta.model_name.lower()
+            return mark_safe(
+                '<a href="{}">{}</a>'.format(
+                    reverse(
+                        f"admin:api_{category_model_class_name}_change",
+                        args=[property_category_obj.pk],
+                    ),
+                    obj.project_name,
+                )
+            )
+        return "N/A"
+
+    readonly_fields = ["property_details"]
+
+
+class PendingSmsOtpAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+class ProperyAddressAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_display = [
         "street_address",
         "city",
         "state",
         "postal_code",
-        "linked_property",
+        "base_property",
     ]
 
-    readonly_fields = ["linked_property"]
+    def base_property(self, obj):
+        if hasattr(obj, "property"):
+            return mark_safe(
+                '<a href="{}">{}</a>'.format(
+                    reverse(
+                        "admin:api_property_change",
+                        args=[getattr(obj, "property").pk],
+                    ),
+                    getattr(obj, "property").project_name,
+                )
+            )
+        return "N/A"
+
+    readonly_fields = ["base_property"]
 
 
-class PropertyMapAdmin(admin.ModelAdmin):
-    list_display = ["location", "linked_property"]
+class PropertyMapAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    list_display = ["location", "base_property"]
 
-    readonly_fields = ["linked_property"]
+    def base_property(self, obj):
+        if hasattr(obj, "property"):
+            return mark_safe(
+                '<a href="{}">{}</a>'.format(
+                    reverse(
+                        "admin:api_property_change",
+                        args=[getattr(obj, "property").pk],
+                    ),
+                    getattr(obj, "property").project_name,
+                )
+            )
+        return "N/A"
+
+    readonly_fields = ["base_property"]
 
 
-class PropertyImageAdmin(admin.ModelAdmin):
+class PropertyImageAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def image_tag(self, obj):
         return format_html(
             '<img src="{}" style="object-fit: cover; width: 200px; height: 200px;" />'.format(
@@ -100,24 +200,27 @@ class UserAdmin(BaseUserAdmin):
     # search_fields = ("email", "username")
 
 
-admin.site.register(Seller)
-admin.site.register(Buyer)
-admin.site.register(Plan)
-admin.site.register(PropertyMap, PropertyMapAdmin)
-admin.site.register(PropertyPlan)
-admin.site.register(Property, PropertyAdmin)
-admin.site.register(ContactDetails)
-admin.site.register(PG)
-admin.site.register(UserAddress)
-admin.site.register(Building)
-admin.site.register(Flat)
-admin.site.register(GroupAppartment)
-admin.site.register(GroupPlot)
-admin.site.register(GroupVilla)
-admin.site.register(OpenPlot)
-admin.site.register(Rent)
 admin.site.register(User, UserAdmin)
-admin.site.register(Villa)
+admin.site.register(Buyer, BuyerAdmin)
+admin.site.register(Seller, SellerAdmin)
+admin.site.register(PendingSmsOtp, PendingSmsOtpAdmin)
+admin.site.register(Plan, PlanAdmin)
+admin.site.register(PropertyPlan, PropertyPlanAdmin)
+admin.site.register(ContactDetails, ContactDetailsAdmin)
+admin.site.register(UserAddress, UserAddressAdmin)
 admin.site.register(PropertyImage, PropertyImageAdmin)
-admin.site.register(PendingSmsOtp)
+admin.site.register(PropertyMap, PropertyMapAdmin)
 admin.site.register(PropertyAddress, ProperyAddressAdmin)
+
+# properties
+admin.site.register(Property, PropertyAdmin)
+admin.site.register(GroupAppartment, BasePropertyAdmin)
+admin.site.register(GroupVilla, BasePropertyAdmin)
+admin.site.register(GroupPlot, BasePropertyAdmin)
+admin.site.register(Flat, BasePropertyAdmin)
+admin.site.register(Building, BasePropertyAdmin)
+admin.site.register(Villa, BasePropertyAdmin)
+admin.site.register(OpenPlot, BasePropertyAdmin)
+admin.site.register(PG, BasePropertyAdmin)
+admin.site.register(Rent, BasePropertyAdmin)
+admin.site.register(Commercial, BasePropertyAdmin)
