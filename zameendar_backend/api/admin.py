@@ -17,6 +17,7 @@ from .models import (
     GroupPlot,
     GroupVilla,
     OpenPlot,
+    Order,
     PendingSmsOtp,
     Plan,
     Property,
@@ -224,3 +225,5 @@ admin.site.register(OpenPlot, BasePropertyAdmin)
 admin.site.register(PG, BasePropertyAdmin)
 admin.site.register(Rent, BasePropertyAdmin)
 admin.site.register(Commercial, BasePropertyAdmin)
+
+admin.site.register(Order)
