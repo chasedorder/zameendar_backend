@@ -72,7 +72,7 @@ class BasePropertyAdmin(admin.ModelAdmin, DynamicArrayMixin):
                         "admin:api_property_change",
                         args=[getattr(obj, "property").pk],
                     ),
-                    getattr(obj, "property").project_name,
+                    "basic_details",
                 )
             )
         return "N/A"
