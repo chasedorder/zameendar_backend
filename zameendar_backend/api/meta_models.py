@@ -32,13 +32,13 @@ class PropertyTypes:
     Commercial = "Commercial"
 
     property_type_choices = (
-        (GroupAppart, "GroupAppartment"),
-        (GroupVilla, "GroupVilla"),
-        (GroupPlot, "GroupPlot"),
+        (GroupAppart, "Group Appartment"),
+        (GroupVilla, "Group Villa"),
+        (GroupPlot, "Group Plot"),
         (Flat, "Flat"),
         (Building, "Building"),
         (Villa, "Villa"),
-        (OpenPlot, "OpenPlot"),
+        (OpenPlot, "Open Plot"),
         (PG, "PG"),
         (Rent, "Rent"),
         (Commercial, "Commercial"),

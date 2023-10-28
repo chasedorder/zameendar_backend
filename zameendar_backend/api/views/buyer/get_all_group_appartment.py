@@ -23,6 +23,7 @@ class GetAllGroupAppartments(APIView):
             offset : offset + page_size
         ]
         serialized_data = []
+        print(properties_queryset.count())
         for property in properties_queryset:
             serialized_data.append(property_serializers(property=property))
 

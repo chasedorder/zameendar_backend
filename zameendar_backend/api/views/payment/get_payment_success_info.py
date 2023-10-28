@@ -49,6 +49,7 @@ class GetPaymentSuccessInfo(APIView):
 
         order.isPaid = True
         order.razor_signature = raz_signature
+        order.razorpay_payment_id = raz_pay_id
         order.save()
         res_data = {"message": "payment successfully received!"}
 

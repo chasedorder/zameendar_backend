@@ -18,6 +18,7 @@ from .views.forgot_password import ForgotPassword
 from .views.payment.create_order import CreateOrder
 from .views.payment.get_payment_success_info import GetPaymentSuccessInfo
 from .views.plans.create_property_plan import CreatePropertyPlan
+from .views.plans.delete_property_plan import DeletePropertyPlan
 from .views.plans.get_all_plans import GetAllPlans
 from .views.plans.get_property_plan_details import GetPropertyPlanDetail
 from .views.property.add_building import AddBuilding
@@ -74,55 +75,20 @@ urlpatterns = [
         GetSellerPropertyDetails.as_view(),
         name="get_seller_property_details",
     ),
+    path("delete_property_plan/", DeletePropertyPlan.as_view(), name="delete_property_plan"),
     # buyer
     path(
         "get_all_group_appartments/",
         GetAllGroupAppartments.as_view(),
         name="get_all_group_appartments",
     ),
-    path(
-        "get_all_group_villa/",
-        GetAllGroupVilla.as_view(),
-        name="get_all_group_villa",
-    ),
-    path(
-        "get_all_group_plot/",
-        GetAllGroupPlot.as_view(),
-        name="get_all_group_plot",
-    ),
-    path(
-        "get_all_flat/",
-        GetAllFlat.as_view(),
-        name="get_all_flat",
-    ),
-    path(
-        "get_all_building/",
-        GetAllBuilding.as_view(),
-        name="get_all_building",
-    ),
-    path(
-        "get_all_villa/",
-        GetAllVilla.as_view(),
-        name="get_all_villa",
-    ),
-    path(
-        "get_all_open_plot/",
-        GetAllOpenPlot.as_view(),
-        name="get_all_open_plot",
-    ),
-    path(
-        "get_all_rent/",
-        GetAllRent.as_view(),
-        name="get_all_rent",
-    ),
-    path(
-        "get_all_pg/",
-        GetAllPg.as_view(),
-        name="get_all_pg",
-    ),
-    path(
-        "get_all_commercial/",
-        GetAllCommercial.as_view(),
-        name="get_all_commercial",
-    ),
+    path("get_all_group_villa/", GetAllGroupVilla.as_view(), name="get_all_group_villa"),
+    path("get_all_group_plot/", GetAllGroupPlot.as_view(), name="get_all_group_plot"),
+    path("get_all_flat/", GetAllFlat.as_view(), name="get_all_flat"),
+    path("get_all_building/", GetAllBuilding.as_view(), name="get_all_building"),
+    path("get_all_villa/", GetAllVilla.as_view(), name="get_all_villa"),
+    path("get_all_open_plot/", GetAllOpenPlot.as_view(), name="get_all_open_plot"),
+    path("get_all_rent/", GetAllRent.as_view(), name="get_all_rent"),
+    path("get_all_pg/", GetAllPg.as_view(), name="get_all_pg"),
+    path("get_all_commercial/", GetAllCommercial.as_view(), name="get_all_commercial"),
 ]
