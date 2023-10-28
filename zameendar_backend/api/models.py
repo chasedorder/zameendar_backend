@@ -509,9 +509,10 @@ class PropertyPlan(models.Model):
     def save(self, *args, **kwargs):
         active_plans = PropertyPlan.objects.filter(is_active=True, property=self.property)
         if self.is_active and active_plans.exists():
-            raise ValidationError(
-                "An plan for this property already exists. Cannot save another plan."
-            )
+            if self.id != active_plans.first().id:
+                raise ValidationError(
+                    "An plan for this property already exists. Cannot save another plan."
+                )
         return super().save(*args, **kwargs)
 
     def __str__(self):
