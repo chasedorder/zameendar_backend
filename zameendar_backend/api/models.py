@@ -485,6 +485,7 @@ class Plan(models.Model):
     offer_duration_in_months = models.IntegerField(null=True, blank=True)
     description = ArrayField(models.CharField(max_length=1000), null=True, blank=True, default=list)
     is_active = models.BooleanField(default=True, null=True, blank=True)
+    plan_type = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.title

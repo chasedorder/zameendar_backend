@@ -34,7 +34,7 @@ from .models import (
 
 
 class PlanAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    pass
+    list_display = ["title", "plan_type", "id"]
 
 
 class SellerAdmin(admin.ModelAdmin, DynamicArrayMixin):
