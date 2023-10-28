@@ -141,6 +141,7 @@ class Property(models.Model):
     about_property = models.TextField(null=True, blank=True)
     added_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_date = models.DateTimeField(auto_now=True, null=True, blank=True)
+    current_step = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.project_name
@@ -489,9 +490,9 @@ class Plan(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.base_price and not offer_price:
+        if self.base_price is None and self.offer_price is None:
             raise ValidationError("Base price and offer price cannot be empty")
-        if self.offer_price and not self.offer_duration_in_months:
+        if self.offer_price and self.offer_duration_in_months is None:
             raise ValidationError("Offer duration cannot be empty")
         return super().save(*args, **kwargs)
 
