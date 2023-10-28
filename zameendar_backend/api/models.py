@@ -483,7 +483,7 @@ class Plan(models.Model):
     offer_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     duration_in_months = models.IntegerField(null=True, blank=True)
     offer_duration_in_months = models.IntegerField(null=True, blank=True)
-    description = ArrayField(models.JSONField(), null=True, blank=True, default=list)
+    # description = ArrayField(models.JSONField(), null=True, blank=True, default=list)
     is_active = models.BooleanField(default=True, null=True, blank=True)
 
     def __str__(self):
