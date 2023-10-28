@@ -3,6 +3,9 @@ import razorpay
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
+from zameendar_backend.api.dispatchers.responses.send_fail_http_response import (
+    send_fail_http_response,
+)
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
@@ -53,3 +56,4 @@ class CreateOrder(APIView):
             data = {"payment": payment, "order": serializer.data}
 
             return send_pass_http_response(data)
+        return send_fail_http_response({"message": "base price or offer price is empty"})
