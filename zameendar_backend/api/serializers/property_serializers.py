@@ -442,6 +442,7 @@ def property_serializer(property: Property):
     amenities = property.amenities
     is_verified = property.is_verified
     about_property = property.about_property
+    current_step = property.current_step
 
     image_queryset = PropertyImage.objects.filter(property=property)
     image_serializer = []
@@ -469,6 +470,7 @@ def property_serializer(property: Property):
         "is_verified": is_verified,
         "about_property": about_property,
         "images": image_serializer,
+        "current_step": current_step,
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)

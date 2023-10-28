@@ -62,6 +62,7 @@ def create_commerical(request):
     electricity_bill_included = json_to_python(request.POST.get("electricity_bill_included"))
     safety_deposit = request.POST.get("safety_deposit")
     rent_per_month = request.POST.get("rent_per_month")
+    current_step = int(request.POST.get("current_step", 0))
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -77,6 +78,7 @@ def create_commerical(request):
         seller_contact=seller_contact,
         map=property_map,
         about_property=about_property,
+        current_step=current_step,
     )
 
     Commercial.objects.create(
@@ -144,6 +146,7 @@ def update_commerical(request):
     electricity_bill_included = json_to_python(request.POST.get("electricity_bill_included"))
     safety_deposit = request.POST.get("safety_deposit")
     rent_per_month = request.POST.get("rent_per_month")
+    current_step = int(request.POST.get("current_step", 0))
 
     property = Property.objects.get(id=property_id)
 
@@ -161,6 +164,7 @@ def update_commerical(request):
     property.map = property_map
     property.about_property = about_property
     property.updated_date = datetime.now()
+    property.current_step = current_step
     property.save()
 
     commercial = Commercial.objects.get(property=property)

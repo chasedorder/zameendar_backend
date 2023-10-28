@@ -20,7 +20,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 
-class Get_payment_success_info(APIView):
+class GetPaymentSuccessInfo(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 

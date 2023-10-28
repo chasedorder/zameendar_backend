@@ -68,6 +68,7 @@ def create_group_appartment(request):
     image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
+    current_step = int(request.POST.get("current_step", 0))
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -86,6 +87,7 @@ def create_group_appartment(request):
         seller_contact=seller_contact,
         map=property_map,
         about_property=about_property,
+        current_step=current_step,
     )
 
     GroupAppartment.objects.create(
@@ -149,6 +151,7 @@ def update_group_appartment(request):
     image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
+    current_step = int(request.POST.get("current_step", 0))
 
     if not ready_to_occupy:
         possession_date = convert_string_to_date(request.POST.get("possession_date"))
@@ -175,6 +178,7 @@ def update_group_appartment(request):
     property.property_type = PropertyTypes.GroupAppart
     property.about_property = about_property
     property.updated_date = datetime.now()
+    property.current_step = current_step
     property.save()
 
     group_appartment = GroupAppartment.objects.get(property=property)

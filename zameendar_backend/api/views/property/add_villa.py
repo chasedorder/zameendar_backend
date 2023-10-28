@@ -62,6 +62,7 @@ def create_villa(request):
     image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
+    current_step = int(request.POST.get("current_step", 0))
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -78,6 +79,7 @@ def create_villa(request):
         seller_contact=seller_contact,
         map=property_map,
         about_property=about_property,
+        current_step=current_step,
     )
 
     Villa.objects.create(
@@ -141,6 +143,7 @@ def update_villa(request):
     image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
+    current_step = int(request.POST.get("current_step", 0))
 
     property = Property.objects.get(id=property_id)
 
@@ -161,6 +164,7 @@ def update_villa(request):
     property.map = property_map
     property.about_property = about_property
     property.updated_date = datetime.now()
+    property.current_step = current_step
     property.save()
 
     villa = Villa.objects.get(property=property)

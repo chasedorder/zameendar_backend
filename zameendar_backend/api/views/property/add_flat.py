@@ -57,6 +57,7 @@ def create_flat(request):
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
     image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    current_step = int(request.POST.get("current_step", 0))
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -73,6 +74,7 @@ def create_flat(request):
         seller_contact=seller_contact,
         map=property_map,
         about_property=about_property,
+        current_step=current_step,
     )
 
     Flat.objects.create(
@@ -130,7 +132,7 @@ def update_flat(request):
     image_details = json_to_python(
         request.POST.get("image_details", "false")
     )  # list of json objects
-
+    current_step = int(request.POST.get("current_step", 0))
     property = Property.objects.get(id=property_id)
 
     property_map, property_address, seller_contact = update_common_details(
@@ -150,6 +152,7 @@ def update_flat(request):
     property.map = property_map
     property.about_property = about_property
     property.updated_date = datetime.now()
+    property.current_step = current_step
     property.save()
 
     flat = Flat.objects.get(property=property)

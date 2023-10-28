@@ -16,6 +16,7 @@ from .views.buyer.get_all_villa import GetAllVilla
 # seller
 from .views.forgot_password import ForgotPassword
 from .views.payment.create_order import CreateOrder
+from .views.payment.get_payment_success_info import GetPaymentSuccessInfo
 from .views.plans.create_property_plan import CreatePropertyPlan
 from .views.plans.get_all_plans import GetAllPlans
 from .views.plans.get_property_plan_details import GetPropertyPlanDetail
@@ -55,6 +56,11 @@ urlpatterns = [
     path("get_all_plans/", GetAllPlans.as_view(), name="get_all_plans"),
     path("create_property_plan/", CreatePropertyPlan.as_view(), name="create_property_plan"),
     path("create_order/", CreateOrder.as_view(), name="create_order"),
+    path(
+        "get_payment_success_info/",
+        GetPaymentSuccessInfo.as_view(),
+        name="get_payment_success_info",
+    ),
     path("get_seller_properties/", GetSellerProperties.as_view(), name="get_seller_properties"),
     path("delete_property_image/", DeletePropertyImage.as_view(), name="delete_property_image"),
     path("update_property_image/", UpdatePropertyImage.as_view(), name="update_property_image"),

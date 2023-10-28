@@ -55,6 +55,7 @@ def create_building(request):
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
     image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    current_step = int(request.POST.get("current_step", 0))
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -72,6 +73,7 @@ def create_building(request):
         seller_contact=seller_contact,
         about_property=about_property,
         map=property_map,
+        current_step=current_step,
     )
 
     Building.objects.create(
@@ -129,6 +131,7 @@ def update_building(request):
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
     image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    current_step = int(request.POST.get("current_step", 0))
 
     property = Property.objects.get(id=property_id)
 
@@ -149,6 +152,7 @@ def update_building(request):
     property.about_property = about_property
     property.updated_date = datetime.now()
     property.map = property_map
+    property.current_step = current_step
     property.save()
 
     building = Building.objects.get(property=property)

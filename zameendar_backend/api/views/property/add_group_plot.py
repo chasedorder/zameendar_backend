@@ -48,6 +48,7 @@ def create_group_plot(request):
     image_details = json.loads(request.POST.get("image_details"))  # list of json objects
     contact_details = json.loads(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
+    current_step = int(request.POST.get("current_step", 0))
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -65,6 +66,7 @@ def create_group_plot(request):
         seller_contact=seller_contact,
         map=property_map,
         about_property=about_property,
+        current_step=current_step,
     )
 
     GroupPlot.objects.create(
@@ -107,6 +109,7 @@ def update_group_plot(request):
     image_details = json.loads(request.POST.get("image_details"))  # list of json objects
     contact_details = json.loads(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
+    current_step = int(request.POST.get("current_step", 0))
 
     property = Property.objects.get(id=property_id)
 
@@ -128,6 +131,7 @@ def update_group_plot(request):
     property.property_type = PropertyTypes.GroupPlot
     property.about_property = about_property
     property.updated_date = datetime.now()
+    property.current_step = current_step
     property.save()
 
     group_plot = GroupPlot.objects.get(property=property)

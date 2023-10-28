@@ -49,6 +49,7 @@ def create_open_plot(request):
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
     amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
+    current_step = int(request.POST.get("current_step", 0))
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -66,6 +67,7 @@ def create_open_plot(request):
         map=property_map,
         amenities=amenities,
         about_property=about_property,
+        current_step=current_step,
     )
 
     OpenPlot.objects.create(
@@ -109,6 +111,7 @@ def update_open_plot(request):
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
     amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
+    current_step = int(request.POST.get("current_step", 0))
 
     property = Property.objects.get(id=property_id)
 
@@ -129,6 +132,7 @@ def update_open_plot(request):
     property.about_property = about_property
     property.amenities = amenities
     property.updated_date = datetime.now()
+    property.current_step = current_step
     property.save()
 
     open_plot = OpenPlot.objects.get(property=property)
