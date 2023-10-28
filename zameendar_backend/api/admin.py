@@ -201,6 +201,10 @@ class UserAdmin(BaseUserAdmin):
     # search_fields = ("email", "username")
 
 
+class OrderAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    list_display = ["razorpay_order_id", "order_date", "id"]
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Buyer, BuyerAdmin)
 admin.site.register(Seller, SellerAdmin)
@@ -226,4 +230,4 @@ admin.site.register(PG, BasePropertyAdmin)
 admin.site.register(Rent, BasePropertyAdmin)
 admin.site.register(Commercial, BasePropertyAdmin)
 
-admin.site.register(Order)
+admin.site.register(Order, OrderAdmin)

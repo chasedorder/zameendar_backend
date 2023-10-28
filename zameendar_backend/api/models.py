@@ -538,7 +538,7 @@ class Order(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.property_plan.property.project_name
+        return self.razorpay_order_id
 
 
 class SellerPayment(models.Model):
