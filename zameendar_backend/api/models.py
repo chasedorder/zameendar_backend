@@ -537,6 +537,9 @@ class Order(models.Model):
 
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.property_plan.property.project_name
+
 
 class SellerPayment(models.Model):
     seller = models.ForeignKey("Seller", on_delete=models.CASCADE)
