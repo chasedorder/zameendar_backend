@@ -3,6 +3,7 @@ import random
 from django.urls import path
 
 from .views.buyer.add_to_wishlist import AddToWishlist
+from .views.buyer.buyer_signup import BuyerSignUp
 from .views.buyer.get_all_building import GetAllBuilding
 from .views.buyer.get_all_commercial import GetAllCommercial
 from .views.buyer.get_all_flat import GetAllFlat
@@ -79,6 +80,7 @@ urlpatterns = [
     ),
     path("delete_property_plan/", DeletePropertyPlan.as_view(), name="delete_property_plan"),
     # buyer
+    path("buyer_signup/", BuyerSignUp.as_view(), name="buyer_signup"),
     path(
         "get_all_group_appartments/",
         GetAllGroupAppartments.as_view(),
