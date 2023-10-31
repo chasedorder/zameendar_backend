@@ -25,6 +25,7 @@ class GetWishlist(APIView):
                         "start_price": property.start_price,
                         "end_price": property.end_price,
                         "final_price": property.final_price,
+                        "location": property.map.location if property.map else "",
                     }
                 )
 
