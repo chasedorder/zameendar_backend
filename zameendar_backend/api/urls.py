@@ -2,6 +2,7 @@ import random
 
 from django.urls import path
 
+from .views.buyer.add_to_wishlist import AddToWishlist
 from .views.buyer.get_all_building import GetAllBuilding
 from .views.buyer.get_all_commercial import GetAllCommercial
 from .views.buyer.get_all_flat import GetAllFlat
@@ -12,6 +13,7 @@ from .views.buyer.get_all_open_plot import GetAllOpenPlot
 from .views.buyer.get_all_pg import GetAllPg
 from .views.buyer.get_all_rent import GetAllRent
 from .views.buyer.get_all_villa import GetAllVilla
+from .views.buyer.get_wishlist import GetWishlist
 
 # seller
 from .views.forgot_password import ForgotPassword
@@ -91,4 +93,6 @@ urlpatterns = [
     path("get_all_rent/", GetAllRent.as_view(), name="get_all_rent"),
     path("get_all_pg/", GetAllPg.as_view(), name="get_all_pg"),
     path("get_all_commercial/", GetAllCommercial.as_view(), name="get_all_commercial"),
+    path("add_to_wishlist/", AddToWishlist.as_view(), name="add_to_wishlist"),
+    path("get_wishlist/", GetWishlist.as_view(), name="get_wishlist"),
 ]

@@ -30,6 +30,7 @@ from .models import (
     User,
     UserAddress,
     Villa,
+    WishList,
 )
 
 
@@ -54,6 +55,10 @@ class ContactDetailsAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 class UserAddressAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+class WishListAdmin(admin.ModelAdmin, DynamicArrayMixin):
     pass
 
 
@@ -165,22 +170,21 @@ class PropertyImageAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 class UserAdmin(BaseUserAdmin):
-    # add_fieldsets = (
-    #     (
-    #         None,
-    #         {
-    #             "fields": (
-    #                 "email",
-    #                 "username",
-    #                 "password1",
-    #                 "password2",
-    #                 "phone_number",
-    #                 "last_active",
-    #             )
-    #         },
-    #     ),
-    #     ("Permissions", {"fields": ("is_superuser", "is_staff")}),
-    # )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "email",
+                    "username",
+                    "password1",
+                    "password2",
+                    "phone_number",
+                )
+            },
+        ),
+        ("Permissions", {"fields": ("is_superuser", "is_staff")}),
+    )
     fieldsets = (
         (
             None,
@@ -229,5 +233,5 @@ admin.site.register(OpenPlot, BasePropertyAdmin)
 admin.site.register(PG, BasePropertyAdmin)
 admin.site.register(Rent, BasePropertyAdmin)
 admin.site.register(Commercial, BasePropertyAdmin)
-
+admin.site.register(WishList, WishListAdmin)
 admin.site.register(Order, OrderAdmin)

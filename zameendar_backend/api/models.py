@@ -549,6 +549,14 @@ class SellerPayment(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=100, null=True, blank=True)
 
 
+class WishList(models.Model):
+    buyer = models.ForeignKey("Buyer", on_delete=models.CASCADE)
+    properties = models.ManyToManyField("Property", blank=True, related_name="wish_list")
+
+    def __str__(self):
+        return self.buyer.user.username
+
+
 PROPERTY_MODEL_MAP = {
     PropertyTypes.GroupAppart: GroupAppartment,
     PropertyTypes.GroupVilla: GroupVilla,
