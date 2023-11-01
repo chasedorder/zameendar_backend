@@ -31,7 +31,7 @@ class GetPaymentSuccessInfo(APIView):
         raz_pay_id = res.get("razorpay_payment_id")
         raz_signature = res.get("razorpay_signature")
 
-        order = Order.objects.get(order_payment_id=order_id)
+        order = Order.objects.get(razorpay_order_id=order_id)
 
         data = {
             "razorpay_order_id": order_id,
