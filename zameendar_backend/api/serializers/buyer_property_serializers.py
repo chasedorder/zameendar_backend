@@ -17,6 +17,7 @@ from zameendar_backend.api.models import (
     Rent,
     Seller,
     Villa,
+    WishList,
 )
 
 
@@ -429,7 +430,7 @@ PROPERTY_SERIALIZER_MAP = {
 }
 
 
-def property_serializers(property: Property):
+def property_serializers(property: Property, buyer=None):
     property_id = property.id
     project_name = property.project_name
     property_type = property.property_type
@@ -454,6 +455,10 @@ def property_serializers(property: Property):
                 "meta_data": image.meta_data,
             }
         )
+    in_wishlist = False
+    if buyer:
+        if WishList.objects.filter(buyer=buyer, properties=property):
+            in_wishlist = True
 
     serialized_data = {
         "property_id": property_id,
@@ -469,6 +474,7 @@ def property_serializers(property: Property):
         "is_verified": is_verified,
         "about_property": about_property,
         "images": image_serializer,
+        "in_wishlist": in_wishlist,
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)

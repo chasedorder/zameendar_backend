@@ -29,6 +29,9 @@ class CreateOrder(APIView):
 
         property_plan = PropertyPlan.objects.get(id=property_plan_id)
 
+        if not property_plan.is_active:
+            return send_fail_http_response({"message": "property plan is not active"})
+
         if property_plan.is_offer_taken:
             final_amount = property_plan.plan.offer_price
         else:

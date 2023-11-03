@@ -11,8 +11,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
-from zameendar_backend.api.models import Order, Property, PropertyPlan
-from zameendar_backend.api.serializers.order_serializer import OrderSerializer
+from zameendar_backend.api.models import Order
 
 env = environ.Env()
 
@@ -48,7 +47,7 @@ class GetPaymentSuccessInfo(APIView):
             return send_fail_http_response({"error": "Something went wrong"})
 
         order.isPaid = True
-        order.razor_signature = raz_signature
+        order.razorpay_signature = raz_signature
         order.razorpay_payment_id = raz_pay_id
         order.save()
         res_data = {"message": "payment successfully received!"}

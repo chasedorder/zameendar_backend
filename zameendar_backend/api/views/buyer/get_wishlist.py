@@ -22,6 +22,7 @@ class GetWishlist(APIView):
                     {
                         "id": property.id,
                         "project_name": property.project_name,
+                        "property_type": property.property_type,
                         "start_price": property.start_price,
                         "end_price": property.end_price,
                         "final_price": property.final_price,

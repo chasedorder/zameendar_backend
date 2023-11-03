@@ -3,7 +3,7 @@ from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
 from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import Property
+from zameendar_backend.api.models import Buyer, Property
 from zameendar_backend.api.serializers.buyer_property_serializers import property_serializers
 from zameendar_backend.api.serializers.get_paginated_property_reponse import (
     get_paginated_property_response,
@@ -24,8 +24,9 @@ class GetAllBuilding(APIView):
             offset : offset + page_size
         ]
         serialized_data = []
+        buyer = Buyer.objects.filter(user=request.user).first()
         for property in properties_queryset:
-            serialized_data.append(property_serializers(property=property))
+            serialized_data.append(property_serializers(property=property, buyer=buyer))
 
         response_data = get_paginated_property_response(page, property_type, serialized_data)
 

@@ -59,7 +59,7 @@ class UserAddress(models.Model):
 class User(AbstractUser):
     phone_number = models.CharField(unique=True, max_length=20)
     last_active = models.DateTimeField(auto_now=True, blank=True)
-    email = models.EmailField(unique=True, blank=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
 
     objects = UserManager()
 
@@ -530,7 +530,6 @@ class Order(models.Model):
     razorpay_order_id = models.CharField(max_length=100000, null=True, blank=True)
     razorpay_payment_id = models.CharField(max_length=100000, null=True, blank=True)
     razorpay_signature = models.CharField(max_length=100000, null=True, blank=True)
-    is_payment_successful = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.order_id is None and self.date_of_payment and self.pk:
