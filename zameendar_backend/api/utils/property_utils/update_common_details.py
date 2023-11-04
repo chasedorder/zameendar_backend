@@ -1,20 +1,22 @@
 from zameendar_backend.api.models import ContactDetails, PropertyAddress, PropertyMap
 
 
-def update_common_details(property, maps_details=None, address_details=None, contact_details=None):
+def update_common_details(
+    property_model, maps_details=None, address_details=None, contact_details=None
+):
     property_map = None
     property_address = None
     seller_contact = None
 
     if maps_details:
-        property_map = property.map
+        property_map = property_model.map
         if property_map:
             property_map.location = maps_details.get("location")
             property_map.save()
         else:
             property_map = PropertyMap.objects.create(location=maps_details.get("location"))
     if address_details:
-        property_address = property.address
+        property_address = property_model.address
         if property_address:
             property_address.street_address = address_details.get("street_address")
             property_address.area = address_details.get("area")
@@ -31,7 +33,7 @@ def update_common_details(property, maps_details=None, address_details=None, con
                 postal_code=address_details["postal_code"],
             )
     if contact_details:
-        seller_contact = property.seller_contact
+        seller_contact = property_model.seller_contact
         if seller_contact:
             seller_contact.street_address = address_details.get("street_address")
             seller_contact.area = address_details.get("area")
