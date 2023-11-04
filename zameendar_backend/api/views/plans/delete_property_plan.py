@@ -23,7 +23,7 @@ class DeletePropertyPlan(APIView):
         property_plan = PropertyPlan.objects.get(id=property_plan_id)
 
         paid_property_plan_order_queryset = Order.objects.filter(
-            property_plan=property_plan, is_paid=True
+            property_plan=property_plan, isPaid=True
         )
         if paid_property_plan_order_queryset:
             return send_fail_http_response({"message": "Order for this property plan already paid"})
