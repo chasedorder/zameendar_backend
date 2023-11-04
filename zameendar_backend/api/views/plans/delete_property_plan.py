@@ -22,7 +22,7 @@ class DeletePropertyPlan(APIView):
 
         property_plan = PropertyPlan.objects.get(id=property_plan_id)
 
-        paid_property_plan_order_queryset = Order.objects.get(
+        paid_property_plan_order_queryset = Order.objects.filter(
             property_plan=property_plan, is_paid=True
         )
         if paid_property_plan_order_queryset:

@@ -44,7 +44,7 @@ class UpgradePropertyPlan(APIView):
 
         return send_pass_http_response(
             {
-                "message": "property plan created successfully",
+                "message": "property plan upgraded successfully",
                 "property_plan_id": property_plan.id,
             }
         )
