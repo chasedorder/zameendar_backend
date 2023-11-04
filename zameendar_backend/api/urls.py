@@ -39,7 +39,7 @@ from .views.property.delete_property_image import DeletePropertyImage
 from .views.property.update_property_image import UpdatePropertyImage
 from .views.reset_password import ResetPassword
 from .views.seller.get_all_properties import GetSellerProperties
-from .views.seller.get_property_details import GetSellerPropertyDetails
+from .views.seller.get_seller_property_details import GetSellerPropertyDetails
 from .views.seller.seller_signup import SellerSignUp
 from .views.send_signup_sms_otp import SendSignupSmsOtp
 

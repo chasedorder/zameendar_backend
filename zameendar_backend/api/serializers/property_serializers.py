@@ -18,6 +18,7 @@ from zameendar_backend.api.models import (
     Seller,
     Villa,
 )
+from zameendar_backend.api.serializers.property_plan_serializer import property_plan_serializer
 
 
 def seller_serializer(seller: Seller):
@@ -471,6 +472,7 @@ def property_serializer(property: Property):
         "about_property": about_property,
         "images": image_serializer,
         "current_step": current_step,
+        "property_plan": property_plan_serializer(property),
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)
