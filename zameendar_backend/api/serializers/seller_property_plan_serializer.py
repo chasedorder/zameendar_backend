@@ -1,7 +1,7 @@
 from zameendar_backend.api.models import Order, PropertyModel, PropertyPlan
 
 
-def property_plan_serializer(property_model: PropertyModel):
+def seller_property_plan_serializer(property_model: PropertyModel):
     property_plan = PropertyPlan.objects.filter(
         property_model=property_model, is_active=True
     ).first()

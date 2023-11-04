@@ -10,10 +10,12 @@ from zameendar_backend.api.models import (
     GroupPlot,
     GroupVilla,
     OpenPlot,
+    Order,
     PropertyAddress,
     PropertyImage,
     PropertyMap,
     PropertyModel,
+    PropertyPlan,
     Rent,
     Seller,
     Villa,
@@ -460,6 +462,14 @@ def property_serializers(property_model: PropertyModel, buyer=None):
         if WishList.objects.filter(buyer=buyer, properties=property_model):
             in_wishlist = True
 
+    property_plan = PropertyPlan.objects.filter(
+        property_model=property_model, is_active=True
+    ).first()
+
+    is_visible = False
+    if property_plan:
+        is_visible = Order.objects.filter(property_plan=property_plan, isPaid=True).exists()
+
     serialized_data = {
         "property_id": property_id,
         "project_name": project_name,
@@ -475,6 +485,7 @@ def property_serializers(property_model: PropertyModel, buyer=None):
         "about_property": about_property,
         "images": image_serializer,
         "in_wishlist": in_wishlist,
+        "is_visible": is_visible,
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)

@@ -13,7 +13,7 @@ class GetSellerProperties(APIView):
     def get(self, request):
         seller = Seller.objects.get(user=request.user)
 
-        properties_queryset = PropertyModel.objects.filter(seller=seller)
+        properties_queryset = PropertyModel.objects.filter(seller=seller).order_by("-added_date")
 
         serialzed_data = []
         for property_model in properties_queryset:

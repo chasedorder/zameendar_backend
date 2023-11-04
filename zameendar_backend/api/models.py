@@ -514,7 +514,7 @@ class PropertyPlan(models.Model):
 
     def save(self, *args, **kwargs):
         active_plans = PropertyPlan.objects.filter(
-            is_active=True, property_model=self.property_model
+            is_active=True, property_model=self.property_model, is_expired=False
         )
         if self.is_active and active_plans.exists():
             if self.id != active_plans.first().id:
@@ -522,6 +522,11 @@ class PropertyPlan(models.Model):
                     "An plan for this property already exists. Cannot save another plan."
                 )
         return super().save(*args, **kwargs)
+
+    @property
+    def is_expired(self):
+        # Check if the plan has expired at the moment of access
+        return self.plan_expire_on and self.plan_expire_on < timezone.now()
 
     def __str__(self):
         return self.property_model.project_name
