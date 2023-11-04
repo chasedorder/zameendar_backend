@@ -114,7 +114,7 @@ class PropertyMap(models.Model):
         return self.location
 
 
-class Property(models.Model):
+class PropertyModel(models.Model):
     project_name = models.CharField(max_length=100)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     property_type = models.CharField(max_length=50, choices=PropertyTypes.property_type_choices)
@@ -146,11 +146,17 @@ class Property(models.Model):
     def __str__(self):
         return self.project_name
 
+    class Meta:
+        verbose_name = "Property"
+        verbose_name_plural = "Properties"
+
 
 class PropertyImage(models.Model):
     image = models.ImageField(upload_to="property_images/")
     title = models.CharField(max_length=100, null=True, blank=True)
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True, blank=True)
+    property_model = models.ForeignKey(
+        PropertyModel, on_delete=models.CASCADE, null=True, blank=True
+    )
     meta_data = models.JSONField(default=dict)
     added_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
@@ -160,7 +166,7 @@ class PropertyImage(models.Model):
 
 # Group Properties
 class GroupAppartment(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     # Pricing Details
     price_per_sqft = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     bhk_details = ArrayField(models.JSONField(), default=list)
@@ -191,11 +197,11 @@ class GroupAppartment(models.Model):
     )
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class GroupVilla(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     # Pricing Details
     price_per_sqft = models.DecimalField(max_digits=10, decimal_places=2)
     bhk_details = ArrayField(models.JSONField(), default=list, null=True, blank=True)
@@ -231,11 +237,11 @@ class GroupVilla(models.Model):
     sale_type = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class GroupPlot(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     price_per_sqyd = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     plot_sizes = ArrayField(models.CharField(max_length=50), default=list, null=True, blank=True)
     total_project_area = models.CharField(max_length=100, null=True, blank=True)
@@ -248,12 +254,12 @@ class GroupPlot(models.Model):
     )
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 # Single Poroperties
 class Flat(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
         models.CharField(max_length=50, choices=FACINGS.facing_choices),
         default=list,
@@ -282,11 +288,11 @@ class Flat(models.Model):
     sale_type = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class Building(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
         models.CharField(max_length=50, choices=FACINGS.facing_choices),
         default=list,
@@ -314,11 +320,11 @@ class Building(models.Model):
     )
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class Villa(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
         models.CharField(max_length=50, choices=FACINGS.facing_choices),
         null=True,
@@ -351,11 +357,11 @@ class Villa(models.Model):
     sale_type = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class OpenPlot(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     facing = ChoiceArrayField(
         models.CharField(max_length=50, choices=FACINGS.facing_choices),
         null=True,
@@ -371,12 +377,12 @@ class OpenPlot(models.Model):
     )
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 # PG And Rents
 class Rent(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     rent_type = models.CharField(max_length=100, null=True, blank=True)
     facing = ChoiceArrayField(
         models.CharField(max_length=50, choices=FACINGS.facing_choices),
@@ -402,11 +408,11 @@ class Rent(models.Model):
     )
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class PG(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     # sharing_type = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
     sharing_types = ArrayField(models.JSONField(), null=True, blank=True, default=list)
     sharing_for = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
@@ -445,11 +451,11 @@ class PG(models.Model):
     )
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class Commercial(models.Model):
-    property = models.OneToOneField(Property, on_delete=models.CASCADE)
+    property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     commercial_type = models.CharField(max_length=100, null=True, blank=True)
     commerical_category = models.CharField(max_length=100, null=True, blank=True)
     price_per_square_feet = models.DecimalField(
@@ -474,7 +480,7 @@ class Commercial(models.Model):
     rent_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class Plan(models.Model):
@@ -499,7 +505,7 @@ class Plan(models.Model):
 
 
 class PropertyPlan(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    property_model = models.ForeignKey(PropertyModel, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
     plan_start_on = models.DateField(null=True, blank=True)
     plan_expire_on = models.DateField(null=True, blank=True)
@@ -507,7 +513,9 @@ class PropertyPlan(models.Model):
     is_offer_taken = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        active_plans = PropertyPlan.objects.filter(is_active=True, property=self.property)
+        active_plans = PropertyPlan.objects.filter(
+            is_active=True, property_model=self.property_model
+        )
         if self.is_active and active_plans.exists():
             if self.id != active_plans.first().id:
                 raise ValidationError(
@@ -516,7 +524,7 @@ class PropertyPlan(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.property.project_name
+        return self.property_model.project_name
 
 
 class Order(models.Model):
@@ -550,7 +558,7 @@ class SellerPayment(models.Model):
 
 class WishList(models.Model):
     buyer = models.ForeignKey("Buyer", on_delete=models.CASCADE)
-    properties = models.ManyToManyField("Property", blank=True, related_name="wish_list")
+    properties = models.ManyToManyField("PropertyModel", blank=True, related_name="wish_list")
 
     def __str__(self):
         return self.buyer.user.username
@@ -573,13 +581,13 @@ PROPERTY_MODEL_MAP = {
 # <<<<<<<<<<<<<<<<<< SIGNALS >>>>>>>>>>>>>>>>>>>>
 
 
-@receiver(post_delete, sender=Property)
-def delete_address_on_property_delete(sender, instance: Property, **kwargs):
+@receiver(post_delete, sender=PropertyModel)
+def delete_address_on_property_delete(sender, instance: PropertyModel, **kwargs):
     model_class = PROPERTY_MODEL_MAP.get(instance.property_type)
     if model_class:
-        model_class.objects.filter(property=instance).delete()
+        model_class.objects.filter(property_model=instance).delete()
 
-    PropertyImage.objects.filter(property=instance).delete()
+    PropertyImage.objects.filter(property_model=instance).delete()
 
     if instance.address:
         instance.address.delete()

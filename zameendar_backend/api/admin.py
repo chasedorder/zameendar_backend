@@ -20,10 +20,10 @@ from .models import (
     Order,
     PendingSmsOtp,
     Plan,
-    Property,
     PropertyAddress,
     PropertyImage,
     PropertyMap,
+    PropertyModel,
     PropertyPlan,
     Rent,
     Seller,
@@ -64,19 +64,19 @@ class WishListAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 # base properties to show in each property category in admin panel
 class BasePropertyAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    list_display = ["property", "id", "get_property_id", "base_property"]
+    list_display = ["property_model", "id", "get_property_id", "base_property"]
 
     @admin.display(description="Property id")
     def get_property_id(self, obj):
-        return obj.property.id
+        return obj.property_model.id
 
     def base_property(self, obj):
-        if hasattr(obj, "property"):
+        if hasattr(obj, "property_model"):
             return mark_safe(
                 '<a href="{}">{}</a>'.format(
                     reverse(
-                        "admin:api_property_change",
-                        args=[getattr(obj, "property").pk],
+                        "admin:api_propertymodel_change",
+                        args=[getattr(obj, "property_model").pk],
                     ),
                     "basic_details",
                 )
@@ -86,12 +86,14 @@ class BasePropertyAdmin(admin.ModelAdmin, DynamicArrayMixin):
     readonly_fields = ["base_property"]
 
 
-class PropertyAdmin(admin.ModelAdmin, DynamicArrayMixin):
+class PropertyModelAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ["project_name", "id", "seller", "added_date", "property_details"]
 
     def property_details(self, obj):
         if hasattr(obj, "property_type"):
-            property_category_obj = PROPERTY_MODEL_MAP[obj.property_type].objects.get(property=obj)
+            property_category_obj = PROPERTY_MODEL_MAP[obj.property_type].objects.get(
+                property_model=obj
+            )
             category_model_class_name = property_category_obj._meta.model_name.lower()
             return mark_safe(
                 '<a href="{}">{}</a>'.format(
@@ -121,14 +123,14 @@ class ProperyAddressAdmin(admin.ModelAdmin, DynamicArrayMixin):
     ]
 
     def base_property(self, obj):
-        if hasattr(obj, "property"):
+        if hasattr(obj, "property_model"):
             return mark_safe(
                 '<a href="{}">{}</a>'.format(
                     reverse(
                         "admin:api_property_change",
-                        args=[getattr(obj, "property").pk],
+                        args=[getattr(obj, "property_model").pk],
                     ),
-                    getattr(obj, "property").project_name,
+                    getattr(obj, "property_model").project_name,
                 )
             )
         return "N/A"
@@ -140,14 +142,14 @@ class PropertyMapAdmin(admin.ModelAdmin, DynamicArrayMixin):
     list_display = ["location", "base_property"]
 
     def base_property(self, obj):
-        if hasattr(obj, "property"):
+        if hasattr(obj, "property_model"):
             return mark_safe(
                 '<a href="{}">{}</a>'.format(
                     reverse(
                         "admin:api_property_change",
-                        args=[getattr(obj, "property").pk],
+                        args=[getattr(obj, "property_model").pk],
                     ),
-                    getattr(obj, "property").project_name,
+                    getattr(obj, "property_model").project_name,
                 )
             )
         return "N/A"
@@ -165,7 +167,7 @@ class PropertyImageAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
     image_tag.short_description = "Image"
 
-    fields = ["image_tag", "image", "title", "property", "meta_data"]
+    fields = ["image_tag", "image", "title", "property_model", "meta_data"]
     readonly_fields = ["image_tag"]
 
 
@@ -222,7 +224,7 @@ admin.site.register(PropertyMap, PropertyMapAdmin)
 admin.site.register(PropertyAddress, ProperyAddressAdmin)
 
 # properties
-admin.site.register(Property, PropertyAdmin)
+admin.site.register(PropertyModel, PropertyModelAdmin)
 admin.site.register(GroupAppartment, BasePropertyAdmin)
 admin.site.register(GroupVilla, BasePropertyAdmin)
 admin.site.register(GroupPlot, BasePropertyAdmin)

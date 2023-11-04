@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from zameendar_backend.api.dispatchers.responses.send_fail_http_response import (
     send_fail_http_response,
 )
-from zameendar_backend.api.models import Property, PropertyPlan
+from zameendar_backend.api.models import PropertyModel, PropertyPlan
 
 
 class GetPropertyPlanDetail(APIView):
@@ -15,9 +15,11 @@ class GetPropertyPlanDetail(APIView):
     def get(self, request):
         property_id = request.GET["property_id"]
 
-        property = Property.objects.get(id=property_id)
+        property_model = PropertyModel.objects.get(id=property_id)
 
-        property_plan = PropertyPlan.objects.filter(property=property, is_active=True).first()
+        property_plan = PropertyPlan.objects.filter(
+            property_model=property_model, is_active=True
+        ).first()
 
         if property_plan:
             serialized_data = {

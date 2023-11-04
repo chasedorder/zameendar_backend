@@ -10,11 +10,11 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
     send_pass_http_response,
 )
 from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import PG, Property, Seller
+from zameendar_backend.api.models import PG, PropertyModel, Seller
 from zameendar_backend.api.utils.json_to_python import json_to_python
-from zameendar_backend.api.utils.property.add_common_details import add_common_details
-from zameendar_backend.api.utils.property.add_property_images import add_property_images
-from zameendar_backend.api.utils.property.update_common_details import update_common_details
+from zameendar_backend.api.utils.property_utils.add_common_details import add_common_details
+from zameendar_backend.api.utils.property_utils.add_property_images import add_property_images
+from zameendar_backend.api.utils.property_utils.update_common_details import update_common_details
 
 
 class AddPG(APIView):
@@ -66,7 +66,7 @@ def create_pg(request):
         address_details=address_details,
         contact_details=contact_details,
     )
-    property = Property.objects.create(
+    property_model = PropertyModel.objects.create(
         project_name=project_name,
         seller=seller,
         final_price=final_price,
@@ -79,7 +79,7 @@ def create_pg(request):
     )
 
     PG.objects.create(
-        property=property,
+        property_model=property_model,
         sharing_types=sharing_types,
         sharing_for=sharing_for,
         attached_washroom=attached_washroom,
@@ -101,13 +101,15 @@ def create_pg(request):
 
     if image_details:
         add_property_images(
-            property=property, property_images=property_images, image_details=image_details
+            property_model=property_model,
+            property_images=property_images,
+            image_details=image_details,
         )
 
     return send_pass_http_response(
         {
             "message": "Property Added Successfully",
-            "property_id": property.id,
+            "property_id": property_model.id,
         }
     )
 
@@ -142,30 +144,30 @@ def update_pg(request):
     about_property = request.POST.get("about_property")
     current_step = int(request.POST.get("current_step", 0))
 
-    property = Property.objects.get(id=property_id)
+    property_model = PropertyModel.objects.get(id=property_id)
 
     property_map, property_address, seller_contact = update_common_details(
-        property=property,
+        property_model=property_model,
         maps_details=maps_details,
         address_details=address_details,
         contact_details=contact_details,
     )
 
-    property.project_name = project_name
-    property.seller = seller
-    property.final_price = final_price
-    property.property_type = PropertyTypes.PG
-    property.address = property_address
-    property.seller_contact = seller_contact
-    property.map = property_map
-    property.about_property = about_property
-    property.updated_date = datetime.now()
-    property.current_step = current_step
-    property.save()
+    property_model.project_name = project_name
+    property_model.seller = seller
+    property_model.final_price = final_price
+    property_model.property_type = PropertyTypes.PG
+    property_model.address = property_address
+    property_model.seller_contact = seller_contact
+    property_model.map = property_map
+    property_model.about_property = about_property
+    property_model.updated_date = datetime.now()
+    property_model.current_step = current_step
+    property_model.save()
 
-    pg = PG.objects.get(property=property)
+    pg = PG.objects.get(property_model=property_model)
 
-    pg.property = property
+    pg.property_model = property_model
     pg.sharing_types = sharing_types
     pg.sharing_for = sharing_for
     pg.attached_washroom = attached_washroom
@@ -187,7 +189,9 @@ def update_pg(request):
 
     if image_details:
         add_property_images(
-            property=property, property_images=property_images, image_details=image_details
+            property_model=property_model,
+            property_images=property_images,
+            image_details=image_details,
         )
 
-    return send_pass_http_response({"property_id": property.id})
+    return send_pass_http_response({"property_id": property_model.id})

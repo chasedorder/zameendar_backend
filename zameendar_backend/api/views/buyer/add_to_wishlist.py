@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
-from zameendar_backend.api.models import Buyer, Property, WishList
+from zameendar_backend.api.models import Buyer, PropertyModel, WishList
 
 
 class AddToWishlist(APIView):
@@ -16,11 +16,11 @@ class AddToWishlist(APIView):
         property_id = request.POST["property_id"]
         buyer = Buyer.objects.get(user=request.user)
 
-        property = Property.objects.get(id=property_id)
+        property_model = PropertyModel.objects.get(id=property_id)
         wishlist = WishList.objects.filter(buyer=buyer).first()
 
         if not wishlist:
             wishlist = WishList.objects.create(buyer=buyer)
-        wishlist.properties.add(property)
+        wishlist.properties.add(property_model)
 
         return send_pass_http_response({"message": "Added to wishlist"})

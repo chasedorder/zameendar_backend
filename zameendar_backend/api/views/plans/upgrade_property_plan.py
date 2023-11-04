@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
-from zameendar_backend.api.models import Plan, Property, PropertyPlan
+from zameendar_backend.api.models import Plan, PropertyModel, PropertyPlan
 from zameendar_backend.api.utils.json_to_python import json_to_python
 
 
@@ -20,11 +20,13 @@ class UpgradePropertyPlan(APIView):
         property_id = request.POST["property_id"]
         is_offer_taken = json_to_python(request.POST.get("is_offer_taken", "false"))
 
-        property = Property.objects.get(id=property_id)
+        property_model = PropertyModel.objects.get(id=property_id)
         plan = Plan.objects.get(id=plan_id)
 
         # deactivating old plan
-        old_property_plan = PropertyPlan.objects.filter(property=property, is_active=True).first()
+        old_property_plan = PropertyPlan.objects.filter(
+            property_model=property_model, is_active=True
+        ).first()
         old_property_plan.is_active = False
         old_property_plan.save()
 
@@ -34,7 +36,7 @@ class UpgradePropertyPlan(APIView):
         else:
             plan_expire_on = date.today() + relativedelta(months=plan.duration_in_months)
         property_plan = PropertyPlan.objects.create(
-            property=property,
+            property_model=property_model,
             plan=plan,
             plan_start_on=date.today(),
             plan_expire_on=plan_expire_on,

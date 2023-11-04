@@ -3,7 +3,7 @@ from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
 from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import Property
+from zameendar_backend.api.models import PropertyModel
 from zameendar_backend.api.serializers.buyer_property_serializers import property_serializers
 from zameendar_backend.api.serializers.get_paginated_property_reponse import (
     get_paginated_property_response,
@@ -20,12 +20,12 @@ class GetAllPg(APIView):
         offset = (page - 1) * page_size
         property_type = PropertyTypes.PG
 
-        properties_queryset = Property.objects.filter(property_type=property_type)[
+        properties_queryset = PropertyModel.objects.filter(property_type=property_type)[
             offset : offset + page_size
         ]
         serialized_data = []
-        for property in properties_queryset:
-            serialized_data.append(property_serializers(property=property))
+        for property_model in properties_queryset:
+            serialized_data.append(property_serializers(property_model=property_model))
 
         response_data = get_paginated_property_response(page, property_type, serialized_data)
 

@@ -23,7 +23,7 @@ class UpdatePropertyImage(APIView):
         propoerty_image = PropertyImage.objects.get(id=image_id)
         seller = Seller.objects.get(user=request.user)
 
-        if propoerty_image.property.seller == seller:
+        if propoerty_image.property_model.seller == seller:
             if image:
                 propoerty_image.image = image
             if title:

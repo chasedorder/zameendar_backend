@@ -10,10 +10,10 @@ from zameendar_backend.api.models import (
     GroupPlot,
     GroupVilla,
     OpenPlot,
-    Property,
     PropertyAddress,
     PropertyImage,
     PropertyMap,
+    PropertyModel,
     Rent,
     Seller,
     Villa,
@@ -430,22 +430,22 @@ PROPERTY_SERIALIZER_MAP = {
 }
 
 
-def property_serializer(property: Property):
-    property_id = property.id
-    project_name = property.project_name
-    property_type = property.property_type
-    address = property_address_serializer(property.address)
-    map_details = map_serializer(property.map)
-    seller_contact = seller_contact_serializer(property.seller_contact)
-    start_price = property.start_price
-    end_price = property.end_price
-    final_price = property.final_price
-    amenities = property.amenities
-    is_verified = property.is_verified
-    about_property = property.about_property
-    current_step = property.current_step
+def property_serializer(property_model: PropertyModel):
+    property_id = property_model.id
+    project_name = property_model.project_name
+    property_type = property_model.property_type
+    address = property_address_serializer(property_model.address)
+    map_details = map_serializer(property_model.map)
+    seller_contact = seller_contact_serializer(property_model.seller_contact)
+    start_price = property_model.start_price
+    end_price = property_model.end_price
+    final_price = property_model.final_price
+    amenities = property_model.amenities
+    is_verified = property_model.is_verified
+    about_property = property_model.about_property
+    current_step = property_model.current_step
 
-    image_queryset = PropertyImage.objects.filter(property=property)
+    image_queryset = PropertyImage.objects.filter(property_model=property_model)
     image_serializer = []
     for image in image_queryset:
         image_serializer.append(
@@ -472,13 +472,15 @@ def property_serializer(property: Property):
         "about_property": about_property,
         "images": image_serializer,
         "current_step": current_step,
-        "property_plan": property_plan_serializer(property),
+        "property_plan": property_plan_serializer(property_model),
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)
 
     serialized_data.update(
-        property_type_details(PROPERTY_MODEL_MAP.get(property_type).objects.get(property=property))
+        property_type_details(
+            PROPERTY_MODEL_MAP.get(property_type).objects.get(property_model=property_model)
+        )
     )
 
     return serialized_data

@@ -3,7 +3,7 @@ from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
 from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import Buyer, Property
+from zameendar_backend.api.models import Buyer, PropertyModel
 from zameendar_backend.api.serializers.buyer_property_serializers import property_serializers
 from zameendar_backend.api.serializers.get_paginated_property_reponse import (
     get_paginated_property_response,
@@ -17,7 +17,7 @@ class GetPropertyDetails(APIView):
     def get(self, request):
         property_id = request.GET.get("property_id")
 
-        property = Property.objects.get(id=property_id)
-        serialized_data = property_serializers(property=property)
+        property_model = PropertyModel.objects.get(id=property_id)
+        serialized_data = property_serializers(property_model=property_model)
 
         return JsonResponse(serialized_data)

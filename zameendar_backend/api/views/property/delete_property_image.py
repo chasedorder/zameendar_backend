@@ -19,7 +19,7 @@ class DeletePropertyImage(APIView):
         propoerty_image = PropertyImage.objects.get(id=image_id)
         seller = Seller.objects.get(user=request.user)
 
-        if propoerty_image.property.seller == seller:
+        if propoerty_image.property_model.seller == seller:
             propoerty_image.delete()
             return send_pass_http_response()
         return send_fail_http_response({"message": "Not Authorized"})

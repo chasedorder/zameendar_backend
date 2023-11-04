@@ -10,12 +10,12 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
     send_pass_http_response,
 )
 from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import GroupAppartment, Property, Seller
+from zameendar_backend.api.models import GroupAppartment, PropertyModel, Seller
 from zameendar_backend.api.utils.formatting_date_time import convert_string_to_date
 from zameendar_backend.api.utils.json_to_python import json_to_python
-from zameendar_backend.api.utils.property.add_common_details import add_common_details
-from zameendar_backend.api.utils.property.add_property_images import add_property_images
-from zameendar_backend.api.utils.property.update_common_details import update_common_details
+from zameendar_backend.api.utils.property_utils.add_common_details import add_common_details
+from zameendar_backend.api.utils.property_utils.add_property_images import add_property_images
+from zameendar_backend.api.utils.property_utils.update_common_details import update_common_details
 
 
 class AddGroupAppartment(APIView):
@@ -76,7 +76,7 @@ def create_group_appartment(request):
         contact_details=contact_details,
     )
 
-    property = Property.objects.create(
+    property_model = PropertyModel.objects.create(
         project_name=project_name,
         start_price=start_price,
         end_price=end_price,
@@ -91,7 +91,7 @@ def create_group_appartment(request):
     )
 
     GroupAppartment.objects.create(
-        property=property,
+        property_model=property_model,
         price_per_sqft=price_per_sqft,
         bhk_details=bhk_details,
         number_of_floors=number_of_floors,
@@ -112,13 +112,15 @@ def create_group_appartment(request):
 
     if image_details:
         add_property_images(
-            property=property, property_images=property_images, image_details=image_details
+            property_model=property_model,
+            property_images=property_images,
+            image_details=image_details,
         )
 
     return send_pass_http_response(
         {
             "message": "Property Added Successfully",
-            "property_id": property.id,
+            "property_id": property_model.id,
         }
     )
 
@@ -158,31 +160,31 @@ def update_group_appartment(request):
     else:
         possession_date = None
 
-    property = Property.objects.get(id=property_id)
+    property_model = PropertyModel.objects.get(id=property_id)
 
     property_map, property_address, seller_contact = update_common_details(
-        property=property,
+        property_model=property_model,
         maps_details=maps_details,
         address_details=address_details,
         contact_details=contact_details,
     )
 
-    property.project_name = project_name
-    property.start_price = start_price
-    property.end_price = end_price
-    property.seller = seller
-    property.amenities = amenities
-    property.address = property_address
-    property.seller_contact = seller_contact
-    property.map = property_map
-    property.property_type = PropertyTypes.GroupAppart
-    property.about_property = about_property
-    property.updated_date = datetime.now()
-    property.current_step = current_step
-    property.save()
+    property_model.project_name = project_name
+    property_model.start_price = start_price
+    property_model.end_price = end_price
+    property_model.seller = seller
+    property_model.amenities = amenities
+    property_model.address = property_address
+    property_model.seller_contact = seller_contact
+    property_model.map = property_map
+    property_model.property_type = PropertyTypes.GroupAppart
+    property_model.about_property = about_property
+    property_model.updated_date = datetime.now()
+    property_model.current_step = current_step
+    property_model.save()
 
-    group_appartment = GroupAppartment.objects.get(property=property)
-    group_appartment.property = property
+    group_appartment = GroupAppartment.objects.get(property_model=property_model)
+    group_appartment.property_model = property_model
     group_appartment.price_per_sqft = price_per_sqft
     group_appartment.bhk_details = bhk_details
     group_appartment.number_of_floors = number_of_floors
@@ -203,7 +205,9 @@ def update_group_appartment(request):
 
     if image_details:
         add_property_images(
-            property=property, property_images=property_images, image_details=image_details
+            property_model=property_model,
+            property_images=property_images,
+            image_details=image_details,
         )
 
-    return send_pass_http_response({"property_id": property.id})
+    return send_pass_http_response({"property_id": property_model.id})

@@ -1,8 +1,10 @@
-from zameendar_backend.api.models import Order, Property, PropertyPlan
+from zameendar_backend.api.models import Order, PropertyModel, PropertyPlan
 
 
-def property_plan_serializer(property: Property):
-    property_plan = PropertyPlan.objects.filter(property=property, is_active=True).first()
+def property_plan_serializer(property_model: PropertyModel):
+    property_plan = PropertyPlan.objects.filter(
+        property_model=property_model, is_active=True
+    ).first()
 
     serialized_data = None
     if property_plan:

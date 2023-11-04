@@ -17,16 +17,16 @@ class GetWishlist(APIView):
         wishlist_obj = WishList.objects.filter(buyer=buyer).first()
         serialized_wishlist = []
         if wishlist_obj:
-            for property in wishlist_obj.properties.all():
+            for property_model in wishlist_obj.properties.all():
                 serialized_wishlist.append(
                     {
-                        "id": property.id,
-                        "project_name": property.project_name,
-                        "property_type": property.property_type,
-                        "start_price": property.start_price,
-                        "end_price": property.end_price,
-                        "final_price": property.final_price,
-                        "location": property.map.location if property.map else "",
+                        "id": property_model.id,
+                        "project_name": property_model.project_name,
+                        "property_type": property_model.property_type,
+                        "start_price": property_model.start_price,
+                        "end_price": property_model.end_price,
+                        "final_price": property_model.final_price,
+                        "location": property_model.map.location if property_model.map else "",
                     }
                 )
 
