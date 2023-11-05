@@ -15,6 +15,7 @@ from .views.buyer.get_all_pg import GetAllPg
 from .views.buyer.get_all_rent import GetAllRent
 from .views.buyer.get_all_villa import GetAllVilla
 from .views.buyer.get_wishlist import GetWishlist
+from .views.buyer.remove_from_wishlist import RemoveFromWishlist
 
 # seller
 from .views.forgot_password import ForgotPassword
@@ -99,4 +100,5 @@ urlpatterns = [
     path("get_all_commercial/", GetAllCommercial.as_view(), name="get_all_commercial"),
     path("add_to_wishlist/", AddToWishlist.as_view(), name="add_to_wishlist"),
     path("get_wishlist/", GetWishlist.as_view(), name="get_wishlist"),
+    path("remove_from_wishlist/", RemoveFromWishlist.as_view(), name="remove_from_wishlist"),
 ]
