@@ -111,7 +111,7 @@ urlpatterns = [
         "delete_seller_property/",
         DeleteSellerProperty.as_view(),
         name="delete_seller_property",
-    ).
+    ),
     # buyer
     path("buyer_signup/", BuyerSignUp.as_view(), name="buyer_signup"),
     path("get_properties/", GetProperties.as_view(), name="get_properties"),
