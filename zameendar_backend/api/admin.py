@@ -35,7 +35,7 @@ from .models import (
 
 
 class PlanAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    list_display = ["title", "plan_type", "id"]
+    list_display = ["title", "plan_type", "plan_category", "id"]
 
 
 class SellerAdmin(admin.ModelAdmin, DynamicArrayMixin):

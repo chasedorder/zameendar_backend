@@ -27,6 +27,10 @@ class GetPropertyDetails(APIView):
         )
 
         if property_plans:
+            if property_plans.first().is_expired:
+                return send_fail_http_response(
+                    {"message": "you can't view this property details"}
+                )
             return JsonResponse(
                 {"data": property_serializers(property_model=property_model)}
             )
