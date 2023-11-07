@@ -541,7 +541,7 @@ class Plan(models.Model):
     def save(self, *args, **kwargs):
         if self.base_price is None and self.offer_price is None:
             raise ValidationError("Base price and offer price cannot be empty")
-        if self.offer_price and self.offer_duration_in_months is None:
+        if self.offer_price and self.offer_duration_in_days is None:
             raise ValidationError("Offer duration cannot be empty")
         if self.plan_category == "Diamond":
             self.weightage = 5
