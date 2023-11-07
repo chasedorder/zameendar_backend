@@ -3,11 +3,13 @@ from zameendar_backend.api.models import Order, PropertyModel, PropertyPlan
 
 def seller_property_plan_serializer(property_model: PropertyModel):
     property_plan = PropertyPlan.objects.filter(
-        property_model=property_model, is_active=True, order__isPaid=True
-    ).first()
+        property_model=property_model,
+        is_active=True,
+    )
 
     serialized_data = None
     if property_plan:
+        is_ordered = True if property_plan.objects.filter(order__isPaid=True) else False
         price = 0
         if property_plan.is_offer_taken:
             price = property_plan.plan.offer_price
@@ -20,5 +22,6 @@ def seller_property_plan_serializer(property_model: PropertyModel):
             "plan_type": property_plan.plan.plan_type,
             "base_price": price,
             "is_expired": property_plan.is_expired,
+            "is_ordered": is_ordered,
         }
     return serialized_data
