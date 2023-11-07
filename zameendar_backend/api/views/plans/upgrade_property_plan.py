@@ -27,8 +27,9 @@ class UpgradePropertyPlan(APIView):
         old_property_plan = PropertyPlan.objects.filter(
             property_model=property_model, is_active=True
         ).first()
-        old_property_plan.is_active = False
-        old_property_plan.save()
+        if old_property_plan:
+            old_property_plan.is_active = False
+            old_property_plan.save()
 
         # upgrading to new plan
         if is_offer_taken:
