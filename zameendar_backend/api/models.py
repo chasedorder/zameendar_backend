@@ -136,13 +136,13 @@ class PropertyModel(models.Model):
         ContactDetails, on_delete=models.DO_NOTHING, null=True, blank=True
     )
     start_price = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        max_digits=30, decimal_places=2, null=True, blank=True
     )
     end_price = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        max_digits=30, decimal_places=2, null=True, blank=True
     )
     final_price = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
+        max_digits=30, decimal_places=2, null=True, blank=True
     )
     amenities = ArrayField(models.JSONField(), default=list)
     is_verified = models.BooleanField(default=False)
