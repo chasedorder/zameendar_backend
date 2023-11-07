@@ -4,6 +4,7 @@ from django.urls import path
 
 from .views.buyer.add_to_wishlist import AddToWishlist
 from .views.buyer.buyer_signup import BuyerSignUp
+from .views.buyer.get_help import GetHelp
 from .views.buyer.get_properties import GetProperties
 from .views.buyer.get_property_details import GetPropertyDetails
 from .views.buyer.get_wishlist import GetWishlist
@@ -125,4 +126,5 @@ urlpatterns = [
         IsInWishlist.as_view(),
         name="is_in_wishlist",
     ),
+    path("get_help/", GetHelp.as_view(), name="get_help"),
 ]
