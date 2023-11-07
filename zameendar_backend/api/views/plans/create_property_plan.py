@@ -1,6 +1,5 @@
-from datetime import date
-
 from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
@@ -28,13 +27,17 @@ class CreatePropertyPlan(APIView):
         ).first()
         if not property_plan:
             if is_offer_taken:
-                plan_expire_on = date.today() + relativedelta(months=plan.offer_duration_in_months)
+                plan_expire_on = timezone.now() + relativedelta(
+                    days=plan.offer_duration_in_days
+                )
             else:
-                plan_expire_on = date.today() + relativedelta(months=plan.duration_in_months)
+                plan_expire_on = timezone.now() + relativedelta(
+                    days=plan.duration_in_days
+                )
             property_plan = PropertyPlan.objects.create(
                 property_model=property_model,
                 plan=plan,
-                plan_start_on=date.today(),
+                plan_start_on=timezone.now(),
                 plan_expire_on=plan_expire_on,
                 is_active=True,
                 is_offer_taken=is_offer_taken,

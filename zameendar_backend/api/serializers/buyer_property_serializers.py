@@ -432,7 +432,10 @@ PROPERTY_SERIALIZER_MAP = {
 }
 
 
-def property_serializers(property_model: PropertyModel, buyer=None):
+def property_serializers(property_model: PropertyModel):
+    property_model.views += 1
+    property_model.save()
+
     property_id = property_model.id
     project_name = property_model.project_name
     property_type = property_model.property_type
@@ -457,10 +460,6 @@ def property_serializers(property_model: PropertyModel, buyer=None):
                 "meta_data": image.meta_data,
             }
         )
-    in_wishlist = False
-    if buyer:
-        if WishList.objects.filter(buyer=buyer, properties=property_model):
-            in_wishlist = True
 
     property_plan = PropertyPlan.objects.filter(
         property_model=property_model, is_active=True
@@ -468,7 +467,9 @@ def property_serializers(property_model: PropertyModel, buyer=None):
 
     is_visible = False
     if property_plan:
-        is_visible = Order.objects.filter(property_plan=property_plan, isPaid=True).exists()
+        is_visible = Order.objects.filter(
+            property_plan=property_plan, isPaid=True
+        ).exists()
 
     serialized_data = {
         "property_id": property_id,
@@ -484,7 +485,6 @@ def property_serializers(property_model: PropertyModel, buyer=None):
         "is_verified": is_verified,
         "about_property": about_property,
         "images": image_serializer,
-        "in_wishlist": in_wishlist,
         "is_visible": is_visible,
     }
 
@@ -492,7 +492,9 @@ def property_serializers(property_model: PropertyModel, buyer=None):
 
     serialized_data.update(
         property_type_details(
-            PROPERTY_MODEL_MAP.get(property_type).objects.get(property_model=property_model)
+            PROPERTY_MODEL_MAP.get(property_type).objects.get(
+                property_model=property_model
+            )
         )
     )
 

@@ -475,6 +475,7 @@ def property_serializer(property_model: PropertyModel):
         "images": image_serializer,
         "current_step": current_step,
         "property_plan": seller_property_plan_serializer(property_model),
+        "views": property_model.views,
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)

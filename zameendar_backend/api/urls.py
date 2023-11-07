@@ -14,7 +14,9 @@ from .views.buyer.get_all_open_plot import GetAllOpenPlot
 from .views.buyer.get_all_pg import GetAllPg
 from .views.buyer.get_all_rent import GetAllRent
 from .views.buyer.get_all_villa import GetAllVilla
+from .views.buyer.get_property_details import GetPropertyDetails
 from .views.buyer.get_wishlist import GetWishlist
+from .views.buyer.is_in_wishlist import IsInWishlist
 from .views.buyer.remove_from_wishlist import RemoveFromWishlist
 
 # seller
@@ -45,11 +47,17 @@ from .views.seller.seller_signup import SellerSignUp
 from .views.send_signup_sms_otp import SendSignupSmsOtp
 
 urlpatterns = [
-    path("send_signup_sms_otp/", SendSignupSmsOtp.as_view(), name="send_signup_sms_otp"),
+    path(
+        "send_signup_sms_otp/", SendSignupSmsOtp.as_view(), name="send_signup_sms_otp"
+    ),
     path("seller_signup/", SellerSignUp.as_view(), name="seller_signup"),
     path("forgot_password/", ForgotPassword.as_view(), name="forgot_password"),
     path("reset_password/", ResetPassword.as_view(), name="reset_password"),
-    path("add_group_appartment/", AddGroupAppartment.as_view(), name="add_group_appartment"),
+    path(
+        "add_group_appartment/",
+        AddGroupAppartment.as_view(),
+        name="add_group_appartment",
+    ),
     path("add_group_villa/", AddGroupVilla.as_view(), name="add_group_villa"),
     path("add_group_plot/", AddGroupPlot.as_view(), name="add_group_plot"),
     path("add_flat/", AddFlat.as_view(), name="add_flat"),
@@ -60,17 +68,37 @@ urlpatterns = [
     path("add_pg/", AddPG.as_view(), name="add_pg"),
     path("add_commercial/", AddCommercial.as_view(), name="add_commercial"),
     path("get_all_plans/", GetAllPlans.as_view(), name="get_all_plans"),
-    path("create_property_plan/", CreatePropertyPlan.as_view(), name="create_property_plan"),
-    path("upgrade_property_plan/", UpgradePropertyPlan.as_view(), name="upgrade_property_plan"),
+    path(
+        "create_property_plan/",
+        CreatePropertyPlan.as_view(),
+        name="create_property_plan",
+    ),
+    path(
+        "upgrade_property_plan/",
+        UpgradePropertyPlan.as_view(),
+        name="upgrade_property_plan",
+    ),
     path("create_order/", CreateOrder.as_view(), name="create_order"),
     path(
         "get_payment_success_info/",
         GetPaymentSuccessInfo.as_view(),
         name="get_payment_success_info",
     ),
-    path("get_seller_properties/", GetSellerProperties.as_view(), name="get_seller_properties"),
-    path("delete_property_image/", DeletePropertyImage.as_view(), name="delete_property_image"),
-    path("update_property_image/", UpdatePropertyImage.as_view(), name="update_property_image"),
+    path(
+        "get_seller_properties/",
+        GetSellerProperties.as_view(),
+        name="get_seller_properties",
+    ),
+    path(
+        "delete_property_image/",
+        DeletePropertyImage.as_view(),
+        name="delete_property_image",
+    ),
+    path(
+        "update_property_image/",
+        UpdatePropertyImage.as_view(),
+        name="update_property_image",
+    ),
     path(
         "get_property_plan_details/",
         GetPropertyPlanDetail.as_view(),
@@ -81,7 +109,11 @@ urlpatterns = [
         GetSellerPropertyDetails.as_view(),
         name="get_seller_property_details",
     ),
-    path("delete_property_plan/", DeletePropertyPlan.as_view(), name="delete_property_plan"),
+    path(
+        "delete_property_plan/",
+        DeletePropertyPlan.as_view(),
+        name="delete_property_plan",
+    ),
     # buyer
     path("buyer_signup/", BuyerSignUp.as_view(), name="buyer_signup"),
     path(
@@ -89,7 +121,9 @@ urlpatterns = [
         GetAllGroupAppartments.as_view(),
         name="get_all_group_appartments",
     ),
-    path("get_all_group_villa/", GetAllGroupVilla.as_view(), name="get_all_group_villa"),
+    path(
+        "get_all_group_villa/", GetAllGroupVilla.as_view(), name="get_all_group_villa"
+    ),
     path("get_all_group_plot/", GetAllGroupPlot.as_view(), name="get_all_group_plot"),
     path("get_all_flat/", GetAllFlat.as_view(), name="get_all_flat"),
     path("get_all_building/", GetAllBuilding.as_view(), name="get_all_building"),
@@ -100,5 +134,19 @@ urlpatterns = [
     path("get_all_commercial/", GetAllCommercial.as_view(), name="get_all_commercial"),
     path("add_to_wishlist/", AddToWishlist.as_view(), name="add_to_wishlist"),
     path("get_wishlist/", GetWishlist.as_view(), name="get_wishlist"),
-    path("remove_from_wishlist/", RemoveFromWishlist.as_view(), name="remove_from_wishlist"),
+    path(
+        "remove_from_wishlist/",
+        RemoveFromWishlist.as_view(),
+        name="remove_from_wishlist",
+    ),
+    path(
+        "get_property_details/",
+        GetPropertyDetails.as_view(),
+        name="get_property_details",
+    ),
+    path(
+        "is_in_wishlist/",
+        IsInWishlist.as_view(),
+        name="is_in_wishlist",
+    ),
 ]

@@ -55,3 +55,21 @@ class FursnihingTypes:
         (SemiFurnished, "Semi Furnished"),
         (FullyFurnished, "Fully Furnished"),
     )
+
+
+class PlanCategory:
+    Diamond = "Diamond"
+    Platinum = "Platinum"
+    Gold = "Gold"
+    Silver = "Silver"
+    Bronze = "Bronze"
+    Free = "Free"
+
+    choices = (
+        (Diamond, "Diamond"),
+        (Platinum, "Platinum"),
+        (Gold, "Gold"),
+        (Silver, "Silver"),
+        (Bronze, "Bronze"),
+        (Free, "Free"),
+    )

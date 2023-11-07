@@ -22,8 +22,8 @@ class GetAllPlans(APIView):
                     "base_price": plan.base_price,
                     "offer_price": plan.offer_price,
                     "description": plan.description,
-                    "duration_in_months": plan.duration_in_months,
-                    "offer_duration_in_months": plan.offer_duration_in_months,
+                    "duration_in_days": plan.duration_in_days,
+                    "offer_duration_in_days": plan.offer_duration_in_days,
                     "plan_type": plan.plan_type,
                 }
             )

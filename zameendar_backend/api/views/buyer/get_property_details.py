@@ -1,23 +1,35 @@
+from django.db.models import Q
 from django.http import JsonResponse
-from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
-from zameendar_backend.api.meta_models import PropertyTypes
-from zameendar_backend.api.models import Buyer, PropertyModel
-from zameendar_backend.api.serializers.buyer_property_serializers import property_serializers
-from zameendar_backend.api.serializers.get_paginated_property_reponse import (
-    get_paginated_property_response,
+from zameendar_backend.api.dispatchers.responses.send_fail_http_response import (
+    send_fail_http_response,
+)
+from zameendar_backend.api.models import PropertyModel, PropertyPlan
+from zameendar_backend.api.serializers.buyer_property_serializers import (
+    property_serializers,
 )
 
 
 class GetPropertyDetails(APIView):
-    authentication_classes = (authentication.TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = []
+    permission_classes = []
 
     def get(self, request):
         property_id = request.GET.get("property_id")
 
         property_model = PropertyModel.objects.get(id=property_id)
-        serialized_data = property_serializers(property_model=property_model)
 
-        return JsonResponse(serialized_data)
+        property_plans = PropertyPlan.objects.filter(
+            Q(order__isPaid=True) | Q(plan__plan_category="Free"),
+            property_model=property_model,
+            is_active=True,
+        )
+
+        if property_plans:
+            return JsonResponse(
+                {"data": property_serializers(property_model=property_model)}
+            )
+        return send_fail_http_response(
+            {"message": "you can't view this property details"}
+        )

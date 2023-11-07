@@ -142,6 +142,7 @@ class PropertyModel(models.Model):
     added_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     updated_date = models.DateTimeField(auto_now=True, null=True, blank=True)
     current_step = models.IntegerField(null=True, blank=True)
+    views = models.IntegerField(default=0)
 
     def __str__(self):
         return self.project_name
@@ -149,6 +150,7 @@ class PropertyModel(models.Model):
     class Meta:
         verbose_name = "Property"
         verbose_name_plural = "Properties"
+        ordering = ["added_date"]
 
 
 class PropertyImage(models.Model):
@@ -487,11 +489,15 @@ class Plan(models.Model):
     title = models.CharField(max_length=50)
     base_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     offer_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    duration_in_months = models.IntegerField(null=True, blank=True)
-    offer_duration_in_months = models.IntegerField(null=True, blank=True)
+    duration_in_days = models.IntegerField(null=True, blank=True)
+    offer_duration_in_days = models.IntegerField(null=True, blank=True)
     description = ArrayField(models.CharField(max_length=1000), null=True, blank=True, default=list)
     is_active = models.BooleanField(default=True, null=True, blank=True)
     plan_type = models.CharField(max_length=100, null=True, blank=True)
+    plan_category = models.CharField(
+        max_length=100, null=True, blank=True, choices=PlanCategory.choices
+    )
+    weightage = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -501,20 +507,34 @@ class Plan(models.Model):
             raise ValidationError("Base price and offer price cannot be empty")
         if self.offer_price and self.offer_duration_in_months is None:
             raise ValidationError("Offer duration cannot be empty")
+        if self.plan_category == "Diamond":
+            self.weightage = 5
+        elif self.plan_category == "Platinum":
+            self.weightage = 4
+        elif self.plan_category == "Gold":
+            self.weightage = 3
+        elif self.plan_category == "Silver":
+            self.weightage = 2
+        elif self.plan_category == "Bronze":
+            self.weightage = 1
+        else:
+            self.weightage = 0
+
         return super().save(*args, **kwargs)
 
 
 class PropertyPlan(models.Model):
     property_model = models.ForeignKey(PropertyModel, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
-    plan_start_on = models.DateField(null=True, blank=True)
-    plan_expire_on = models.DateField(null=True, blank=True)
+    plan_start_on = models.DateTimeField(null=True, blank=True)
+    plan_expire_on = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
     is_offer_taken = models.BooleanField(default=False)
+    added_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         active_plans = PropertyPlan.objects.filter(
-            is_active=True, property_model=self.property_model, is_expired=False
+            is_active=True, property_model=self.property_model
         )
         if self.is_active and active_plans.exists():
             if self.id != active_plans.first().id:
@@ -522,6 +542,9 @@ class PropertyPlan(models.Model):
                     "An plan for this property already exists. Cannot save another plan."
                 )
         return super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ["-added_date"]
 
     @property
     def is_expired(self):
