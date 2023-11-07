@@ -117,7 +117,9 @@ class PropertyMap(models.Model):
 class PropertyModel(models.Model):
     project_name = models.CharField(max_length=100)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
-    property_type = models.CharField(max_length=50, choices=PropertyTypes.property_type_choices)
+    property_type = models.CharField(
+        max_length=50, choices=PropertyTypes.property_type_choices
+    )
     address = models.OneToOneField(
         PropertyAddress,
         on_delete=models.CASCADE,
@@ -133,9 +135,15 @@ class PropertyModel(models.Model):
     seller_contact = models.OneToOneField(
         ContactDetails, on_delete=models.DO_NOTHING, null=True, blank=True
     )
-    start_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    end_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    final_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    start_price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    end_price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    final_price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
     amenities = ArrayField(models.JSONField(), default=list)
     is_verified = models.BooleanField(default=False)
     about_property = models.TextField(null=True, blank=True)
@@ -244,8 +252,12 @@ class GroupVilla(models.Model):
 
 class GroupPlot(models.Model):
     property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
-    price_per_sqyd = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    plot_sizes = ArrayField(models.CharField(max_length=50), default=list, null=True, blank=True)
+    price_per_sqyd = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    plot_sizes = ArrayField(
+        models.CharField(max_length=50), default=list, null=True, blank=True
+    )
     total_project_area = models.CharField(max_length=100, null=True, blank=True)
     rera_id = models.CharField(max_length=100, null=True, blank=True)
     facing = ChoiceArrayField(
@@ -349,7 +361,9 @@ class Villa(models.Model):
     price_per_square_feet = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
-    floors = ArrayField(models.CharField(max_length=100), null=True, blank=True, default=list)
+    floors = ArrayField(
+        models.CharField(max_length=100), null=True, blank=True, default=list
+    )
     furnishing_detail = ChoiceArrayField(
         models.CharField(max_length=100, choices=FursnihingTypes.furnished_choices),
         null=True,
@@ -401,8 +415,12 @@ class Rent(models.Model):
         blank=True,
         default=list,
     )
-    rent_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    advance_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    rent_per_month = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    advance_amount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
     ready_to_move_in = models.BooleanField(default=False, null=True, blank=True)
     carpet_area = models.CharField(max_length=100, null=True, blank=True)
     bedroom_available = ArrayField(
@@ -417,7 +435,9 @@ class PG(models.Model):
     property_model = models.OneToOneField(PropertyModel, on_delete=models.CASCADE)
     # sharing_type = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
     sharing_types = ArrayField(models.JSONField(), null=True, blank=True, default=list)
-    sharing_for = ArrayField(models.CharField(max_length=50), null=True, blank=True, default=list)
+    sharing_for = ArrayField(
+        models.CharField(max_length=50), null=True, blank=True, default=list
+    )
     attached_washroom = models.BooleanField(default=False, null=True, blank=True)
     food_facility = models.BooleanField(default=False, null=True, blank=True)
     parking_facility = models.BooleanField(default=False, null=True, blank=True)
@@ -431,10 +451,14 @@ class PG(models.Model):
     )
     ready_to_move_in = models.BooleanField(default=False, null=True, blank=True)
     # coliving_common_area = models.CharField(max_length=100, null=True, blank=True)
-    coliving_common_areas = ArrayField(models.JSONField(), null=True, blank=True, default=list)
+    coliving_common_areas = ArrayField(
+        models.JSONField(), null=True, blank=True, default=list
+    )
     non_veg_available = models.BooleanField(default=False, null=True, blank=True)
     visitor_allowed = models.BooleanField(default=False, null=True, blank=True)
-    opposite_sex_visitor_allowed = models.BooleanField(default=False, null=True, blank=True)
+    opposite_sex_visitor_allowed = models.BooleanField(
+        default=False, null=True, blank=True
+    )
     drinking_allowed = models.BooleanField(default=False, null=True, blank=True)
     smoking_allowed = models.BooleanField(default=False, null=True, blank=True)
     any_time_allowed = models.BooleanField(default=False, null=True, blank=True)
@@ -477,9 +501,15 @@ class Commercial(models.Model):
     water_charges_included = models.BooleanField(default=False, null=True, blank=True)
     floor_number = models.IntegerField(null=True, blank=True)
     possession_date = models.DateTimeField(null=True, blank=True)
-    electricity_bill_included = models.BooleanField(default=False, null=True, blank=True)
-    safety_deposit = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    rent_per_month = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    electricity_bill_included = models.BooleanField(
+        default=False, null=True, blank=True
+    )
+    safety_deposit = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
+    rent_per_month = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
 
     def __str__(self):
         return self.property_model.project_name
@@ -487,11 +517,17 @@ class Commercial(models.Model):
 
 class Plan(models.Model):
     title = models.CharField(max_length=50)
-    base_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    offer_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    base_price = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True
+    )
+    offer_price = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True
+    )
     duration_in_days = models.IntegerField(null=True, blank=True)
     offer_duration_in_days = models.IntegerField(null=True, blank=True)
-    description = ArrayField(models.CharField(max_length=1000), null=True, blank=True, default=list)
+    description = ArrayField(
+        models.CharField(max_length=1000), null=True, blank=True, default=list
+    )
     is_active = models.BooleanField(default=True, null=True, blank=True)
     plan_type = models.CharField(max_length=100, null=True, blank=True)
     plan_category = models.CharField(
@@ -559,7 +595,9 @@ class Order(models.Model):
     property_plan = models.ForeignKey(PropertyPlan, on_delete=models.DO_NOTHING)
     final_amount = models.DecimalField(max_digits=8, decimal_places=2)
     isPaid = models.BooleanField(default=False)
-    order_id = models.CharField(unique=True, max_length=100, null=True, blank=True, default=None)
+    order_id = models.CharField(
+        unique=True, max_length=100, null=True, blank=True, default=None
+    )
     order_date = models.DateTimeField(auto_now=True)
     date_of_payment = models.DateTimeField(default=timezone.now)
     # razorpay
@@ -569,7 +607,9 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if self.order_id is None and self.date_of_payment and self.pk:
-            self.order_id = self.date_of_payment.strftime("PAY2ME%Y%m%dODR") + str(self.pk)
+            self.order_id = self.date_of_payment.strftime("PAY2ME%Y%m%dODR") + str(
+                self.pk
+            )
 
         return super().save(*args, **kwargs)
 
@@ -581,15 +621,29 @@ class SellerPayment(models.Model):
     seller = models.ForeignKey("Seller", on_delete=models.CASCADE)
     order = models.ForeignKey("Order", on_delete=models.CASCADE)
     payment_id = models.CharField(max_length=1000)
-    amount = models.DecimalField(decimal_places=2, max_digits=100, null=True, blank=True)
+    amount = models.DecimalField(
+        decimal_places=2, max_digits=100, null=True, blank=True
+    )
 
 
 class WishList(models.Model):
     buyer = models.ForeignKey("Buyer", on_delete=models.CASCADE)
-    properties = models.ManyToManyField("PropertyModel", blank=True, related_name="wish_list")
+    properties = models.ManyToManyField(
+        "PropertyModel", blank=True, related_name="wish_list"
+    )
 
     def __str__(self):
         return self.buyer.user.username
+
+
+class Help(models.Model):
+    name = models.CharField(max_length=100, null=True, blank=True)
+    email = models.EmailField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=100, null=True, blank=True)
+    message = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.email
 
 
 PROPERTY_MODEL_MAP = {

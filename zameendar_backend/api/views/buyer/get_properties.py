@@ -2,7 +2,6 @@ from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework.views import APIView
 
-from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import PropertyPlan
 from zameendar_backend.api.serializers.buyer_property_serializers import (
     property_serializers,
