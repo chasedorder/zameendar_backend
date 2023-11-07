@@ -33,6 +33,7 @@ from .views.property.add_villa import AddVilla
 from .views.property.delete_property_image import DeletePropertyImage
 from .views.property.update_property_image import UpdatePropertyImage
 from .views.reset_password import ResetPassword
+from .views.seller.delete_seller_property import DeleteSellerProperty
 from .views.seller.get_all_properties import GetSellerProperties
 from .views.seller.get_seller_property_details import GetSellerPropertyDetails
 from .views.seller.seller_signup import SellerSignUp
@@ -106,6 +107,11 @@ urlpatterns = [
         DeletePropertyPlan.as_view(),
         name="delete_property_plan",
     ),
+    path(
+        "delete_seller_property/",
+        DeleteSellerProperty.as_view(),
+        name="delete_seller_property",
+    ).
     # buyer
     path("buyer_signup/", BuyerSignUp.as_view(), name="buyer_signup"),
     path("get_properties/", GetProperties.as_view(), name="get_properties"),
