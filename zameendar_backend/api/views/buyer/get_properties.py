@@ -37,6 +37,7 @@ class GetProperties(APIView):
         serialized_data = []
         for property_model in properties_queryset[offset : offset + page_size]:
             serialized_data.append(property_serializers(property_model=property_model))
+        print(len(serialized_data))
 
         response_data = get_paginated_property_response(
             page, len(serialized_data), serialized_data
