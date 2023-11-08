@@ -42,8 +42,8 @@ class SellerSignUp(APIView):
         password = request.POST["password"].strip()
         phone_number = request.POST["phone_number"].strip()
         otp = request.POST["otp"].strip()
-        is_phone_already_use = User.objects.filter(phone_number=phone_number).exists()
-        if is_phone_already_use:
+
+        if Seller.objects.filter(user__phone_number=phone_number).exists():
             return send_fail_http_response({"message": "Phone already in use"})
         is_email_already_use = User.objects.filter(email=email).exists()
         if is_email_already_use:
@@ -53,18 +53,35 @@ class SellerSignUp(APIView):
         if int(otp) != pending_otp.otp:
             return send_fail_http_response({"message": "incorrect OTP"})
 
-        user = User.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            username=email,
-            email=email,
-            phone_number=phone_number,
-        )
-        user.set_password(password)
-        user.save()
-        pending_otp.delete()
+        user = User.objects.filter(phone_number=phone_number).first()
+        if not user:
+            try:
+                user = User.objects.create(
+                    first_name=first_name,
+                    last_name=last_name,
+                    username=email,
+                    email=email,
+                    phone_number=phone_number,
+                )
+                user.set_password(password)
+                user.save()
+                pending_otp.delete()
+                Seller.objects.create(user=user)
+                token = Token.objects.get(user=user).key
+                return send_pass_http_response(
+                    {
+                        "message": "User Created Successfully",
+                        "token": token,
+                        "user_type": get_user_type(user=user),
+                    }
+                )
+            except Exception as e:
+                return send_fail_http_response({"message": str(e)})
+
         Seller.objects.create(user=user)
         token = Token.objects.get(user=user).key
+        pending_otp.delete()
+
         return send_pass_http_response(
             {
                 "message": "User Created Successfully",
