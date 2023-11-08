@@ -48,7 +48,11 @@ class BuyerAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 class PropertyPlanAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    pass
+    list_display = ["property_model", "plan", "is_expired", "id", "get_property_id"]
+
+    @admin.display(description="Property id")
+    def get_property_id(self, obj):
+        return obj.property_model.id
 
 
 class ContactDetailsAdmin(admin.ModelAdmin, DynamicArrayMixin):
