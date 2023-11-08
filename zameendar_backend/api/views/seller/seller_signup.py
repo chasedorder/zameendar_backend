@@ -65,16 +65,6 @@ class SellerSignUp(APIView):
                 )
                 user.set_password(password)
                 user.save()
-                pending_otp.delete()
-                Seller.objects.create(user=user)
-                token = Token.objects.get(user=user).key
-                return send_pass_http_response(
-                    {
-                        "message": "User Created Successfully",
-                        "token": token,
-                        "user_type": get_user_type(user=user),
-                    }
-                )
             except Exception as e:
                 return send_fail_http_response({"message": str(e)})
 
