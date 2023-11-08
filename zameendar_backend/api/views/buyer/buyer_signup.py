@@ -61,7 +61,6 @@ class BuyerSignUp(APIView):
                 )
                 user.set_password(password)
                 user.save()
-                pending_otp.delete()
             except Exception as e:
                 return send_fail_http_response({"message": str(e)})
 
