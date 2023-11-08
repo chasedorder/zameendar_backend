@@ -59,7 +59,7 @@ class SellerSignUp(APIView):
                 user = User.objects.create(
                     first_name=first_name,
                     last_name=last_name,
-                    username=email,
+                    username=phone_number,
                     email=email,
                     phone_number=phone_number,
                 )
