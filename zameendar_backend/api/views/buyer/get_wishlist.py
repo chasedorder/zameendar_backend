@@ -25,6 +25,7 @@ class GetWishlist(APIView):
                     property_model=property_model
                 ).first()
                 image = image_obj.image.url if image_obj else None
+                rent_per_month = None
                 if property_model.property_type == PropertyTypes.Rent:
                     try:
                         rent_per_month = Rent.objects.get(
