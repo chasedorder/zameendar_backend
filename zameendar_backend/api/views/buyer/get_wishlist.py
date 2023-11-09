@@ -23,7 +23,7 @@ class GetWishlist(APIView):
             for property_model in wishlist_obj.properties.all():
                 image_obj = PropertyImage.objects.filter(
                     property_model=property_model
-                ).first
+                ).first()
                 image = image_obj.image.url if image_obj else None
                 if property_model.property_type == PropertyTypes.Rent:
                     try:
