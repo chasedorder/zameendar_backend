@@ -13,7 +13,9 @@ class GetWishlist(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        buyer = Buyer.objects.get(user=request.user)
+        buyer = Buyer.objects.filter(user=request.user).first()
+        if not buyer:
+            return send_pass_http_response({"wishlist": []})
         wishlist_obj = WishList.objects.filter(buyer=buyer).first()
         serialized_wishlist = []
         if wishlist_obj:
@@ -26,7 +28,9 @@ class GetWishlist(APIView):
                         "start_price": property_model.start_price,
                         "end_price": property_model.end_price,
                         "final_price": property_model.final_price,
-                        "location": property_model.map.location if property_model.map else "",
+                        "location": property_model.map.location
+                        if property_model.map
+                        else "",
                     }
                 )
 
