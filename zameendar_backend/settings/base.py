@@ -70,11 +70,14 @@ TEMPLATES = [
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
+    # "allauth.account.auth_backends.AuthenticationBackend",
+    "zameendar_backend.backend.auth_backends.AuthenticationBackend",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework.authentication.TokenAuthentication",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+    ),
     "DATETIME_FORMAT": "%s000",
 }
 REST_AUTH_SERIALIZERS = {
@@ -132,3 +135,6 @@ CORS_ALLOW_CREDENTIALS = True
 AUTH_USER_MODEL = "api.User"
 
 PAGE_SIZE = 10
+ACCOUNT_AUTHENTICATION_METHOD = "EMAIL"
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
