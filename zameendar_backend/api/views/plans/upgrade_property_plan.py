@@ -34,10 +34,10 @@ class UpgradePropertyPlan(APIView):
         # upgrading to new plan
         if is_offer_taken:
             plan_expire_on = date.today() + relativedelta(
-                months=plan.offer_duration_in_days
+                days=plan.offer_duration_in_days
             )
         else:
-            plan_expire_on = date.today() + relativedelta(months=plan.duration_in_days)
+            plan_expire_on = date.today() + relativedelta(days=plan.duration_in_days)
         property_plan = PropertyPlan.objects.create(
             property_model=property_model,
             plan=plan,
