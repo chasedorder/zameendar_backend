@@ -29,11 +29,22 @@ class GetSearchProperties(APIView):
 
         serialized_data = []
         for property_model in properties_queryset:
+            address = property_model.address
+            serialized_address = None
+            if address:
+                serialized_address = {
+                    "street_address": address.street_address,
+                    "city": address.city,
+                    "state": address.state,
+                    "postal_code": address.postal_code,
+                    "area": address.area,
+                }
             serialized_data.append(
                 {
                     "property_id": property_model.id,
                     "project_name": property_model.project_name,
                     "project_type": property_model.property_type,
+                    "address": serialized_address,
                     "location": property_model.map.location
                     if property_model.map
                     else "",
