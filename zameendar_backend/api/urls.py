@@ -7,6 +7,7 @@ from .views.buyer.buyer_signup import BuyerSignUp
 from .views.buyer.get_help import GetHelp
 from .views.buyer.get_properties import GetProperties
 from .views.buyer.get_property_details import GetPropertyDetails
+from .views.buyer.get_search_properties import GetSearchProperties
 from .views.buyer.get_wishlist import GetWishlist
 from .views.buyer.is_in_wishlist import IsInWishlist
 from .views.buyer.remove_from_wishlist import RemoveFromWishlist
@@ -133,4 +134,9 @@ urlpatterns = [
         name="is_in_wishlist",
     ),
     path("get_help/", GetHelp.as_view(), name="get_help"),
+    path(
+        "get_search_properties/",
+        GetSearchProperties.as_view(),
+        name="get_search_properties",
+    ),
 ]
