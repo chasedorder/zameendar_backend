@@ -13,9 +13,15 @@ from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import Commercial, PropertyModel, Seller
 from zameendar_backend.api.utils.formatting_date_time import convert_string_to_date
 from zameendar_backend.api.utils.json_to_python import json_to_python
-from zameendar_backend.api.utils.property_utils.add_common_details import add_common_details
-from zameendar_backend.api.utils.property_utils.add_property_images import add_property_images
-from zameendar_backend.api.utils.property_utils.update_common_details import update_common_details
+from zameendar_backend.api.utils.property_utils.add_common_details import (
+    add_common_details,
+)
+from zameendar_backend.api.utils.property_utils.add_property_images import (
+    add_property_images,
+)
+from zameendar_backend.api.utils.property_utils.update_common_details import (
+    update_common_details,
+)
 
 
 class AddCommercial(APIView):
@@ -41,10 +47,13 @@ def create_commerical(request):
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
-    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    image_details = json_to_python(
+        request.POST.get("image_details")
+    )  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
 
+    amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
     commerical_category = request.POST.get("commerical_category")
     price_per_square_feet = request.POST.get("price_per_square_feet")
     builtup_area = request.POST.get("builtup_area")
@@ -54,12 +63,18 @@ def create_commerical(request):
     parking_available = json_to_python(request.POST.get("parking_available"))
     min_contract_period = request.POST.get("min_contract_period")
     negotialble = json_to_python(request.POST.get("negotialble"))
-    tax_gov_charges_included = json_to_python(request.POST.get("tax_gov_charges_included"))
-    dg_ups_charges_included = json_to_python(request.POST.get("dg_ups_charges_included"))
+    tax_gov_charges_included = json_to_python(
+        request.POST.get("tax_gov_charges_included")
+    )
+    dg_ups_charges_included = json_to_python(
+        request.POST.get("dg_ups_charges_included")
+    )
     water_charges_included = json_to_python(request.POST.get("water_charges_included"))
     floor_number = request.POST.get("floor_number")
     possession_date = request.POST.get("possession_date")
-    electricity_bill_included = json_to_python(request.POST.get("electricity_bill_included"))
+    electricity_bill_included = json_to_python(
+        request.POST.get("electricity_bill_included")
+    )
     safety_deposit = request.POST.get("safety_deposit")
     rent_per_month = request.POST.get("rent_per_month")
     current_step = int(request.POST.get("current_step", 0))
@@ -76,6 +91,7 @@ def create_commerical(request):
         property_type=PropertyTypes.Commercial,
         address=property_address,
         seller_contact=seller_contact,
+        amenities=amenities,
         map=property_map,
         about_property=about_property,
         current_step=current_step,
@@ -97,7 +113,9 @@ def create_commerical(request):
         dg_ups_charges_included=dg_ups_charges_included,
         water_charges_included=water_charges_included,
         floor_number=floor_number,
-        possession_date=convert_string_to_date(possession_date) if possession_date else None,
+        possession_date=convert_string_to_date(possession_date)
+        if possession_date
+        else None,
         electricity_bill_included=electricity_bill_included,
         safety_deposit=safety_deposit,
         rent_per_month=rent_per_month,
@@ -127,10 +145,12 @@ def update_commerical(request):
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
-    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    image_details = json_to_python(
+        request.POST.get("image_details")
+    )  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
-
+    amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
     commerical_category = request.POST.get("commerical_category")
     price_per_square_feet = request.POST.get("price_per_square_feet")
     builtup_area = request.POST.get("builtup_area")
@@ -140,12 +160,18 @@ def update_commerical(request):
     parking_available = json_to_python(request.POST.get("parking_available"))
     min_contract_period = request.POST.get("min_contract_period")
     negotialble = json_to_python(request.POST.get("negotialble"))
-    tax_gov_charges_included = json_to_python(request.POST.get("tax_gov_charges_included"))
-    dg_ups_charges_included = json_to_python(request.POST.get("dg_ups_charges_included"))
+    tax_gov_charges_included = json_to_python(
+        request.POST.get("tax_gov_charges_included")
+    )
+    dg_ups_charges_included = json_to_python(
+        request.POST.get("dg_ups_charges_included")
+    )
     water_charges_included = json_to_python(request.POST.get("water_charges_included"))
     floor_number = request.POST.get("floor_number")
     possession_date = request.POST.get("possession_date")
-    electricity_bill_included = json_to_python(request.POST.get("electricity_bill_included"))
+    electricity_bill_included = json_to_python(
+        request.POST.get("electricity_bill_included")
+    )
     safety_deposit = request.POST.get("safety_deposit")
     rent_per_month = request.POST.get("rent_per_month")
     current_step = int(request.POST.get("current_step", 0))
@@ -167,6 +193,7 @@ def update_commerical(request):
     property_model.about_property = about_property
     property_model.updated_date = datetime.now()
     property_model.current_step = current_step
+    property_model.amenities = amenities
     property_model.save()
 
     commercial = Commercial.objects.get(property_model=property_model)

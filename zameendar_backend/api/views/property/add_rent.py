@@ -13,9 +13,15 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
 from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import PropertyModel, Rent, Seller
 from zameendar_backend.api.utils.json_to_python import json_to_python
-from zameendar_backend.api.utils.property_utils.add_common_details import add_common_details
-from zameendar_backend.api.utils.property_utils.add_property_images import add_property_images
-from zameendar_backend.api.utils.property_utils.update_common_details import update_common_details
+from zameendar_backend.api.utils.property_utils.add_common_details import (
+    add_common_details,
+)
+from zameendar_backend.api.utils.property_utils.add_property_images import (
+    add_property_images,
+)
+from zameendar_backend.api.utils.property_utils.update_common_details import (
+    update_common_details,
+)
 
 
 class AddRent(APIView):
@@ -51,9 +57,12 @@ def create_rent(request):
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
-    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    image_details = json_to_python(
+        request.POST.get("image_details")
+    )  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     current_step = int(request.POST.get("current_step", 0))
+    amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
 
     property_map, property_address, seller_contact = add_common_details(
         maps_details=maps_details,
@@ -64,6 +73,7 @@ def create_rent(request):
         project_name=project_name,
         seller=seller,
         property_type=PropertyTypes.Rent,
+        amenities=amenities,
         address=property_address,
         seller_contact=seller_contact,
         map=property_map,
@@ -109,6 +119,7 @@ def update_rent(request):
     facing = json_to_python(request.POST.get("facing"))
     rent_per_month = request.POST.get("rent_per_month")
     advance_amount = request.POST.get("advance_amount")
+    amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
     floor_number = request.POST.get("floor_number")
     number_of_car_parking = request.POST.get("number_of_car_parking")
     number_of_bike_parking = request.POST.get("number_of_bike_parking")
@@ -120,7 +131,9 @@ def update_rent(request):
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
-    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    image_details = json_to_python(
+        request.POST.get("image_details")
+    )  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     current_step = int(request.POST.get("current_step", 0))
 
@@ -141,6 +154,7 @@ def update_rent(request):
     property_model.about_property = about_property
     property_model.updated_date = datetime.now()
     property_model.current_step = current_step
+    property_model.amenities = amenities
     property_model.save()
 
     rent = Rent.objects.get(property_model=property_model)

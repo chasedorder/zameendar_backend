@@ -12,9 +12,15 @@ from zameendar_backend.api.dispatchers.responses.send_pass_http_response import 
 from zameendar_backend.api.meta_models import PropertyTypes
 from zameendar_backend.api.models import PG, PropertyModel, Seller
 from zameendar_backend.api.utils.json_to_python import json_to_python
-from zameendar_backend.api.utils.property_utils.add_common_details import add_common_details
-from zameendar_backend.api.utils.property_utils.add_property_images import add_property_images
-from zameendar_backend.api.utils.property_utils.update_common_details import update_common_details
+from zameendar_backend.api.utils.property_utils.add_common_details import (
+    add_common_details,
+)
+from zameendar_backend.api.utils.property_utils.add_property_images import (
+    add_property_images,
+)
+from zameendar_backend.api.utils.property_utils.update_common_details import (
+    update_common_details,
+)
 
 
 class AddPG(APIView):
@@ -42,11 +48,17 @@ def create_pg(request):
     food_facility = json_to_python(request.POST.get("food_facility"))
     parking_facility = json_to_python(request.POST.get("parking_facility"))
     ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
-    other_facilities = json_to_python(request.POST.get("other_facilities"))  # list of json objects
+    other_facilities = json_to_python(
+        request.POST.get("other_facilities")
+    )  # list of json objects
+    amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
+
     coliving_common_areas = json_to_python(request.POST.get("coliving_common_areas"))
     non_veg_available = json_to_python(request.POST.get("non_veg_available"))
     visitor_allowed = json_to_python(request.POST.get("visitor_allowed"))
-    opposite_sex_visitor_allowed = json_to_python(request.POST.get("opposite_sex_visitor_allowed"))
+    opposite_sex_visitor_allowed = json_to_python(
+        request.POST.get("opposite_sex_visitor_allowed")
+    )
     drinking_allowed = json_to_python(request.POST.get("drinking_allowed"))
     smoking_allowed = json_to_python(request.POST.get("smoking_allowed"))
     any_time_allowed = json_to_python(request.POST.get("any_time_allowed"))
@@ -56,7 +68,9 @@ def create_pg(request):
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
-    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    image_details = json_to_python(
+        request.POST.get("image_details")
+    )  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
     current_step = int(request.POST.get("current_step", 0))
@@ -71,6 +85,7 @@ def create_pg(request):
         seller=seller,
         final_price=final_price,
         property_type=PropertyTypes.PG,
+        amenities=amenities,
         address=property_address,
         seller_contact=seller_contact,
         map=property_map,
@@ -125,21 +140,29 @@ def update_pg(request):
     food_facility = json_to_python(request.POST.get("food_facility"))
     parking_facility = json_to_python(request.POST.get("parking_facility"))
     ready_to_move_in = json_to_python(request.POST.get("ready_to_move_in"))
-    other_facilities = json_to_python(request.POST.get("other_facilities"))  # list of json objects
+    other_facilities = json_to_python(
+        request.POST.get("other_facilities")
+    )  # list of json objects
     coliving_common_areas = json_to_python(request.POST.get("coliving_common_areas"))
     non_veg_available = json_to_python(request.POST.get("non_veg_available"))
     visitor_allowed = json_to_python(request.POST.get("visitor_allowed"))
-    opposite_sex_visitor_allowed = json_to_python(request.POST.get("opposite_sex_visitor_allowed"))
+    opposite_sex_visitor_allowed = json_to_python(
+        request.POST.get("opposite_sex_visitor_allowed")
+    )
     drinking_allowed = json_to_python(request.POST.get("drinking_allowed"))
     smoking_allowed = json_to_python(request.POST.get("smoking_allowed"))
     any_time_allowed = json_to_python(request.POST.get("any_time_allowed"))
     last_time_entry = json_to_python(request.POST.get("last_time_entry"))
     furnishing_detail = json_to_python(request.POST.get("furnishing_detail"))
+    amenities = json_to_python(request.POST.get("amenities"))  # list of json objects
+
     food_offerings = json_to_python(request.POST.get("food_offerings"))
     maps_details = json_to_python(request.POST.get("maps_details", "false"))
     seller = Seller.objects.get(user=request.user)
     property_images = request.FILES.getlist("property_images")
-    image_details = json_to_python(request.POST.get("image_details"))  # list of json objects
+    image_details = json_to_python(
+        request.POST.get("image_details")
+    )  # list of json objects
     contact_details = json_to_python(request.POST.get("contact_details"))
     about_property = request.POST.get("about_property")
     current_step = int(request.POST.get("current_step", 0))
@@ -163,6 +186,7 @@ def update_pg(request):
     property_model.about_property = about_property
     property_model.updated_date = datetime.now()
     property_model.current_step = current_step
+    property_model.amenities = amenities
     property_model.save()
 
     pg = PG.objects.get(property_model=property_model)
