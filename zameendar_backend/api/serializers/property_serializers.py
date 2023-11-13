@@ -21,6 +21,7 @@ from zameendar_backend.api.models import (
 from zameendar_backend.api.serializers.seller_property_plan_serializer import (
     seller_property_plan_serializer,
 )
+from zameendar_backend.api.utils.formatting_date_time import formatting_date_time
 
 
 def seller_serializer(seller: Seller):
@@ -446,6 +447,7 @@ def property_serializer(property_model: PropertyModel):
     is_verified = property_model.is_verified
     about_property = property_model.about_property
     current_step = property_model.current_step
+    added_date = property_model.added_date
 
     image_queryset = PropertyImage.objects.filter(property_model=property_model)
     image_serializer = []
@@ -476,13 +478,16 @@ def property_serializer(property_model: PropertyModel):
         "current_step": current_step,
         "property_plan": seller_property_plan_serializer(property_model),
         "views": property_model.views,
+        "added_date": formatting_date_time(added_date),
     }
 
     property_type_details = PROPERTY_SERIALIZER_MAP.get(property_type)
 
     serialized_data.update(
         property_type_details(
-            PROPERTY_MODEL_MAP.get(property_type).objects.get(property_model=property_model)
+            PROPERTY_MODEL_MAP.get(property_type).objects.get(
+                property_model=property_model
+            )
         )
     )
 
