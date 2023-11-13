@@ -1,6 +1,11 @@
 from .base import *
 
-ALLOWED_HOSTS = ["64.227.177.77", "127.0.0.1", "192.168.44.128"]
+ALLOWED_HOSTS = [
+    "64.227.177.77",
+    "127.0.0.1",
+    "192.168.44.128",
+    "zameendarproperties.com",
+]
 
 DATABASES = {
     "default": {
