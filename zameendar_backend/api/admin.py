@@ -19,6 +19,7 @@ from .models import (
     Help,
     OpenPlot,
     Order,
+    PendingEmailOtp,
     PendingSmsOtp,
     Plan,
     PropertyAddress,
@@ -115,6 +116,10 @@ class PropertyModelAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 class PendingSmsOtpAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    pass
+
+
+class PendingEmailOtpAdmin(admin.ModelAdmin, DynamicArrayMixin):
     pass
 
 
@@ -220,6 +225,7 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Buyer, BuyerAdmin)
 admin.site.register(Seller, SellerAdmin)
 admin.site.register(PendingSmsOtp, PendingSmsOtpAdmin)
+admin.site.register(PendingEmailOtp, PendingEmailOtpAdmin)
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(PropertyPlan, PropertyPlanAdmin)
 admin.site.register(ContactDetails, ContactDetailsAdmin)

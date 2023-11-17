@@ -7,7 +7,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
-from zameendar_backend.api.models import Buyer, PendingSmsOtp, Seller, User
+from zameendar_backend.api.models import Buyer, PendingEmailOtp, Seller, User
 from zameendar_backend.api.serializers.token_serializer import UserSerializer
 
 
@@ -39,25 +39,24 @@ class BuyerSignUp(APIView):
         first_name = request.POST["first_name"].strip()
         last_name = request.POST["last_name"].strip()
         password = request.POST["password"].strip()
-        phone_number = request.POST["phone_number"].strip()
+        email = request.POST["email"].strip()
         otp = request.POST["otp"].strip()
 
-        if Buyer.objects.filter(user__phone_number=phone_number).exists():
-            return send_fail_http_response({"message": "Phone already in use"})
+        if Buyer.objects.filter(user__email=email).exists():
+            return send_fail_http_response({"message": "Email already in use"})
 
-        pending_otp = PendingSmsOtp.objects.get(phone=phone_number)
+        pending_otp = PendingEmailOtp.objects.get(email=email)
         if int(otp) != pending_otp.otp:
             return send_fail_http_response({"message": "incorrect OTP"})
 
-        user = User.objects.filter(phone_number=phone_number).first()
+        user = User.objects.filter(email=email).first()
 
         if not user:
             try:
                 user = User.objects.create(
                     first_name=first_name,
                     last_name=last_name,
-                    username=phone_number,
-                    phone_number=phone_number,
+                    username=email,
                 )
                 user.set_password(password)
                 user.save()

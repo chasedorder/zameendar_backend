@@ -57,7 +57,7 @@ class UserAddress(models.Model):
 
 
 class User(AbstractUser):
-    phone_number = models.CharField(unique=True, max_length=20)
+    phone_number = models.CharField(null=True, blank=True, max_length=20)
     last_active = models.DateTimeField(auto_now=True, blank=True)
     email = models.EmailField(unique=True, blank=True, null=True)
 
@@ -73,6 +73,14 @@ class PendingSmsOtp(models.Model):
 
     def __str__(self):
         return self.phone
+
+
+class PendingEmailOtp(models.Model):
+    email = models.EmailField(max_length=100)
+    otp = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.email
 
 
 class Seller(models.Model):

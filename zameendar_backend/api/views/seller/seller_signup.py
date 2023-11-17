@@ -7,7 +7,7 @@ from zameendar_backend.api.dispatchers.responses.send_fail_http_response import 
 from zameendar_backend.api.dispatchers.responses.send_pass_http_response import (
     send_pass_http_response,
 )
-from zameendar_backend.api.models import Buyer, PendingSmsOtp, Seller, User
+from zameendar_backend.api.models import Buyer, PendingEmailOtp, Seller, User
 from zameendar_backend.api.serializers.token_serializer import UserSerializer
 
 
@@ -43,23 +43,20 @@ class SellerSignUp(APIView):
         phone_number = request.POST["phone_number"].strip()
         otp = request.POST["otp"].strip()
 
-        if Seller.objects.filter(user__phone_number=phone_number).exists():
-            return send_fail_http_response({"message": "Phone already in use"})
-        is_email_already_use = User.objects.filter(email=email).exists()
-        if is_email_already_use:
+        if Seller.objects.filter(user__email=email).exists():
             return send_fail_http_response({"message": "Email already in use"})
 
-        pending_otp = PendingSmsOtp.objects.get(phone=phone_number)
+        pending_otp = PendingEmailOtp.objects.get(email=email)
         if int(otp) != pending_otp.otp:
             return send_fail_http_response({"message": "incorrect OTP"})
 
-        user = User.objects.filter(phone_number=phone_number).first()
+        user = User.objects.filter(email=email).first()
         if not user:
             try:
                 user = User.objects.create(
                     first_name=first_name,
                     last_name=last_name,
-                    username=phone_number,
+                    username=email,
                     email=email,
                     phone_number=phone_number,
                 )

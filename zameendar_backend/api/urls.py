@@ -38,11 +38,19 @@ from .views.seller.delete_seller_property import DeleteSellerProperty
 from .views.seller.get_all_properties import GetSellerProperties
 from .views.seller.get_seller_property_details import GetSellerPropertyDetails
 from .views.seller.seller_signup import SellerSignUp
+from .views.send_signup_email_otp import SendSignupEmailOtp
 from .views.send_signup_sms_otp import SendSignupSmsOtp
 
 urlpatterns = [
     path(
-        "send_signup_sms_otp/", SendSignupSmsOtp.as_view(), name="send_signup_sms_otp"
+        "send_signup_sms_otp/",
+        SendSignupSmsOtp.as_view(),
+        name="send_signup_sms_otp",
+    ),
+    path(
+        "send_signup_email_otp/",
+        SendSignupEmailOtp.as_view(),
+        name="send_signup_email_otp",
     ),
     path("seller_signup/", SellerSignUp.as_view(), name="seller_signup"),
     path("forgot_password/", ForgotPassword.as_view(), name="forgot_password"),
