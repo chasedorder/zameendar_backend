@@ -38,13 +38,13 @@ class SendSignupEmailOtp(APIView):
             return send_pass_http_response(
                 {
                     "message": "OTP sent successfully",
-                    "otp only for testing": otp,
+                    # "otp only for testing": otp,
                 }
             )
         except Exception as e:
             return send_fail_http_response(
                 {
                     "message": f"Some error occur {e}",
-                    "otp only for testing": otp,
+                    # "otp only for testing": otp,
                 }
             )

@@ -37,6 +37,6 @@ class ForgotPassword(APIView):
             return send_fail_http_response(
                 {
                     "message": f"Some error occur {e}",
-                    "otp only for testing": otp,
+                    # "otp only for testing": otp,
                 }
             )

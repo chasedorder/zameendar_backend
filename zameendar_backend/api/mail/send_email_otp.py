@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 
 def send_email_otp(email, otp):
     send_mail(
-        subject="Zameendar OTP verificaion",
+        subject="Zameendar OTP verification",
         message=f"OTP is {otp}",
         from_email=settings.SEND_EMAIL_FROM,
         recipient_list=[email],
