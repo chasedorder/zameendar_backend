@@ -448,6 +448,7 @@ def property_serializer(property_model: PropertyModel):
     about_property = property_model.about_property
     current_step = property_model.current_step
     added_date = property_model.added_date
+    views = property_model.views
 
     image_queryset = PropertyImage.objects.filter(property_model=property_model)
     image_serializer = []
