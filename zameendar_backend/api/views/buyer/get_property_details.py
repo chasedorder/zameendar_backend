@@ -25,8 +25,6 @@ class GetPropertyDetails(APIView):
             property_model=property_model,
             is_active=True,
         )
-        property_model.views += 1
-        property_model.save()
 
         if property_plans:
             if property_plans.first().is_expired:
