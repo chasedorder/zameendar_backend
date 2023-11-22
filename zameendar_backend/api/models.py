@@ -59,7 +59,7 @@ class UserAddress(models.Model):
 class User(AbstractUser):
     phone_number = models.CharField(null=True, blank=True, max_length=20)
     last_active = models.DateTimeField(auto_now=True, blank=True)
-    email = models.EmailField(unique=True, blank=True, null=True)
+    email = models.EmailField(unique=True)
 
     objects = UserManager()
 

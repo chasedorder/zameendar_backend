@@ -57,6 +57,7 @@ class BuyerSignUp(APIView):
                     first_name=first_name,
                     last_name=last_name,
                     username=email,
+                    email=email,
                 )
                 user.set_password(password)
                 user.save()
