@@ -23,6 +23,7 @@ def add_common_details(maps_details=None, address_details=None, contact_details=
             phone_number_1=contact_details.get("phone_number_1"),
             phone_number_2=contact_details.get("phone_number_2"),
             email=contact_details.get("email"),
+            name=contact_details.get("name"),
         )
 
     return (property_map, property_address, seller_contact)

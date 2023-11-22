@@ -100,7 +100,8 @@ class Buyer(models.Model):
 class ContactDetails(models.Model):
     phone_number_1 = models.CharField(max_length=50, blank=True, null=True)
     phone_number_2 = models.CharField(max_length=50, blank=True, null=True)
-    email = models.EmailField(blank=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
 
 class PropertyAddress(models.Model):

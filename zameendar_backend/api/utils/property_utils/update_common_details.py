@@ -40,12 +40,14 @@ def update_common_details(
             seller_contact.phone_number_1 = contact_details.get("phone_number_1")
             seller_contact.phone_number_2 = contact_details.get("phone_number_2")
             seller_contact.email = contact_details.get("email")
+            seller_contact.name = contact_details.get("name")
             seller_contact.save()
         else:
             seller_contact = ContactDetails.objects.create(
-                phone_number_1=contact_details["phone_number_1"],
-                phone_number_2=contact_details["phone_number_2"],
-                email=contact_details["email"],
+                phone_number_1=contact_details.get("phone_number_1"),
+                phone_number_2=contact_details.get("phone_number_2"),
+                email=contact_details.get("email"),
+                name=contact_details.get("name"),
             )
 
     return (property_map, property_address, seller_contact)

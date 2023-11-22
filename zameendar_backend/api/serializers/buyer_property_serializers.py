@@ -47,11 +47,13 @@ def seller_contact_serializer(seller_contact: ContactDetails):
     phone_number_1 = seller_contact.phone_number_1
     phone_number_2 = seller_contact.phone_number_2
     email = seller_contact.email
+    name = seller_contact.name
 
     serialized_data = {
         "phone_number_1": phone_number_1,
         "phone_number_2": phone_number_2,
         "email": email,
+        "name": name,
     }
     return serialized_data
 
