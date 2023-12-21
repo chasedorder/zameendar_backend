@@ -5,35 +5,12 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
-from .models import (
-    PG,
-    PROPERTY_MODEL_MAP,
-    Building,
-    Buyer,
-    Commercial,
-    ContactDetails,
-    Flat,
-    GroupAppartment,
-    GroupPlot,
-    GroupVilla,
-    Help,
-    OpenPlot,
-    Order,
-    PendingEmailOtp,
-    PendingSmsOtp,
-    Plan,
-    PropertyAddress,
-    PropertyImage,
-    PropertyMap,
-    PropertyModel,
-    PropertyPlan,
-    Rent,
-    Seller,
-    User,
-    UserAddress,
-    Villa,
-    WishList,
-)
+from .models import (PG, PROPERTY_MODEL_MAP, Building, Buyer, Commercial,
+                     ContactDetails, Flat, GroupAppartment, GroupPlot,
+                     GroupVilla, Help, OpenPlot, Order, PendingEmailOtp,
+                     PendingSmsOtp, Plan, PropertyAddress, PropertyImage,
+                     PropertyMap, PropertyModel, PropertyPlan, Rent, Seller,
+                     User, UserAddress, Villa, WishList)
 
 
 class PlanAdmin(admin.ModelAdmin, DynamicArrayMixin):
